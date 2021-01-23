@@ -4,6 +4,7 @@ using DvBCrud.EFCore.Tests.Mocks.Repositories;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -68,6 +69,30 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public void Get_NonExistingId_ReturnsNull()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_NonExistingId_ReturnsNull));
+            var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
+            var expected = new[]
+            {
+                new AnyEntity
+                {
+                    Id = 1,
+                    AnyString = "Any"
+                },
+                new AnyEntity {
+                    Id = 2,
+                    AnyString = "Any"
+                }
+            };
+            dbContextProvider.Mock(expected);
+
+            var actual = repository.Get(3);
+
+            actual.Should().BeNull();
+        }
+
+        [Fact]
         public void GetRange_MultipleIds_ReturnsEntities()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_MultipleIds_ReturnsEntities));
@@ -93,27 +118,12 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Get_NonExistingId_ReturnsNull()
+        public void GetRange_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_NonExistingId_ReturnsNull));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_MultipleIds_ReturnsEntities));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
-            var expected = new[]
-            {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "Any"
-                },
-                new AnyEntity {
-                    Id = 2,
-                    AnyString = "Any"
-                }
-            };
-            dbContextProvider.Mock(expected);
 
-            var actual = repository.Get(3);
-
-            actual.Should().BeNull();
+            repository.Invoking(r => r.GetRange(null)).Should().Throw<ArgumentNullException>();
         }
     }
 }

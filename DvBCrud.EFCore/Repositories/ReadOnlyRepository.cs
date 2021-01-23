@@ -1,6 +1,7 @@
 ﻿using DvBCrud.EFCore.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,13 +32,18 @@ namespace DvBCrud.EFCore.Repositories
         public virtual TEntity Get(TId id)
         {
             logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {id}");
-            return GetAll().SingleOrDefault(e => id.Equals(e.Id));
+            return Set.SingleOrDefault(e => id.Equals(e.Id));
         }
 
         public IQueryable<TEntity> GetRange(IEnumerable<TId> ids)
         {
+            if (ids == null)
+            {
+                throw new ArgumentNullException($"{ids} cannot be null");
+            }
+
             logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {string.Join(", ", ids)}");
-            return GetAll().Where(e => ids.Contains(e.Id));
+            return Set.Where(e => ids.Contains(e.Id));
         }
     }
 }
