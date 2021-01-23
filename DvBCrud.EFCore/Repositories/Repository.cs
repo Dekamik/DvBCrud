@@ -21,18 +21,33 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void Create(TEntity entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException($"{nameof(entity)} cannot be null");
+            }
+
             logger.LogTrace($"Creating a new {nameof(TEntity)}");
             Set.Add(entity);
         }
 
         public virtual void CreateRange(IEnumerable<TEntity> entities)
         {
+            if (entities == null)
+            {
+                throw new ArgumentNullException($"{nameof(entities)} cannot be null");
+            }
+
             logger.LogTrace($"Creating {entities.Count()} new {nameof(TEntity)}");
             Set.AddRange(entities);
         }
 
         public virtual void Update(TEntity entity, bool createIfNotExists = false)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException($"{nameof(entity)} cannot be null");
+            }
+
             logger.LogTrace($"Updating {nameof(TEntity)} with Id {entity.Id}");
 
             var existingEntity = Set.Find(entity.Id);
@@ -55,6 +70,11 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void UpdateRange(IEnumerable<TEntity> entities, bool createIfNotExists = false)
         {
+            if (entities == null)
+            {
+                throw new ArgumentNullException($"{nameof(entities)} cannot be null");
+            }
+
             logger.LogTrace($"Updating {entities.Count()} {nameof(TEntity)} with Id {string.Join(", ", entities.Select(e => e.Id))}");
 
             // Get all entities that matches IDs
@@ -96,6 +116,11 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void DeleteRange(IEnumerable<TId> ids)
         {
+            if (ids == null)
+            {
+                throw new ArgumentNullException($"{nameof(ids)} cannot be null");
+            }
+
             logger.LogTrace($"Deleting {ids.Count()} {nameof(TEntity)} with Id {string.Join(", ", ids)}");
 
             var entities = Set.Where(e => ids.Contains(e.Id));

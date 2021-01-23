@@ -55,6 +55,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public void Create_Null_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Create_Null_ThrowsArgumentNullException));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+
+            repository.Invoking(r => r.Create(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void CreateRange_MultipleEntities_CreatesEntities()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(CreateRange_MultipleEntities_CreatesEntities));
@@ -77,6 +86,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
             var actual = dbContextProvider.DbContext.AnyEntities;
             actual.First().AnyString.Should().Be(expected.First().AnyString);
             actual.Last().AnyString.Should().BeEquivalentTo(expected.Last().AnyString);
+        }
+
+        [Fact]
+        public void CreateRange_Null_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(CreateRange_Null_ThrowsArgumentNullException));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+
+            repository.Invoking(r => r.CreateRange(null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -146,6 +164,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
 
             var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 2);
             actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public void Update_Null_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_Null_ThrowsArgumentNullException));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+
+            repository.Invoking(r => r.Update(null)).Should().Throw<ArgumentNullException>();
+            repository.Invoking(r => r.Update(null, true)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -378,6 +406,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public void UpdateRange_Null_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_Null_ThrowsArgumentNullException));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+
+            repository.Invoking(r => r.UpdateRange(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void Delete_ExistingEntity_EntityDeleted()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Delete_ExistingEntity_EntityDeleted));
@@ -432,6 +469,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
 
             var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Single().Should().BeEquivalentTo(entities.Last());
+        }
+
+        [Fact]
+        public void DeleteRange_Null_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteRange_Null_ThrowsArgumentNullException));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+
+            repository.Invoking(r => r.DeleteRange(null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
