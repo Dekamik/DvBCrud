@@ -93,6 +93,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public void Get_Null_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_MultipleIds_ReturnsEntities));
+            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+
+            repository.Invoking(r => r.Get(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void GetRange_MultipleIds_ReturnsEntities()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_MultipleIds_ReturnsEntities));

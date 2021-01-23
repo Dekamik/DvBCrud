@@ -11,5 +11,7 @@ namespace DvBCrud.EFCore.Tests.Mocks.DbContexts
         }
 
         public DbSet<AnyEntity> AnyEntities { get; set; }
+
+        public DbSet<AnyNullableIdEntity> AnyNullableIdEntities { get; set; }
     }
 }

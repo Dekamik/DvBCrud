@@ -101,6 +101,11 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void Delete(TId id)
         {
+            if (id == null)
+            {
+                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+            }
+
             logger.LogTrace($"Deleting {nameof(TEntity)} with Id {string.Join(", ", id)}");
 
             var entity = Set.Find(id);

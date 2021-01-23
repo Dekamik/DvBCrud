@@ -441,6 +441,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public void Delete_Null_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Delete_Null_ThrowsArgumentNullException));
+            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+
+            repository.Invoking(r => r.Delete(null)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public void DeleteRange_MultipleEntities_EntitiesDeleted()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteRange_MultipleEntities_EntitiesDeleted));
