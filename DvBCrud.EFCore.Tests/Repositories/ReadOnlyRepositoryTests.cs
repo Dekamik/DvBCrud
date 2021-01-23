@@ -127,6 +127,58 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public void GetRange_MultipleNonExistingIds_ReturnsNoEntities()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_MultipleNonExistingIds_ReturnsNoEntities));
+            var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
+            var entities = new[]
+            {
+                new AnyEntity
+                {
+                    Id = 1,
+                    AnyString = "Any"
+                },
+                new AnyEntity {
+                    Id = 2,
+                    AnyString = "Any"
+                }
+            };
+            dbContextProvider.Mock(entities);
+
+            var actual = repository.GetRange(new[] { 3, 4 });
+
+            actual.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void GetRange_ExistingAndNonExistingIds_ReturnsExistingEntities()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_ExistingAndNonExistingIds_ReturnsExistingEntities));
+            var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
+            var entities = new[]
+            {
+                new AnyEntity
+                {
+                    Id = 1,
+                    AnyString = "Any"
+                },
+                new AnyEntity {
+                    Id = 2,
+                    AnyString = "Any"
+                }
+            };
+            dbContextProvider.Mock(entities);
+            var expected = new[]
+            {
+                entities.Single(e => e.Id == 2)
+            };
+
+            var actual = repository.GetRange(new[] { 2, 3 });
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
         public void GetRange_Null_ThrowsArgumentNullException()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_MultipleIds_ReturnsEntities));
