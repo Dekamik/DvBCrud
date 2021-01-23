@@ -53,7 +53,7 @@ namespace DvBCrud.EFCore.Repositories
             existingEntity.Copy(entity);
         }
 
-        public virtual void UpdateRange(IEnumerable<TEntity> entities)
+        public virtual void UpdateRange(IEnumerable<TEntity> entities, bool createIfNotExists = false)
         {
             logger.LogTrace($"Updating {entities.Count()} {nameof(TEntity)} with Id {string.Join(", ", entities.Select(e => e.Id))}");
 
@@ -64,9 +64,13 @@ namespace DvBCrud.EFCore.Repositories
             if (existingEntities.Count() != entities.Count())
             {
                 var missingIds = entities.Select(e => e.Id).Where(id => !existingEntities.Select(ee => ee.Id).Contains(id));
-                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {string.Join(", ", missingIds)} for update");
+                logger.LogDebug($"Couldn't find {entities.Count()} {nameof(TEntity)} with Id {string.Join(", ", missingIds)} for update{(createIfNotExists ? ", creating those entities" : "")}");
 
-                // TODO: Add a createIfNotExists option
+                if (createIfNotExists)
+                {
+                    var missingEntities = entities.Where(e => missingIds.Contains(e.Id));
+                    CreateRange(missingEntities);
+                }
             }
 
             foreach (var e in existingEntities)

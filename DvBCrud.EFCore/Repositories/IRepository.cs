@@ -13,7 +13,7 @@ namespace DvBCrud.EFCore.Repositories
 
         void Update(TEntity entity, bool createIfNotExists = false);
 
-        void UpdateRange(IEnumerable<TEntity> entities);
+        void UpdateRange(IEnumerable<TEntity> entities, bool createIfNotExists = false);
 
         void Delete(TId id);
 
