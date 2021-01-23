@@ -530,17 +530,17 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = 1,
                 AnyString = "AnyString"
             });
-            var expected = new AnyEntity
+            var modifiedEntity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyNewString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Single().AnyString = expected.AnyString;
+            dbContextProvider.DbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
             await repository.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(expected);
+            actual.Single().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]

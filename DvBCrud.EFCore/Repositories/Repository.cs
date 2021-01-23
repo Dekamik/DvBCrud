@@ -35,7 +35,7 @@ namespace DvBCrud.EFCore.Repositories
         {
             logger.LogTrace($"Updating {nameof(TEntity)} with Id {entity.Id}");
 
-            var existingEntity = Set.SingleOrDefault(e => e.Id.Equals(entity.Id));
+            var existingEntity = Set.Find(entity.Id);
 
             // If entity wasn't found, log a debug message
             if (existingEntity == null)
@@ -83,7 +83,7 @@ namespace DvBCrud.EFCore.Repositories
         {
             logger.LogTrace($"Deleting {nameof(TEntity)} with Id {string.Join(", ", id)}");
 
-            var entity = Set.Where(e => e.Id.Equals(id));
+            var entity = Set.Find(id);
 
             if (entity == null)
             {
