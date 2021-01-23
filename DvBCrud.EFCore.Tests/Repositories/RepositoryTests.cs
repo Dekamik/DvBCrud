@@ -178,10 +178,86 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.UpdateRange(expected);
-            var actual = repository.GetRange(new[] { 1, 2 });
             await repository.SaveChanges();
+            var actual = repository.GetRange(new[] { 1, 2 });
 
             actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public async Task UpdateRange_MultipleNonExistingEntities_EntitiesNotUpdated()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_MultipleNonExistingEntities_EntitiesNotUpdated));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            dbContextProvider.Mock(new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            },
+            new AnyEntity
+            {
+                Id = 2,
+                AnyString = "AnyString"
+            });
+            var nonExistingEntities = new[] {
+                new AnyEntity
+                {
+                    Id = 3,
+                    AnyString = "AnyNewString"
+                },
+                new AnyEntity
+                {
+                    Id = 4,
+                    AnyString = "AnyNewString"
+                }
+            };
+
+            repository.UpdateRange(nonExistingEntities);
+            await repository.SaveChanges();
+            var actual = repository.GetRange(new[] { 3, 4 });
+
+            actual.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task UpdateRange_ExistingAndNonExistingEntities_ExistingEntitiesUpdated()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_ExistingAndNonExistingEntities_ExistingEntitiesUpdated));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            dbContextProvider.Mock(new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            },
+            new AnyEntity
+            {
+                Id = 2,
+                AnyString = "AnyString"
+            });
+            var nonExistingEntities = new[] {
+                new AnyEntity
+                {
+                    Id = 3,
+                    AnyString = "AnyNewString"
+                },
+                new AnyEntity
+                {
+                    Id = 4,
+                    AnyString = "AnyNewString"
+                }
+            };
+            var expected = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 2);
+            var selection = new[]
+            {
+                expected,
+                nonExistingEntities.Single(e => e.Id == 3)
+            };
+
+            repository.UpdateRange(nonExistingEntities);
+            await repository.SaveChanges();
+            var actual = dbContextProvider.DbContext.AnyEntities.Where(e => new[] { 2, 3 }.Contains(e.Id)); // Get AnyEntity 2 and 3
+
+            actual.Single().Should().BeEquivalentTo(expected);
         }
 
         [Fact]
