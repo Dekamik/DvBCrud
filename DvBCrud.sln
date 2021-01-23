@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore", "DvBCrud.EFCore\DvBCrud.EFCore.csproj", "{D2565219-C14B-44CC-969E-1EDBE01A04ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore.Tests", "DvBCrud.EFCore.Tests\DvBCrud.EFCore.Tests.csproj", "{86DD4D80-B9B5-4ECC-AB96-219B92840A01}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D2565219-C14B-44CC-969E-1EDBE01A04ED} = {D2565219-C14B-44CC-969E-1EDBE01A04ED}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2565219-C14B-44CC-969E-1EDBE01A04ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2565219-C14B-44CC-969E-1EDBE01A04ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2565219-C14B-44CC-969E-1EDBE01A04ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2565219-C14B-44CC-969E-1EDBE01A04ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86DD4D80-B9B5-4ECC-AB96-219B92840A01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86DD4D80-B9B5-4ECC-AB96-219B92840A01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86DD4D80-B9B5-4ECC-AB96-219B92840A01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86DD4D80-B9B5-4ECC-AB96-219B92840A01}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E54F41F1-80A3-4CC1-8E1A-4FF314DD5DF5}
+	EndGlobalSection
+EndGlobal
