@@ -6,7 +6,7 @@ namespace DvBCrud.EFCore.Tests.Mocks.Entities
     {
         public string AnyString { get; set; }
 
-        public override void Copy(BaseEntity<string> other)
+        protected override void CopyImpl(BaseEntity<string> other)
         {
             AnyNullableIdEntity otherEntity = other as AnyNullableIdEntity;
             AnyString = otherEntity.AnyString;

@@ -1,4 +1,5 @@
-﻿using DvBCrud.EFCore.Tests.Mocks.Entities;
+﻿using DvBCrud.EFCore.Entities;
+using DvBCrud.EFCore.Tests.Mocks.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -26,12 +27,23 @@ namespace DvBCrud.EFCore.Tests.Mocks.DbContexts
             {
                 DbContext.AnyEntities.Remove(entity);
             }
+
+            foreach (var entity in DbContext.AnyNullableIdEntities)
+            {
+                DbContext.AnyNullableIdEntities.Remove(entity);
+            }
+
+            foreach (var entity in DbContext.AnyAuditedEntities)
+            {
+                DbContext.AnyAuditedEntities.Remove(entity);
+            }
+
             DbContext.SaveChanges();
         }
 
-        public void Mock(params AnyEntity[] entities)
+        public void Mock<TEntity>(params TEntity[] entities) where TEntity : BaseEntity<int>
         {
-            DbContext.AnyEntities.AddRange(entities);
+            DbContext.Set<TEntity>().AddRange(entities);
             DbContext.SaveChanges();
         }
     }

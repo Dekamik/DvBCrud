@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DvBCrud.EFCore.Entities
@@ -17,6 +18,11 @@ namespace DvBCrud.EFCore.Entities
         /// Copy other entity's values to this entity
         /// </summary>
         /// <param name="other">Other entity to copy from</param>
-        public abstract void Copy(BaseEntity<TId> other);
+        public virtual void Copy(BaseEntity<TId> other)
+        {
+            CopyImpl(other);
+        }
+
+        protected abstract void CopyImpl(BaseEntity<TId> other);
     }
 }
