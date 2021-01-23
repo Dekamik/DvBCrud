@@ -21,7 +21,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task Create_AnyEntity_EntityCreated()
+        public void Create_AnyEntity_EntityCreated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Create_AnyEntity_EntityCreated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -31,10 +31,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.Create(expected);
-            await repository.SaveChanges();
+            dbContextProvider.DbContext.SaveChanges();
 
-            var actual = repository.GetAll();
-
+            var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Single().AnyString.Should().Be(expected.AnyString);
         }
 
@@ -52,11 +51,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
 
             repository.Create(entity);
 
-            repository.Invoking(r => r.SaveChanges()).Should().ThrowAsync<ArgumentException>();
+            dbContextProvider.DbContext.Invoking(db => db.SaveChanges()).Should().Throw<ArgumentException>();
         }
 
         [Fact]
-        public async Task CreateRange_MultipleEntities_CreatesEntities()
+        public void CreateRange_MultipleEntities_CreatesEntities()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(CreateRange_MultipleEntities_CreatesEntities));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -73,15 +72,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.CreateRange(expected);
-            await repository.SaveChanges();
-            var actual = repository.GetAll();
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities;
             actual.First().AnyString.Should().Be(expected.First().AnyString);
             actual.Last().AnyString.Should().BeEquivalentTo(expected.Last().AnyString);
         }
 
         [Fact]
-        public async Task Update_ExistingEntity_EntityUpdated()
+        public void Update_ExistingEntity_EntityUpdated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Update_ExistingEntity_EntityUpdated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -97,14 +96,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.Update(expected);
-            await repository.SaveChanges();
-            var actual = repository.Get(1);
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 1);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task Update_NonExistingEntity_EntityNotUpdated()
+        public void Update_NonExistingEntity_EntityNotUpdated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_EntityNotUpdated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -120,14 +119,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.Update(updatedEntity);
-            await repository.SaveChanges();
-            var actual = repository.Get(2);
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities.SingleOrDefault(e => e.Id == 2);
             actual.Should().BeNull();
         }
 
         [Fact]
-        public async Task Update_NonExistingEntityWithCreate_EntityCreated()
+        public void Update_NonExistingEntityWithCreate_EntityCreated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_EntityNotUpdated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -143,14 +142,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.Update(expected, true);
-            await repository.SaveChanges();
-            var actual = repository.Get(2);
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 2);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task UpdateRange_MultipleEntities_EntitiesUpdated()
+        public void UpdateRange_MultipleEntities_EntitiesUpdated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_MultipleEntities_EntitiesUpdated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -178,14 +177,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.UpdateRange(expected);
-            await repository.SaveChanges();
-            var actual = repository.GetRange(new[] { 1, 2 });
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities.Where(e => new[] { 1, 2 }.Contains(e.Id));
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task UpdateRange_MultipleNonExistingEntities_EntitiesNotUpdated()
+        public void UpdateRange_MultipleNonExistingEntities_EntitiesNotUpdated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_MultipleNonExistingEntities_EntitiesNotUpdated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -213,14 +212,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.UpdateRange(nonExistingEntities);
-            await repository.SaveChanges();
-            var actual = repository.GetRange(new[] { 3, 4 });
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities.Where(e => new[] { 3, 4 }.Contains(e.Id));
             actual.Should().BeEmpty();
         }
 
         [Fact]
-        public async Task UpdateRange_ExistingAndNonExistingEntities_ExistingEntitiesUpdated()
+        public void UpdateRange_ExistingAndNonExistingEntities_ExistingEntitiesUpdated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_ExistingAndNonExistingEntities_ExistingEntitiesUpdated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -254,14 +253,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.UpdateRange(nonExistingEntities);
-            await repository.SaveChanges();
-            var actual = dbContextProvider.DbContext.AnyEntities.Where(e => new[] { 2, 3 }.Contains(e.Id)); // Get AnyEntity 2 and 3
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities.Where(e => new[] { 2, 3 }.Contains(e.Id));
             actual.Single().Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task UpdateRange_MultipleEntitiesWithCreate_EntitiesUpdated()
+        public void UpdateRange_MultipleEntitiesWithCreate_EntitiesUpdated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_MultipleEntitiesWithCreate_EntitiesUpdated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -289,14 +288,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.UpdateRange(expected, true);
-            await repository.SaveChanges();
-            var actual = repository.GetRange(new[] { 1, 2 });
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities.Where(e => new[] { 1, 2 }.Contains(e.Id));
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task UpdateRange_MultipleNonExistingEntitiesWithCreate_EntitiesCreated()
+        public void UpdateRange_MultipleNonExistingEntitiesWithCreate_EntitiesCreated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_MultipleNonExistingEntitiesWithCreate_EntitiesCreated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -331,14 +330,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.UpdateRange(nonExistingEntities, true);
-            await repository.SaveChanges();
-            var actual = dbContextProvider.DbContext.AnyEntities;
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task UpdateRange_ExistingAndNonExistingEntitiesWithCreate_EntitiesCreated()
+        public void UpdateRange_ExistingAndNonExistingEntitiesWithCreate_EntitiesCreated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_ExistingAndNonExistingEntitiesWithCreate_EntitiesCreated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -372,14 +371,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             repository.UpdateRange(nonExistingEntities, true);
-            await repository.SaveChanges();
-            var actual = dbContextProvider.DbContext.AnyEntities;
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task Delete_ExistingEntity_EntityDeleted()
+        public void Delete_ExistingEntity_EntityDeleted()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Delete_ExistingEntity_EntityDeleted));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -398,14 +397,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             dbContextProvider.Mock(entities);
 
             repository.Delete(1);
-            await repository.SaveChanges();
-            var actual = repository.GetAll();
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Single().Should().BeEquivalentTo(entities.Last());
         }
 
         [Fact]
-        public async Task DeleteRange_MultipleEntities_EntitiesDeleted()
+        public void DeleteRange_MultipleEntities_EntitiesDeleted()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteRange_MultipleEntities_EntitiesDeleted));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
@@ -429,9 +428,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
             dbContextProvider.Mock(entities);
 
             repository.DeleteRange(new[] { 1, 2 });
-            await repository.SaveChanges();
-            var actual = repository.GetAll();
+            dbContextProvider.DbContext.SaveChanges();
 
+            var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Single().Should().BeEquivalentTo(entities.Last());
         }
     }
