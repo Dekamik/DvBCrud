@@ -24,7 +24,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(GetAll_Default_ReturnsAll));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
-            var expected = new List<AnyEntity>
+            var expected = new[]
             {
                 new AnyEntity
                 {
@@ -37,7 +37,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected.ToArray());
+            dbContextProvider.Mock(expected);
 
             var actual = repository.GetAll();
 
@@ -49,7 +49,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Get_ExistingId_ReturnsEntity));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
-            var expected = new List<AnyEntity>
+            var expected = new[]
             {
                 new AnyEntity
                 {
@@ -61,7 +61,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected.ToArray());
+            dbContextProvider.Mock(expected);
 
             var actual = repository.Get(1);
 
@@ -98,7 +98,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Get_NonExistingId_ReturnsNull));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
-            var expected = new List<AnyEntity>
+            var expected = new[]
             {
                 new AnyEntity
                 {
@@ -110,7 +110,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected.ToArray());
+            dbContextProvider.Mock(expected);
 
             var actual = repository.Get(3);
 
