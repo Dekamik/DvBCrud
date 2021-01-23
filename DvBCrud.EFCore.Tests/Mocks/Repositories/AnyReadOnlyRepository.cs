@@ -2,9 +2,6 @@
 using DvBCrud.EFCore.Tests.Mocks.DbContexts;
 using DvBCrud.EFCore.Tests.Mocks.Entities;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DvBCrud.EFCore.Tests.Mocks.Repositories
 {

@@ -28,10 +28,10 @@ namespace DvBCrud.EFCore.Repositories
             return Set;
         }
 
-        public virtual IQueryable<TEntity> Get(TId id)
+        public virtual TEntity Get(TId id)
         {
             logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {id}");
-            return GetAll().Where(e => id.Equals(e.Id));
+            return GetAll().SingleOrDefault(e => id.Equals(e.Id));
         }
 
         public IQueryable<TEntity> GetRange(IEnumerable<TId> ids)

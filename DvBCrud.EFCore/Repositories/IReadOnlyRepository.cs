@@ -8,7 +8,7 @@ namespace DvBCrud.EFCore.Repositories
     {
         IQueryable<TEntity> GetAll();
 
-        IQueryable<TEntity> Get(TId id);
+        TEntity Get(TId id);
 
         IQueryable<TEntity> GetRange(IEnumerable<TId> ids);
     }

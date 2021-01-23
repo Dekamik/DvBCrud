@@ -11,7 +11,7 @@ namespace DvBCrud.EFCore.Repositories
 
         void CreateRange(IEnumerable<TEntity> entities);
 
-        void Update(TEntity entity);
+        void Update(TEntity entity, bool createIfNotExists = false);
 
         void UpdateRange(IEnumerable<TEntity> entities);
 

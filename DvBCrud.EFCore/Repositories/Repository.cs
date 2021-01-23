@@ -31,7 +31,7 @@ namespace DvBCrud.EFCore.Repositories
             Set.AddRange(entities);
         }
 
-        public virtual void Update(TEntity entity)
+        public virtual void Update(TEntity entity, bool createIfNotExists = false)
         {
             logger.LogTrace($"Updating {nameof(TEntity)} with Id {entity.Id}");
 
@@ -40,9 +40,14 @@ namespace DvBCrud.EFCore.Repositories
             // If entity wasn't found, log a debug message
             if (existingEntity == null)
             {
-                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {entity.Id} for update");
+                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {entity.Id} for update{ (createIfNotExists ? ", creating entity" : "") }");
 
-                // TODO: Add a createIfNotExists option
+                if (createIfNotExists)
+                {
+                    Create(entity);
+                }
+
+                return;
             }
 
             existingEntity.Copy(entity);

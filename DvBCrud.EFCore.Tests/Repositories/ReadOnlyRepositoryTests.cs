@@ -4,10 +4,8 @@ using DvBCrud.EFCore.Tests.Mocks.Repositories;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace DvBCrud.EFCore.Tests.Repositories
@@ -47,9 +45,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Get_ExistingId_ReturnsEntityWithId()
+        public void Get_ExistingId_ReturnsEntity()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_ExistingId_ReturnsEntityWithId));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_ExistingId_ReturnsEntity));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
             var expected = new List<AnyEntity>
             {
@@ -67,7 +65,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
 
             var actual = repository.Get(1);
 
-            actual.Single().Should().BeEquivalentTo(expected.First());
+            actual.Should().BeEquivalentTo(expected.First());
         }
 
         [Fact]
@@ -96,9 +94,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Get_NonExistingId_ReturnsEmptyQueryable()
+        public void Get_NonExistingId_ReturnsNull()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_NonExistingId_ReturnsEmptyQueryable));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_NonExistingId_ReturnsNull));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
             var expected = new List<AnyEntity>
             {
@@ -116,7 +114,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
 
             var actual = repository.Get(3);
 
-            actual.Should().BeEmpty();
+            actual.Should().BeNull();
         }
     }
 }
