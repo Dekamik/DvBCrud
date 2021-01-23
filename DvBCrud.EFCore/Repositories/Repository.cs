@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,23 +19,46 @@ namespace DvBCrud.EFCore.Repositories
 
         }
 
-        public virtual void Create(params TEntity[] entity)
+        public virtual void Create(TEntity entity)
         {
-            logger.LogTrace($"Creating {entity.Length} new {nameof(TEntity)}");
-            Set.AddRange(entity);
+            logger.LogTrace($"Creating a new {nameof(TEntity)}");
+            Set.Add(entity);
         }
 
-        public virtual void Update(params TEntity[] entity)
+        public virtual void CreateRange(IEnumerable<TEntity> entities)
         {
-            logger.LogTrace($"Updating {nameof(TEntity)} with Id {string.Join(", ", entity.Select(e => e.Id))}");
+            logger.LogTrace($"Creating {entities.Count()} new {nameof(TEntity)}");
+            Set.AddRange(entities);
+        }
+
+        public virtual void Update(TEntity entity)
+        {
+            logger.LogTrace($"Updating {nameof(TEntity)} with Id {entity.Id}");
+
+            var existingEntity = Set.SingleOrDefault(e => e.Id.Equals(entity.Id));
+
+            // If entity wasn't found, log a debug message
+            if (existingEntity == null)
+            {
+                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {entity.Id} for update");
+
+                // TODO: Add a createIfNotExists option
+            }
+
+            existingEntity.Copy(entity);
+        }
+
+        public virtual void UpdateRange(IEnumerable<TEntity> entities)
+        {
+            logger.LogTrace($"Updating {entities.Count()} {nameof(TEntity)} with Id {string.Join(", ", entities.Select(e => e.Id))}");
 
             // Get all entities that matches IDs
-            var existingEntities = Set.Where(e => entity.Select(n => n.Id).Contains(e.Id));
+            var existingEntities = Set.Where(e => entities.Select(n => n.Id).Contains(e.Id));
 
             // If not all entities were found, log a debug message
-            if (existingEntities.Count() != entity.Count())
+            if (existingEntities.Count() != entities.Count())
             {
-                var missingIds = entity.Select(e => e.Id).Where(id => !existingEntities.Select(ee => ee.Id).Contains(id));
+                var missingIds = entities.Select(e => e.Id).Where(id => !existingEntities.Select(ee => ee.Id).Contains(id));
                 logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {string.Join(", ", missingIds)} for update");
 
                 // TODO: Add a createIfNotExists option
@@ -42,19 +66,34 @@ namespace DvBCrud.EFCore.Repositories
 
             foreach (var e in existingEntities)
             {
-                e.Copy(entity.SingleOrDefault(n => n.Id.Equals(e.Id)));
+                e.Copy(entities.SingleOrDefault(n => n.Id.Equals(e.Id)));
             }
         }
 
-        public virtual void Delete(params TId[] id)
+        public virtual void Delete(TId id)
         {
             logger.LogTrace($"Deleting {nameof(TEntity)} with Id {string.Join(", ", id)}");
 
-            var entities = Set.Where(e => id.Contains(e.Id));
+            var entity = Set.Where(e => e.Id.Equals(id));
 
-            if (entities.Count() != id.Length)
+            if (entity == null)
             {
-                var missingIds = id.Where(i => !entities.Select(e => e.Id).Contains(i));
+                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {id} for deletion");
+                return;
+            }
+
+            Set.RemoveRange(entity);
+        }
+
+        public virtual void DeleteRange(IEnumerable<TId> ids)
+        {
+            logger.LogTrace($"Deleting {ids.Count()} {nameof(TEntity)} with Id {string.Join(", ", ids)}");
+
+            var entities = Set.Where(e => ids.Contains(e.Id));
+
+            if (entities.Count() != ids.Count())
+            {
+                var missingIds = ids.Where(i => !entities.Select(e => e.Id).Contains(i));
                 logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {string.Join(", ", missingIds)} for deletion");
             }
 

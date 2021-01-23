@@ -71,9 +71,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Get_MultipleIds_ReturnsEntities()
+        public void GetRange_MultipleIds_ReturnsEntities()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_MultipleIds_ReturnsEntities));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_MultipleIds_ReturnsEntities));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
             var expected = new[]
             {
@@ -90,7 +90,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             dbContextProvider.Mock(expected);
             dbContextProvider.Mock(new AnyEntity { Id = 3, AnyString = "Any" });
 
-            var actual = repository.Get(1, 2);
+            var actual = repository.GetRange(new[] { 1, 2 });
 
             actual.Should().BeEquivalentTo(expected);
         }

@@ -1,4 +1,5 @@
 ﻿using DvBCrud.EFCore.Entities;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DvBCrud.EFCore.Repositories
@@ -7,6 +8,8 @@ namespace DvBCrud.EFCore.Repositories
     {
         IQueryable<TEntity> GetAll();
 
-        IQueryable<TEntity> Get(params TId[] id);
+        IQueryable<TEntity> Get(TId id);
+
+        IQueryable<TEntity> GetRange(IEnumerable<TId> ids);
     }
 }
