@@ -28,7 +28,7 @@ namespace DvBCrud.EFCore.Repositories
         /// Finds multiple <typeparamref name="TEntity"/> instances whose Ids are contained within <paramref name="ids"/>
         /// </summary>
         /// <param name="ids">Key values to query</param>
-        /// <returns>an <see cref="IQueryable"/> containing all, some or no matching <typeparamref name="TEntity"/> instances</returns>
+        /// <returns>An <see cref="IQueryable"/> containing all, some or no matching <typeparamref name="TEntity"/> instances</returns>
         IQueryable<TEntity> GetRange(IEnumerable<TId> ids);
     }
 }

@@ -53,7 +53,7 @@ namespace DvBCrud.EFCore.Repositories
         /// <summary>
         /// Persists modifications to DbContext
         /// </summary>
-        /// <returns>An async Task</returns>
+        /// <returns>An async <see cref="Task"/></returns>
         Task SaveChanges();
     }
 }
