@@ -32,9 +32,7 @@ namespace DvBCrud.EFCore.Repositories
         public virtual TEntity Get(TId id)
         {
             if (id == null)
-            {
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
-            }
 
             logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {id}");
             return Set.SingleOrDefault(e => id.Equals(e.Id));
@@ -43,9 +41,7 @@ namespace DvBCrud.EFCore.Repositories
         public IQueryable<TEntity> GetRange(IEnumerable<TId> ids)
         {
             if (ids == null)
-            {
                 throw new ArgumentNullException($"{ids} cannot be null");
-            }
 
             logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {string.Join(", ", ids)}");
             return Set.Where(e => ids.Contains(e.Id));
