@@ -40,7 +40,7 @@ namespace DvBCrud.EFCore.API.JSON
 
             var entities = repository.GetAll();
 
-            return Ok(entities.AsEnumerable());
+            return Ok(entities);
         }
     }
 }
