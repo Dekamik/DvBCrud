@@ -175,7 +175,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 var actual = actualEntities[i];
                 var expected = expectedEntities[i];
 
-                actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.Id).Excluding(x => x.CreatedAt).Excluding(x => x.UpdatedAt));
+                actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.Id).Excluding(x => x.UpdatedAt));
                 actual.UpdatedAt.Should().BeCloseTo(expectedTime);
             }
         }

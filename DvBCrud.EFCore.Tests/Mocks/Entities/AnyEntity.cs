@@ -8,8 +8,8 @@ namespace DvBCrud.EFCore.Tests.Mocks.Entities
 
         protected override void CopyImpl(BaseEntity<int> other)
         {
-            AnyEntity otherEntity = other as AnyEntity;
-            AnyString = otherEntity.AnyString;
+            var o = other as AnyEntity;
+            AnyString = o.AnyString;
         }
     }
 }
