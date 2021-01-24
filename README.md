@@ -6,4 +6,4 @@ This library aims to both standardize and enable rapid development of normal dat
 
 ## [DvBCrud.EFCore](DvBCrud.EFCore/README.md)
 
-DvBCrud.EFCore is the base implementation for handling repositories and entities using Entity Framework Core.
+The core implementation for handling repositories and entities using Entity Framework Core.
