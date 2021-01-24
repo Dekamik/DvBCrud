@@ -11,12 +11,12 @@ The basic workflow goes like this:
 1. Define your entity by inheriting BaseEntity or BaseAuditedEntity.
 2. Define the repository and its functionality by inheriting ReadOnlyRepository, Repository or AuditedRepository (requires BaseAuditedEntity-derived entity).
 
-And that''s it. Migrate using EFCore and you have fully functional and fully tested database CRUD couplings for your application. 
+And that's it. Migrate using EFCore and you have fully functional and fully tested database CRUD couplings for your application. 
 All CRUD functionality is already written and available.
 
 ## Getting started
 
-When you''ve installed the library, below is an example for defining a Repository for AnyEntity
+When you've installed the library, below is an example for defining a Repository for AnyEntity
 
 ### 1. Create the entity
 
@@ -64,7 +64,7 @@ public class AnyRepository : Repository<AnyEntity, int, AnyDbContext>
 
 ### 4. Use it
 
-After you''ve injected a new AnyRepository into your application''s Startup.cs, you can use it like so:
+After you've injected a new AnyRepository into your application's Startup.cs, you can use it like so:
 
 AnyService.cs
 ```cs
@@ -77,7 +77,7 @@ public class AnyService
         this.anyRepository = anyRepository;
     }
 
-    void CreateAnyEntity(string str)
+    public void CreateAnyEntity(string str)
     {
         var entity = new AnyEntity 
         {
