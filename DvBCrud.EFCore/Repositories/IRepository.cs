@@ -15,13 +15,13 @@ namespace DvBCrud.EFCore.Repositories
         /// <summary>
         /// Creates the specified <paramref name="entity"/> and tracks it
         /// </summary>
-        /// <param name="entity">Entity to create</param>
+        /// <param name="entity">The entity to create</param>
         void Create(TEntity entity);
 
         /// <summary>
         /// Creates all specified <paramref name="entities"/> and tracks them
         /// </summary>
-        /// <param name="entities">Entities to create</param>
+        /// <param name="entities">The entities to create</param>
         void CreateRange(IEnumerable<TEntity> entities);
 
         /// <summary>
