@@ -21,7 +21,7 @@ When you've installed the library, below is an example for defining a Repository
 
 ### 1. Create the entity
 
-AnyEntity.cs
+`AnyEntity.cs`
 ```cs
 public class AnyEntity : BaseEntity<int>
 {
@@ -37,7 +37,7 @@ public class AnyEntity : BaseEntity<int>
 
 ### 2. Add it to your DbContext
 
-AnyDbContext.cs
+`AnyDbContext.cs`
 ```cs
 public class AnyDbContext : DbContext
 {
@@ -52,7 +52,7 @@ public class AnyDbContext : DbContext
 
 ### 3. Create the repository
 
-AnyRepository.cs
+`AnyRepository.cs`
 ```cs
 public class AnyRepository : Repository<AnyEntity, int, AnyDbContext>
 {
@@ -65,9 +65,9 @@ public class AnyRepository : Repository<AnyEntity, int, AnyDbContext>
 
 ### 4. Use it
 
-After you've injected a new AnyRepository into your application's Startup.cs, you can use it like so:
+After you've injected a new AnyRepository into your application's `Startup.cs`, you can use it like so:
 
-AnyService.cs
+`AnyService.cs`
 ```cs
 public class AnyService
 {
