@@ -21,6 +21,8 @@ When you've installed the library, below is an example for defining a Repository
 
 ### 1. Create the entity
 
+Create the entity by defining its Id type (`int`).
+
 `AnyEntity.cs`
 ```cs
 public class AnyEntity : BaseEntity<int>
@@ -51,6 +53,8 @@ public class AnyDbContext : DbContext
 ```
 
 ### 3. Create the repository
+
+Create the repository by defining its entity type (`AnyEntity`), the entity's Id type (`int`) and the DbContext type (`AnyDbContext`).
 
 `AnyRepository.cs`
 ```cs
