@@ -15,8 +15,6 @@ namespace DvBCrud.EFCore.Entities
         public override void Copy(BaseEntity<TId> other)
         {
             var o = other as BaseAuditedEntity<TId, TUserId>;
-            CreatedAt = o.CreatedAt;
-            CreatedBy = o.CreatedBy;
             UpdatedAt = o.UpdatedAt;
             UpdatedBy = o.UpdatedBy;
 
