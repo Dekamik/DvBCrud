@@ -1,4 +1,4 @@
-﻿using DvBCrud.EFCore.Tests.Mocks.Entities;
+﻿using DvBCrud.EFCore.Mocks.Entities;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;

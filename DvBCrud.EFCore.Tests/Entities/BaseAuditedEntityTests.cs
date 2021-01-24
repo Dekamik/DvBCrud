@@ -1,8 +1,6 @@
-﻿using DvBCrud.EFCore.Tests.Mocks.Entities;
+﻿using DvBCrud.EFCore.Mocks.Entities;
 using FluentAssertions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace DvBCrud.EFCore.Tests.Entities

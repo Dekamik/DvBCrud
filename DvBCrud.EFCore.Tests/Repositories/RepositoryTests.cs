@@ -1,6 +1,6 @@
-﻿using DvBCrud.EFCore.Tests.Mocks.DbContexts;
-using DvBCrud.EFCore.Tests.Mocks.Entities;
-using DvBCrud.EFCore.Tests.Mocks.Repositories;
+﻿using DvBCrud.EFCore.Mocks.DbContexts;
+using DvBCrud.EFCore.Mocks.Entities;
+using DvBCrud.EFCore.Mocks.Repositories;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DvBCrud.EFCore.Mocks\DvBCrud.EFCore.Mocks.csproj" />
     <ProjectReference Include="..\DvBCrud.EFCore\DvBCrud.EFCore.csproj" />
   </ItemGroup>
 
