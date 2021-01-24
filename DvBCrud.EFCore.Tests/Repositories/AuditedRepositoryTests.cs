@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DvBCrud.EFCore.Tests.Repositories
@@ -89,7 +90,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Update_AnyAuditedEntity_EntityUpdated()
+        public async Task Update_AnyAuditedEntity_EntityUpdated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Update_AnyAuditedEntity_EntityUpdated));
             var repository = new AnyAuditedRepository(dbContextProvider.DbContext, logger);
@@ -114,7 +115,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 UpdatedBy = 1
             };
 
-            repository.Update(expected, 1);
+            await repository.Update(expected, 1);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyAuditedEntities.Single();

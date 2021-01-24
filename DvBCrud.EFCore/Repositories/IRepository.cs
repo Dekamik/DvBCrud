@@ -29,7 +29,7 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="entity">New entity data</param>
         /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChanges"/> should be called after invocation if used.</param>
-        void Update(TEntity entity, bool createIfNotExists = false);
+        Task Update(TEntity entity, bool createIfNotExists = false);
 
         /// <summary>
         /// Finds tracked <typeparamref name="TEntity"/> instances by Id and copies values from each <paramref name="entities"/> to their corresponding tracked <typeparamref name="TEntity"/>

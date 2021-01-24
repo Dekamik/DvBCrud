@@ -37,14 +37,14 @@ namespace DvBCrud.EFCore.Repositories
             Set.AddRange(entities);
         }
 
-        public virtual void Update(TEntity entity, bool createIfNotExists = false)
+        public virtual async Task Update(TEntity entity, bool createIfNotExists = false)
         {
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
 
             logger.LogTrace($"Updating {nameof(TEntity)} with Id {entity.Id}");
 
-            var existingEntity = Set.Find(entity.Id);
+            var existingEntity = await Set.FindAsync(entity.Id);
 
             // If entity wasn't found, log a debug message
             if (existingEntity == null)

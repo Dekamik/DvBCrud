@@ -53,7 +53,7 @@ namespace DvBCrud.EFCore.API.JSON
             {
                 logger.LogTrace($"{nameof(Update)} request recieved for a {nameof(TEntity)}.Id = {entities.Single().Id}");
 
-                repository.Update(entities.Single(), createIfNotExists);
+                await repository.Update(entities.Single(), createIfNotExists);
                 await repository.SaveChanges();
             }
             else if (count > 1)

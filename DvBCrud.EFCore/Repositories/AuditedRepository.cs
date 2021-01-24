@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.Repositories
 {
@@ -44,7 +45,7 @@ namespace DvBCrud.EFCore.Repositories
             base.CreateRange(entities);
         }
 
-        public void Update(TEntity entity, TUserId userId, bool createIfNotExists = false)
+        public async Task Update(TEntity entity, TUserId userId, bool createIfNotExists = false)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(Update)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");
@@ -52,7 +53,7 @@ namespace DvBCrud.EFCore.Repositories
             entity.UpdatedAt = now;
             entity.UpdatedBy = userId;
 
-            base.Update(entity, createIfNotExists);
+            await base.Update(entity, createIfNotExists);
         }
 
         public void UpdateRange(IEnumerable<TEntity> entities, TUserId userId, bool createIfNotExists = false)
@@ -92,7 +93,7 @@ namespace DvBCrud.EFCore.Repositories
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use AuditedRepository.Update(TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
-        public override void Update(TEntity entity, bool createIfNotExists = false)
+        public override Task Update(TEntity entity, bool createIfNotExists = false)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
             throw new NotSupportedException("Use AuditedRepository.Update(TEntity, TUserId) instead");
