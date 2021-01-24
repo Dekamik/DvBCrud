@@ -8,16 +8,16 @@ DvBCrud.EFCore streamlines the process of developing a Code-First database by im
 
 The basic workflow goes like this:
 
-1. Define your entity by inheriting BaseEntity or BaseAuditedEntity.
-2. Add it to your DbContext.
-3. Define the repository and its functionality by inheriting ReadOnlyRepository, Repository or AuditedRepository (requires BaseAuditedEntity-derived entity).
+1. Define your entity by inheriting `BaseEntity` or `BaseAuditedEntity`.
+2. Add it to your `DbContext`.
+3. Define the repository and its functionality by inheriting `ReadOnlyRepository`, `Repository` or `AuditedRepository` (requires `BaseAuditedEntity`-derived entity).
 
 And that's it. Migrate using EFCore and you have fully functional and fully tested database CRUD couplings for your application. 
 All CRUD functionality is already written and available.
 
 ## Getting started
 
-When you've installed the library, below is an example for defining a Repository for AnyEntity
+When you've installed the library, below is an example for defining a `Repository` for `AnyEntity`.
 
 ### 1. Create the entity
 
