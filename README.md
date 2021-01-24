@@ -8,6 +8,10 @@ This library aims to both standardize and enable rapid development of normal dat
 
 The core implementation for handling repositories and entities using Entity Framework Core.
 
+[Documentation](DvBCrud.EFCore)
+
 ## [DvBCrud.EFCore.API](DvBCrud.EFCore.API)
 
 Templates for generating CRUDControllers for Web APIs.
+
+[Documentation](DvBCrud.EFCore.API)
