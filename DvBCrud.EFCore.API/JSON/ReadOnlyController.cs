@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.JSON
 {
@@ -23,11 +24,11 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpGet, Route("{id}")]
-        public ActionResult<TEntity> Read(TId id)
+        public async Task<ActionResult<TEntity>> Read(TId id)
         {
             logger.LogTrace($"Request recieved at {nameof(Read)} for {nameof(TRepository)} ({nameof(TEntity)})");
 
-            TEntity entity = repository.Get(id);
+            TEntity entity = await repository.Get(id);
 
             return Ok(entity);
         }

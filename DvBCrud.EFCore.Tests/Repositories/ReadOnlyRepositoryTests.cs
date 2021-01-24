@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DvBCrud.EFCore.Tests.Repositories
@@ -45,7 +46,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Get_ExistingId_ReturnsEntity()
+        public async Task Get_ExistingId_ReturnsEntity()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Get_ExistingId_ReturnsEntity));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
@@ -63,13 +64,13 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
             dbContextProvider.Mock(expected);
 
-            var actual = repository.Get(1);
+            var actual = await repository.Get(1);
 
             actual.Should().BeEquivalentTo(expected.First());
         }
 
         [Fact]
-        public void Get_NonExistingId_ReturnsNull()
+        public async Task Get_NonExistingId_ReturnsNull()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Get_NonExistingId_ReturnsNull));
             var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
@@ -87,7 +88,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
             dbContextProvider.Mock(expected);
 
-            var actual = repository.Get(3);
+            var actual = await repository.Get(3);
 
             actual.Should().BeNull();
         }
@@ -98,7 +99,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             using var dbContextProvider = new AnyDbContextProvider(nameof(GetRange_MultipleIds_ReturnsEntities));
             var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
 
-            repository.Invoking(r => r.Get(null)).Should().Throw<ArgumentNullException>();
+            repository.Invoking(r => r.Get(null)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]

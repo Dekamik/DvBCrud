@@ -1,6 +1,7 @@
 ﻿using DvBCrud.EFCore.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.Repositories
 {
@@ -22,7 +23,7 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TEntity"/> or null if it doesn't exist</returns>
-        TEntity Get(TId id);
+        Task<TEntity> Get(TId id);
 
         /// <summary>
         /// Finds multiple <typeparamref name="TEntity"/> instances whose Ids are contained within <paramref name="ids"/>

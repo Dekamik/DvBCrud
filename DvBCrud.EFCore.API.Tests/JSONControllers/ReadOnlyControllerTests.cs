@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace DvBCrud.EFCore.API.Tests.JSONControllers
@@ -14,7 +15,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
     public class ReadOnlyControllerTests
     {
         [Fact]
-        public void Read_AnyId_ReturnsEntityFromRepository()
+        public async Task Read_AnyId_ReturnsEntityFromRepository()
         {
             var repo = A.Fake<IAnyReadOnlyRepository>();
             var logger = A.Fake<ILogger>();
@@ -26,7 +27,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
             A.CallTo(() => repo.Get(1)).Returns(expected);
             var controller = new AnyReadOnlyController(repo, logger);
 
-            var result = controller.Read(1).Result as OkObjectResult;
+            var result = (await controller.Read(1)).Result as OkObjectResult;
 
             result.Should().NotBeNull();
             result.Value.Should().Be(expected);
