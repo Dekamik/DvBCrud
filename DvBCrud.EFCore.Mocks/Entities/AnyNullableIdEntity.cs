@@ -1,6 +1,6 @@
 ﻿using DvBCrud.EFCore.Entities;
 
-namespace DvBCrud.EFCore.Tests.Mocks.Entities
+namespace DvBCrud.EFCore.Mocks.Entities
 {
     public class AnyNullableIdEntity : BaseEntity<string>
     {

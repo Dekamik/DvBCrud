@@ -1,9 +1,9 @@
-﻿using DvBCrud.EFCore.Repositories;
-using DvBCrud.EFCore.Tests.Mocks.DbContexts;
-using DvBCrud.EFCore.Tests.Mocks.Entities;
+﻿using DvBCrud.EFCore.Mocks.DbContexts;
+using DvBCrud.EFCore.Mocks.Entities;
+using DvBCrud.EFCore.Repositories;
 using Microsoft.Extensions.Logging;
 
-namespace DvBCrud.EFCore.Tests.Mocks.Repositories
+namespace DvBCrud.EFCore.Mocks.Repositories
 {
     public class AnyAuditedRepository : AuditedRepository<AnyAuditedEntity, int, int, AnyDbContext>
     {

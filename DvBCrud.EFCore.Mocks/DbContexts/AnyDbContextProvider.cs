@@ -1,9 +1,8 @@
 ﻿using DvBCrud.EFCore.Entities;
-using DvBCrud.EFCore.Tests.Mocks.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace DvBCrud.EFCore.Tests.Mocks.DbContexts
+namespace DvBCrud.EFCore.Mocks.DbContexts
 {
     /// <summary>
     /// DbContext provider for testing purposes

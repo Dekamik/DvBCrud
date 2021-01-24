@@ -1,14 +1,14 @@
 ﻿using DvBCrud.EFCore.Entities;
 
-namespace DvBCrud.EFCore.Tests.Mocks.Entities
+namespace DvBCrud.EFCore.Mocks.Entities
 {
-    public class AnyAuditedEntity : BaseAuditedEntity<int, int>
+    public class AnyEntity : BaseEntity<int>
     {
         public string AnyString { get; set; }
 
         protected override void CopyImpl(BaseEntity<int> other)
         {
-            var o = other as AnyAuditedEntity;
+            var o = other as AnyEntity;
             AnyString = o.AnyString;
         }
     }

@@ -1,7 +1,7 @@
-﻿using DvBCrud.EFCore.Tests.Mocks.Entities;
+﻿using DvBCrud.EFCore.Mocks.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DvBCrud.EFCore.Tests.Mocks.DbContexts
+namespace DvBCrud.EFCore.Mocks.DbContexts
 {
     public class AnyDbContext : DbContext
     {
