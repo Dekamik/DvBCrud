@@ -23,7 +23,7 @@ namespace DvBCrud.EFCore.Repositories
             this.logger = logger;
         }
 
-        public virtual IQueryable<TEntity> GetAll()
+        public virtual IEnumerable<TEntity> GetAll()
         {
             logger.LogTrace($"Getting all {nameof(TEntity)} entities");
             return Set;
@@ -38,7 +38,7 @@ namespace DvBCrud.EFCore.Repositories
             return Set.SingleOrDefault(e => id.Equals(e.Id));
         }
 
-        public IQueryable<TEntity> GetRange(IEnumerable<TId> ids)
+        public IEnumerable<TEntity> GetRange(IEnumerable<TId> ids)
         {
             if (ids == null)
                 throw new ArgumentNullException($"{ids} cannot be null");

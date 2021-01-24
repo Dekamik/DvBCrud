@@ -3,11 +3,12 @@ using DvBCrud.EFCore.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DvBCrud.EFCore.API.JSON
 {
-    public abstract class ReadOnlyController<TId, TEntity, TRepository, TDbContext> : ControllerBase, IReadOnlyController<TId>
+    public abstract class ReadOnlyController<TEntity, TId, TRepository, TDbContext> : ControllerBase, IReadOnlyController<TEntity, TId>
         where TEntity : BaseEntity<TId>
         where TRepository : IReadOnlyRepository<TEntity, TId>
         where TDbContext : DbContext
@@ -22,7 +23,7 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpGet, Route("{id}")]
-        public IActionResult Read(TId id)
+        public ActionResult<TEntity> Read(TId id)
         {
             logger.LogTrace($"Request recieved at {nameof(Read)} for {nameof(TRepository)} ({nameof(TEntity)})");
 
@@ -32,13 +33,13 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpGet]
-        public IActionResult ReadAll()
+        public ActionResult<IEnumerable<TEntity>> ReadAll()
         {
             logger.LogTrace($"Request recieved at {nameof(ReadAll)} for {nameof(TRepository)} ({nameof(TEntity)})");
 
-            IQueryable<TEntity> entities = repository.GetAll();
+            var entities = repository.GetAll();
 
-            return Ok(entities);
+            return Ok(entities.AsEnumerable());
         }
     }
 }

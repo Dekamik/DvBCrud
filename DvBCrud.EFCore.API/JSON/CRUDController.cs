@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.JSON
 {
-    public abstract class CRUDController<TId, TEntity, TRepository, TDbContext> : ReadOnlyController<TId, TEntity, TRepository, TDbContext>, ICRUDController<TId, TEntity>
+    public abstract class CRUDController<TEntity, TId, TRepository, TDbContext> : ReadOnlyController<TEntity, TId, TRepository, TDbContext>, ICRUDController<TEntity, TId>
         where TEntity : BaseEntity<TId>
         where TRepository : IRepository<TEntity, TId>
         where TDbContext : DbContext

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DvBCrud.EFCore.API.Mocks.JSONControllers
 {
-    public class AnyReadOnlyController : ReadOnlyController<int, AnyEntity, IAnyReadOnlyRepository, AnyDbContext>
+    public class AnyReadOnlyController : ReadOnlyController<AnyEntity, int, IAnyReadOnlyRepository, AnyDbContext>
     {
         public AnyReadOnlyController(IAnyReadOnlyRepository repository, ILogger logger) : base(repository, logger)
         {

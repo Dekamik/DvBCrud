@@ -1,4 +1,5 @@
 ﻿using DvBCrud.EFCore.Entities;
+using System;
 
 namespace DvBCrud.EFCore.Mocks.Entities
 {

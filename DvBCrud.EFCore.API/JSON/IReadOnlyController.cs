@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DvBCrud.EFCore.API.JSON
 {
-    public interface IReadOnlyController<TId>
+    public interface IReadOnlyController<TEntity, TId>
     {
         [HttpGet, Route("{id}")]
-        IActionResult Read(TId id);
+        ActionResult<TEntity> Read(TId id);
 
         [HttpGet]
-        IActionResult ReadAll();
+        ActionResult<IEnumerable<TEntity>> ReadAll();
     }
 }

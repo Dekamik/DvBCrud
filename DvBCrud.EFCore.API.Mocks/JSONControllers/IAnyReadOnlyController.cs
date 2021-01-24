@@ -1,11 +1,9 @@
 ﻿using DvBCrud.EFCore.API.JSON;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using DvBCrud.EFCore.Mocks.Entities;
 
 namespace DvBCrud.EFCore.API.Mocks.JSONControllers
 {
-    public interface IAnyReadOnlyController : IReadOnlyController<int>
+    public interface IAnyReadOnlyController : IReadOnlyController<AnyEntity, int>
     {
     }
 }

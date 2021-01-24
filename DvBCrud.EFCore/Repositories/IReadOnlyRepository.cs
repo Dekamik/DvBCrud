@@ -15,7 +15,7 @@ namespace DvBCrud.EFCore.Repositories
         /// Gets all entities
         /// </summary>
         /// <returns>An <see cref="IQueryable"/> containing all <typeparamref name="TEntity"/> instances</returns>
-        IQueryable<TEntity> GetAll();
+        IEnumerable<TEntity> GetAll();
 
         /// <summary>
         /// Finds a single <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/>
@@ -29,6 +29,6 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="ids">Key values to query</param>
         /// <returns>An <see cref="IQueryable"/> containing all, some or no matching <typeparamref name="TEntity"/> instances</returns>
-        IQueryable<TEntity> GetRange(IEnumerable<TId> ids);
+        IEnumerable<TEntity> GetRange(IEnumerable<TId> ids);
     }
 }

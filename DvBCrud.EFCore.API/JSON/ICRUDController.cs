@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.JSON
 {
-    public interface ICRUDController<TId, TEntity>
+    public interface ICRUDController<TEntity, TId>
         where TEntity : BaseEntity<TId>
     {
         [HttpPost]
