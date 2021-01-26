@@ -20,7 +20,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
             var entity = new AnyEntity();
 
             // Act
-            await controller.Create(new[] { entity });
+            await controller.Create(entity);
 
             // Assert
             A.CallTo(() => repo.Create(entity)).MustHaveHappenedOnceExactly();

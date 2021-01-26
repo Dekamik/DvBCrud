@@ -9,6 +9,9 @@ namespace DvBCrud.EFCore.API.JSON
         where TEntity : BaseEntity<TId>
     {
         [HttpPost]
+        Task<IActionResult> Create([FromBody] TEntity entity);
+
+        [HttpPost]
         Task<IActionResult> Create([FromBody]IEnumerable<TEntity> entity);
 
         [HttpPut]

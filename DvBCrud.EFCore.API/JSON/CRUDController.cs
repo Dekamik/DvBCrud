@@ -20,27 +20,23 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpPost]
+        public async Task<IActionResult> Create([FromBody] TEntity entity)
+        {
+            logger.LogTrace($"{nameof(Create)} request recieved for a {nameof(TEntity)}");
+
+            repository.Create(entity);
+            await repository.SaveChanges();
+
+            return Ok();
+        }
+
+        
         public async Task<IActionResult> Create([FromBody]IEnumerable<TEntity> entities)
         {
-            var count = entities.Count();
-            if (count == 1)
-            {
-                logger.LogTrace($"{nameof(Create)} request recieved for a {nameof(TEntity)}");
+            logger.LogTrace($"{nameof(Create)} request recieved for {entities.Count()} {nameof(TEntity)}");
 
-                repository.Create(entities.Single());
-                await repository.SaveChanges();
-            }
-            else if (count > 1)
-            {
-                logger.LogTrace($"{nameof(Create)} request recieved for {count} {nameof(TEntity)}");
-
-                repository.CreateRange(entities);
-                await repository.SaveChanges();
-            }
-            else
-            {
-                logger.LogTrace($"{nameof(Update)} request recieved for a null {nameof(TEntity)}");
-            }
+            repository.CreateRange(entities);
+            await repository.SaveChanges();
 
             return Ok();
         }
