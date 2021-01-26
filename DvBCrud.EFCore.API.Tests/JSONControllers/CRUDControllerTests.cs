@@ -43,7 +43,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
             };
 
             // Act
-            var result = await controller.Create(entities) as OkResult;
+            var result = await controller.CreateRange(entities) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
@@ -98,7 +98,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
             };
 
             // Act
-            var result = await controller.Update(entities) as OkResult;
+            var result = await controller.UpdateRange(entities) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
@@ -119,7 +119,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
             };
 
             // Act
-            var result = await controller.Update(entities, true) as OkResult;
+            var result = await controller.UpdateRange(entities, true) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
@@ -153,7 +153,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
             var entities = new[] { 1, 2 };
 
             // Act
-            var result = await controller.Delete(entities) as OkResult;
+            var result = await controller.DeleteRange(entities) as OkResult;
 
             // Assert
             result.Should().NotBeNull();

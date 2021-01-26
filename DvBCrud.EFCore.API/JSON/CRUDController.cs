@@ -34,15 +34,15 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]IEnumerable<TEntity> entities)
+        public async Task<IActionResult> CreateRange([FromBody]IEnumerable<TEntity> entities)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Create)} {entities.Count()} {nameof(TEntity)}");
+            logger.LogDebug($"{guid}: {nameof(CreateRange)} {entities.Count()} {nameof(TEntity)}");
 
             repository.CreateRange(entities);
             await repository.SaveChanges();
 
-            logger.LogDebug($"{guid}: {nameof(Create)} OK");
+            logger.LogDebug($"{guid}: {nameof(CreateRange)} OK");
             return Ok();
         }
 
@@ -60,15 +60,15 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody]IEnumerable<TEntity> entities, [FromQuery]bool createIfNotExists = false)
+        public async Task<IActionResult> UpdateRange([FromBody]IEnumerable<TEntity> entities, [FromQuery]bool createIfNotExists = false)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Update)} {entities.Count()} {nameof(TEntity)}.Id = {string.Join(", ", entities)}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
+            logger.LogDebug($"{guid}: {nameof(UpdateRange)} {entities.Count()} {nameof(TEntity)}.Id = {string.Join(", ", entities)}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
             repository.UpdateRange(entities, createIfNotExists);
             await repository.SaveChanges();
 
-            logger.LogDebug($"{guid}: {nameof(Update)} OK");
+            logger.LogDebug($"{guid}: {nameof(UpdateRange)} OK");
             return Ok();
         }
 
@@ -86,15 +86,15 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody]IEnumerable<TId> id)
+        public async Task<IActionResult> DeleteRange([FromBody]IEnumerable<TId> id)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)}.Id = {string.Join(", ", id)}");
+            logger.LogDebug($"{guid}: {nameof(DeleteRange)} {nameof(TEntity)}.Id = {string.Join(", ", id)}");
 
             repository.DeleteRange(id);
             await repository.SaveChanges();
 
-            logger.LogDebug($"{guid}: {nameof(Delete)} OK");
+            logger.LogDebug($"{guid}: {nameof(DeleteRange)} OK");
             return Ok();
         }
     }
