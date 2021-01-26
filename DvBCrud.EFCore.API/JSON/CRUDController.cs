@@ -30,7 +30,7 @@ namespace DvBCrud.EFCore.API.JSON
             return Ok();
         }
 
-        
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody]IEnumerable<TEntity> entities)
         {
             logger.LogTrace($"{nameof(Create)} request recieved for {entities.Count()} {nameof(TEntity)}");
@@ -42,27 +42,23 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpPut]
+        public async Task<IActionResult> Update([FromBody] TEntity entity, [FromQuery] bool createIfNotExists = false)
+        {
+            logger.LogTrace($"{nameof(Update)} request recieved for a {nameof(TEntity)}.Id = {entity}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
+
+            await repository.Update(entity, createIfNotExists);
+            await repository.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody]IEnumerable<TEntity> entities, [FromQuery]bool createIfNotExists = false)
         {
-            var count = entities.Count();
-            if (count == 1)
-            {
-                logger.LogTrace($"{nameof(Update)} request recieved for a {nameof(TEntity)}.Id = {entities.Single().Id}");
+            logger.LogTrace($"{nameof(Update)} request recieved for {entities.Count()} {nameof(TEntity)}.Id = {string.Join(", ", entities)}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
-                await repository.Update(entities.Single(), createIfNotExists);
-                await repository.SaveChanges();
-            }
-            else if (count > 1)
-            {
-                logger.LogTrace($"{nameof(Update)} request recieved for {count} {nameof(TEntity)}.Id = {string.Join(", ", entities)}");
-
-                repository.UpdateRange(entities, createIfNotExists);
-                await repository.SaveChanges();
-            }
-            else
-            {
-                logger.LogTrace($"{nameof(Update)} request recieved for a null {nameof(TEntity)}");
-            }
+            repository.UpdateRange(entities, createIfNotExists);
+            await repository.SaveChanges();
 
             return Ok();
         }
