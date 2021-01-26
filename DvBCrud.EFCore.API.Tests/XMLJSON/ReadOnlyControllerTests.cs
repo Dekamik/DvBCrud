@@ -1,4 +1,4 @@
-﻿using DvBCrud.EFCore.API.Mocks.JSONControllers;
+﻿using DvBCrud.EFCore.API.Mocks.XMLJSON;
 using DvBCrud.EFCore.Mocks.Entities;
 using DvBCrud.EFCore.Mocks.Repositories;
 using FakeItEasy;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace DvBCrud.EFCore.API.Tests.JSONControllers
+namespace DvBCrud.EFCore.API.Tests.XMLJSON
 {
     public class ReadOnlyControllerTests
     {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DvBCrud.EFCore.API.JSON
+namespace DvBCrud.EFCore.API.XMLJSON
 {
     public interface ICRUDController<TEntity, TId>
         where TEntity : BaseEntity<TId>

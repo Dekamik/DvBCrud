@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DvBCrud.EFCore.API.JSON
+namespace DvBCrud.EFCore.API.XMLJSON
 {
     public abstract class ReadOnlyController<TEntity, TId, TRepository, TDbContext> : ControllerBase, IReadOnlyController<TEntity, TId>
         where TEntity : BaseEntity<TId>

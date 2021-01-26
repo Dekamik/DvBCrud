@@ -1,7 +1,7 @@
-﻿using DvBCrud.EFCore.API.JSON;
+﻿using DvBCrud.EFCore.API.XMLJSON;
 using DvBCrud.EFCore.Mocks.Entities;
 
-namespace DvBCrud.EFCore.API.Mocks.JSONControllers
+namespace DvBCrud.EFCore.API.Mocks.XMLJSON
 {
     public interface IAnyCRUDController : ICRUDController<AnyEntity, int>
     {

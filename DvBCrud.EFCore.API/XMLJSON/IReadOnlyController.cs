@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DvBCrud.EFCore.API.JSON
+namespace DvBCrud.EFCore.API.XMLJSON
 {
     public interface IReadOnlyController<TEntity, TId>
     {
