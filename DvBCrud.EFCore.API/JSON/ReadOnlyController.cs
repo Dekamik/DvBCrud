@@ -24,9 +24,9 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpGet, Route("{id}")]
-        public async Task<ActionResult<TEntity>> Read(TId id)
+        public async Task<ActionResult<TEntity>> Read([FromQuery]TId id)
         {
-            logger.LogTrace($"Request recieved at {nameof(Read)} for {nameof(TRepository)} ({nameof(TEntity)})");
+            logger.LogTrace($"{nameof(Read)} request recieved for a {nameof(TEntity)}.Id = {id}");
 
             TEntity entity = await repository.Get(id);
 
@@ -34,11 +34,21 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpGet]
+        public ActionResult<IEnumerable<TEntity>> Read([FromBody] IEnumerable<TId> ids)
+        {
+            logger.LogTrace($"{nameof(Read)} request recieved for {ids.Count()} {nameof(TEntity)}.Id = {string.Join(", ", ids)}");
+
+            IEnumerable<TEntity> entities = repository.GetRange(ids);
+
+            return Ok(entities);
+        }
+
+        [HttpGet]
         public ActionResult<IEnumerable<TEntity>> ReadAll()
         {
-            logger.LogTrace($"Request recieved at {nameof(ReadAll)} for {nameof(TRepository)} ({nameof(TEntity)})");
+            logger.LogTrace($"{nameof(Read)} request recieved for all {nameof(TEntity)}");
 
-            var entities = repository.GetAll();
+            IEnumerable<TEntity> entities = repository.GetAll();
 
             return Ok(entities);
         }

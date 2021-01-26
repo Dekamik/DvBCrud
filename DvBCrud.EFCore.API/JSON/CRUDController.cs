@@ -72,7 +72,7 @@ namespace DvBCrud.EFCore.API.JSON
         }
 
         [HttpDelete, Route("{id}")]
-        public async Task<IActionResult> Delete(TId id)
+        public async Task<IActionResult> Delete([FromQuery]TId id)
         {
             logger.LogTrace($"{nameof(Delete)} request recieved for {nameof(TEntity)}.Id = {id}");
 

@@ -15,7 +15,7 @@ namespace DvBCrud.EFCore.API.JSON
         Task<IActionResult> Update([FromBody]IEnumerable<TEntity> entity, [FromQuery] bool createIfNotExists = false);
 
         [HttpDelete, Route("{id}")]
-        Task<IActionResult> Delete(TId id);
+        Task<IActionResult> Delete([FromQuery]TId id);
 
         [HttpDelete]
         Task<IActionResult> Delete([FromBody]IEnumerable<TId> id);
