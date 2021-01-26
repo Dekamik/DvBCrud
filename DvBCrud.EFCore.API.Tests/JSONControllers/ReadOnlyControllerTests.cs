@@ -34,7 +34,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
         }
 
         [Fact]
-        public void Read_MultipleIds_ReturnsEntitiesFromRepository()
+        public void ReadRange_MultipleIds_ReturnsEntitiesFromRepository()
         {
             var repo = A.Fake<IAnyReadOnlyRepository>();
             var logger = A.Fake<ILogger>();
@@ -55,7 +55,7 @@ namespace DvBCrud.EFCore.API.Tests.JSONControllers
             A.CallTo(() => repo.GetRange(input)).Returns(expected);
             var controller = new AnyReadOnlyController(repo, logger);
 
-            var result = (controller.Read(input)).Result as OkObjectResult;
+            var result = controller.ReadRange(input).Result as OkObjectResult;
 
             result.Should().NotBeNull();
             result.Value.Should().Be(expected);
