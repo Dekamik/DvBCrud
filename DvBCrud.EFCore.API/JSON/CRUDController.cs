@@ -22,7 +22,7 @@ namespace DvBCrud.EFCore.API.JSON
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] TEntity entity)
         {
-            logger.LogTrace($"{nameof(Create)} request recieved for a {nameof(TEntity)}");
+            logger.LogTrace($"{nameof(Create)} {nameof(TEntity)}");
 
             repository.Create(entity);
             await repository.SaveChanges();
@@ -33,7 +33,7 @@ namespace DvBCrud.EFCore.API.JSON
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]IEnumerable<TEntity> entities)
         {
-            logger.LogTrace($"{nameof(Create)} request recieved for {entities.Count()} {nameof(TEntity)}");
+            logger.LogDebug($"{nameof(Create)} {entities.Count()} {nameof(TEntity)}");
 
             repository.CreateRange(entities);
             await repository.SaveChanges();
@@ -44,7 +44,7 @@ namespace DvBCrud.EFCore.API.JSON
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] TEntity entity, [FromQuery] bool createIfNotExists = false)
         {
-            logger.LogTrace($"{nameof(Update)} request recieved for a {nameof(TEntity)}.Id = {entity}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
+            logger.LogDebug($"{nameof(Update)} {nameof(TEntity)}.Id = {entity}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
             await repository.Update(entity, createIfNotExists);
             await repository.SaveChanges();
@@ -55,7 +55,7 @@ namespace DvBCrud.EFCore.API.JSON
         [HttpPut]
         public async Task<IActionResult> Update([FromBody]IEnumerable<TEntity> entities, [FromQuery]bool createIfNotExists = false)
         {
-            logger.LogTrace($"{nameof(Update)} request recieved for {entities.Count()} {nameof(TEntity)}.Id = {string.Join(", ", entities)}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
+            logger.LogDebug($"{nameof(Update)} {entities.Count()} {nameof(TEntity)}.Id = {string.Join(", ", entities)}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
             repository.UpdateRange(entities, createIfNotExists);
             await repository.SaveChanges();
@@ -66,7 +66,7 @@ namespace DvBCrud.EFCore.API.JSON
         [HttpDelete, Route("{id}")]
         public async Task<IActionResult> Delete([FromQuery]TId id)
         {
-            logger.LogTrace($"{nameof(Delete)} request recieved for {nameof(TEntity)}.Id = {id}");
+            logger.LogDebug($"{nameof(Delete)} {nameof(TEntity)}.Id = {id}");
 
             repository.Delete(id);
             await repository.SaveChanges();
@@ -77,7 +77,7 @@ namespace DvBCrud.EFCore.API.JSON
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody]IEnumerable<TId> id)
         {
-            logger.LogTrace($"{nameof(Delete)} request recieved for {nameof(TEntity)}.Id = {string.Join(", ", id)}");
+            logger.LogDebug($"{nameof(Delete)} {nameof(TEntity)}.Id = {string.Join(", ", id)}");
 
             repository.DeleteRange(id);
             await repository.SaveChanges();
