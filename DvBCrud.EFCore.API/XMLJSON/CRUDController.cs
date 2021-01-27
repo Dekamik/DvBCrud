@@ -25,8 +25,9 @@ namespace DvBCrud.EFCore.API.XMLJSON
 
             if (entity.Id != null)
             {
-                logger.LogDebug($"{guid}: {nameof(Create)} BAD REQUEST");
-                return BadRequest($"{nameof(TEntity)}.Id must not be predefined.");
+                string message = $"{nameof(TEntity)}.Id must not be predefined.";
+                logger.LogDebug($"{guid}: {nameof(Create)} BAD REQUEST - {message}");
+                return BadRequest(message);
             }
 
             repository.Create(entity);
