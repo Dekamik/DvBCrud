@@ -27,7 +27,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             logger.LogDebug($"{guid}: {nameof(Create)} {nameof(TEntity)}");
 
             repository.Create(entity);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             logger.LogDebug($"{guid}: {nameof(Create)} OK");
             return Ok();
@@ -40,7 +40,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             logger.LogDebug($"{guid}: {nameof(CreateRange)} {entities.Count()} {nameof(TEntity)}");
 
             repository.CreateRange(entities);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             logger.LogDebug($"{guid}: {nameof(CreateRange)} OK");
             return Ok();
@@ -52,8 +52,8 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)}.Id = {entity}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
-            await repository.Update(entity, createIfNotExists);
-            await repository.SaveChanges();
+            await repository.UpdateAsync(entity, createIfNotExists);
+            await repository.SaveChangesAsync();
 
             logger.LogDebug($"{guid}: {nameof(Update)} OK");
             return Ok();
@@ -66,7 +66,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             logger.LogDebug($"{guid}: {nameof(UpdateRange)} {entities.Count()} {nameof(TEntity)}.Id = {string.Join(", ", entities)}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
             repository.UpdateRange(entities, createIfNotExists);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             logger.LogDebug($"{guid}: {nameof(UpdateRange)} OK");
             return Ok();
@@ -79,7 +79,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)}.Id = {id}");
 
             repository.Delete(id);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             logger.LogDebug($"{guid}: {nameof(Delete)} OK");
             return Ok();
@@ -92,7 +92,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             logger.LogDebug($"{guid}: {nameof(DeleteRange)} {nameof(TEntity)}.Id = {string.Join(", ", id)}");
 
             repository.DeleteRange(id);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             logger.LogDebug($"{guid}: {nameof(DeleteRange)} OK");
             return Ok();

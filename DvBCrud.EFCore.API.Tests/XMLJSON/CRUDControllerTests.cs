@@ -64,7 +64,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.Update(entity, false)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repo.UpdateAsync(entity, false)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.Update(entity, true)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repo.UpdateAsync(entity, true)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]

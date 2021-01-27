@@ -98,9 +98,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Update_ExistingEntity_EntityUpdated()
+        public async Task UpdateAsync_ExistingEntity_EntityUpdatedAsync()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_ExistingEntity_EntityUpdated));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_ExistingEntity_EntityUpdatedAsync));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             dbContextProvider.Mock(new AnyEntity
             {
@@ -113,7 +113,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 AnyString = "AnyNewString"
             };
 
-            repository.Update(expected);
+            await repository.UpdateAsync(expected);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 1);
@@ -121,9 +121,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Update_NonExistingEntity_EntityNotUpdated()
+        public async Task UpdateAsync_NonExistingEntity_EntityNotUpdated()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_EntityNotUpdated));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_NonExistingEntity_EntityNotUpdated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             dbContextProvider.Mock(new AnyEntity
             {
@@ -136,7 +136,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 AnyString = "AnyNewString"
             };
 
-            repository.Update(updatedEntity);
+            await repository.UpdateAsync(updatedEntity);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyEntities.SingleOrDefault(e => e.Id == 2);
@@ -144,9 +144,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Update_NonExistingEntityWithCreate_EntityCreated()
+        public async Task UpdateAsync_NonExistingEntityWithCreate_EntityCreated()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_EntityNotUpdated));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_NonExistingEntityWithCreate_EntityCreated));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             dbContextProvider.Mock(new AnyEntity
             {
@@ -159,7 +159,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 AnyString = "AnyNewString"
             };
 
-            repository.Update(expected, true);
+            await repository.UpdateAsync(expected, true);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 2);
@@ -167,13 +167,13 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Update_Null_ThrowsArgumentNullException()
+        public void UpdateAsync_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_Null_ThrowsArgumentNullException));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_Null_ThrowsArgumentNullException));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
 
-            repository.Invoking(r => r.Update(null)).Should().Throw<ArgumentNullException>();
-            repository.Invoking(r => r.Update(null, true)).Should().Throw<ArgumentNullException>();
+            repository.Invoking(r => r.UpdateAsync(null)).Should().ThrowAsync<ArgumentNullException>();
+            repository.Invoking(r => r.UpdateAsync(null, true)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
@@ -490,9 +490,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task SaveChanges_CallAfterAdd_ChangesSaved()
+        public async Task SaveChangesAsync_CallAfterAdd_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterAdd_ChangesSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterAdd_ChangesSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             var expected = new AnyEntity
             {
@@ -501,16 +501,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             dbContextProvider.DbContext.AnyEntities.Add(expected);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Single().Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public void SaveChanges_NoCallAfterAdd_ChangesNotSaved()
+        public void SaveChangesAsync_NoCallAfterAdd_ChangesNotSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterAdd_ChangesNotSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterAdd_ChangesNotSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             var entity = new AnyEntity
             {
@@ -525,9 +525,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task SaveChanges_CallAfterAddRange_ChangesSaved()
+        public async Task SaveChangesAsync_CallAfterAddRange_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterAddRange_ChangesSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterAddRange_ChangesSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             var expected = new[]
             {
@@ -544,16 +544,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             dbContextProvider.DbContext.AnyEntities.AddRange(expected);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public void SaveChanges_NoCallAfterAddRange_ChangesNotSaved()
+        public void SaveChangesAsync_NoCallAfterAddRange_ChangesNotSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterAddRange_ChangesNotSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterAddRange_ChangesNotSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             var entities = new[]
             {
@@ -576,9 +576,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task SaveChanges_CallAfterModify_ChangesSaved()
+        public async Task SaveChangesAsync_CallAfterModify_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterModify_ChangesSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterModify_ChangesSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             dbContextProvider.Mock(new AnyEntity
             {
@@ -592,16 +592,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             dbContextProvider.DbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Single().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
-        public void SaveChanges_NoCallAfterModify_ChangesSaved()
+        public void SaveChangesAsync_NoCallAfterModify_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterModify_ChangesSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterModify_ChangesSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             dbContextProvider.Mock(new AnyEntity
             {
@@ -621,9 +621,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task SaveChanges_CallAfterRemove_ChangesSaved()
+        public async Task SaveChangesAsync_CallAfterRemove_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterRemove_ChangesSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterRemove_ChangesSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             var entity = new AnyEntity
             {
@@ -633,16 +633,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
             dbContextProvider.Mock(entity);
 
             dbContextProvider.DbContext.AnyEntities.Remove(entity);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Should().BeEmpty();
         }
 
         [Fact]
-        public void SaveChanges_NoCallAfterRemove_ChangesNotSaved()
+        public void SaveChangesAsync_NoCallAfterRemove_ChangesNotSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterRemove_ChangesNotSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterRemove_ChangesNotSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             var entity = new AnyEntity
             {
@@ -658,9 +658,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task SaveChanges_CallAfterRemoveRange_ChangesSaved()
+        public async Task SaveChangesAsync_CallAfterRemoveRange_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterRemoveRange_ChangesSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterRemoveRange_ChangesSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             var entities = new[] {
                 new AnyEntity
@@ -677,16 +677,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
             dbContextProvider.Mock(entities);
 
             dbContextProvider.DbContext.AnyEntities.RemoveRange(entities);
-            await repository.SaveChanges();
+            await repository.SaveChangesAsync();
 
             var actual = dbContextProvider.DbContext.AnyEntities;
             actual.Should().BeEmpty();
         }
 
         [Fact]
-        public void SaveChanges_NoCallAfterRemoveRange_ChangesNotSaved()
+        public void SaveChangesAsync_NoCallAfterRemoveRange_ChangesNotSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterRemoveRange_ChangesNotSaved));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterRemoveRange_ChangesNotSaved));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             var entities = new[] {
                 new AnyEntity

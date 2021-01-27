@@ -37,7 +37,7 @@ namespace DvBCrud.EFCore.Repositories
             Set.AddRange(entities);
         }
 
-        public virtual async Task Update(TEntity entity, bool createIfNotExists = false)
+        public virtual async Task UpdateAsync(TEntity entity, bool createIfNotExists = false)
         {
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
@@ -127,7 +127,7 @@ namespace DvBCrud.EFCore.Repositories
             Set.RemoveRange(entities);
         }
 
-        public virtual async Task SaveChanges()
+        public virtual async Task SaveChangesAsync()
         {
             logger.LogTrace($"Repository for {nameof(TEntity)} saving changes to {nameof(TDbContext)}");
             await dbContext.SaveChangesAsync();
