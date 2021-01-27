@@ -47,14 +47,5 @@ namespace DvBCrud.EFCore.Repositories
             logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {id}");
             return Set.SingleOrDefaultAsync(e => id.Equals(e.Id));
         }
-
-        public virtual IEnumerable<TEntity> GetRange(IEnumerable<TId> ids)
-        {
-            if (ids == null)
-                throw new ArgumentNullException($"{ids} cannot be null");
-
-            logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {string.Join(", ", ids)}");
-            return Set.Where(e => ids.Contains(e.Id));
-        }
     }
 }

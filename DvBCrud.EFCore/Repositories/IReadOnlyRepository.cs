@@ -31,12 +31,5 @@ namespace DvBCrud.EFCore.Repositories
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TEntity"/> or null if it doesn't exist</returns>
         Task<TEntity> GetAsync(TId id);
-
-        /// <summary>
-        /// Finds multiple <typeparamref name="TEntity"/> instances whose Ids are contained within <paramref name="ids"/>
-        /// </summary>
-        /// <param name="ids">Key values to query</param>
-        /// <returns>An <see cref="IQueryable"/> containing all, some or no matching <typeparamref name="TEntity"/> instances</returns>
-        IEnumerable<TEntity> GetRange(IEnumerable<TId> ids);
     }
 }
