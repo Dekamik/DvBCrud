@@ -110,36 +110,12 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Update_NonExistingEntityWithCreate_EntityCreated()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntityWithCreate_EntityCreated));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
-            {
-                Id = 1,
-                AnyString = "AnyString"
-            });
-            var expected = new AnyEntity
-            {
-                Id = 2,
-                AnyString = "AnyNewString"
-            };
-
-            repository.Update(expected, true);
-            dbContextProvider.DbContext.SaveChanges();
-
-            var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 2);
-            actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Fact]
         public void Update_Null_ThrowsArgumentNullException()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Update_Null_ThrowsArgumentNullException));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
 
             repository.Invoking(r => r.Update(null)).Should().Throw<ArgumentNullException>();
-            repository.Invoking(r => r.Update(null, true)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -189,36 +165,12 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task UpdateAsync_NonExistingEntityWithCreate_EntityCreated()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_NonExistingEntityWithCreate_EntityCreated));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
-            {
-                Id = 1,
-                AnyString = "AnyString"
-            });
-            var expected = new AnyEntity
-            {
-                Id = 2,
-                AnyString = "AnyNewString"
-            };
-
-            await repository.UpdateAsync(expected, true);
-            dbContextProvider.DbContext.SaveChanges();
-
-            var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 2);
-            actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Fact]
         public void UpdateAsync_Null_ThrowsArgumentNullException()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_Null_ThrowsArgumentNullException));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
 
             repository.Invoking(r => r.UpdateAsync(null)).Should().ThrowAsync<ArgumentNullException>();
-            repository.Invoking(r => r.UpdateAsync(null, true)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]

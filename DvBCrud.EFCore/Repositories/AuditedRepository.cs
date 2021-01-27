@@ -29,7 +29,7 @@ namespace DvBCrud.EFCore.Repositories
             base.Create(entity);
         }
 
-        public virtual void Update(TEntity entity, TUserId userId, bool createIfNotExists = false)
+        public virtual void Update(TEntity entity, TUserId userId)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");
@@ -37,10 +37,10 @@ namespace DvBCrud.EFCore.Repositories
             entity.UpdatedAt = now;
             entity.UpdatedBy = userId;
 
-            base.Update(entity, createIfNotExists);
+            base.Update(entity);
         }
 
-        public virtual Task UpdateAsync(TEntity entity, TUserId userId, bool createIfNotExists = false)
+        public virtual Task UpdateAsync(TEntity entity, TUserId userId)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");
@@ -48,7 +48,7 @@ namespace DvBCrud.EFCore.Repositories
             entity.UpdatedAt = now;
             entity.UpdatedBy = userId;
 
-            return base.UpdateAsync(entity, createIfNotExists);
+            return base.UpdateAsync(entity);
         }
 
         #region Hidden methods
@@ -65,7 +65,7 @@ namespace DvBCrud.EFCore.Repositories
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use AuditedRepository.Update(TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
-        public override void Update(TEntity entity, bool createIfNotExists = false)
+        public override void Update(TEntity entity)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
             throw new NotSupportedException("Use AuditedRepository.Update(TEntity, TUserId) instead");
@@ -74,7 +74,7 @@ namespace DvBCrud.EFCore.Repositories
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use AuditedRepository.Update(TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
-        public override Task UpdateAsync(TEntity entity, bool createIfNotExists = false)
+        public override Task UpdateAsync(TEntity entity)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
             throw new NotSupportedException("Use AuditedRepository.Update(TEntity, TUserId) instead");

@@ -72,30 +72,8 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.Update(entity, false)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repo.Update(entity)).MustHaveHappenedOnceExactly();
         }
-
-        [Fact]
-        public void Update_AnyEntityWithCreate_RepositoryUpdatesOrCreatesEntity()
-        {
-            // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyCRUDController(repo, logger);
-            var entity = new AnyEntity
-            {
-                Id = 1,
-                AnyString = "AnyString"
-            };
-
-            // Act
-            var result = controller.Update(entity, true) as OkResult;
-
-            // Assert
-            result.Should().NotBeNull();
-            A.CallTo(() => repo.Update(entity, true)).MustHaveHappenedOnceExactly();
-        }
-
 
         [Fact]
         public void Update_AnyEntityWithoutId_Returns400BadRequest()
@@ -110,12 +88,12 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             };
 
             // Act
-            var result = controller.Update(entity, true) as BadRequestObjectResult;
+            var result = controller.Update(entity) as BadRequestObjectResult;
 
             // Assert
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(400);
-            A.CallTo(() => repo.Update(entity, true)).MustNotHaveHappened();
+            A.CallTo(() => repo.Update(entity)).MustNotHaveHappened();
         }
 
 
@@ -131,7 +109,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                 Id = 1,
                 AnyString = "AnyString"
             };
-            A.CallTo(() => repo.Update(entity, false)).Throws<KeyNotFoundException>();
+            A.CallTo(() => repo.Update(entity)).Throws<KeyNotFoundException>();
 
             // Act
             var result = controller.Update(entity) as NotFoundObjectResult;

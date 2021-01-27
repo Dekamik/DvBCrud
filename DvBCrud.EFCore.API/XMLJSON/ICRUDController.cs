@@ -1,6 +1,5 @@
 ﻿using DvBCrud.EFCore.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
@@ -11,7 +10,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
         IActionResult Create([FromBody] TEntity entity);
 
         [HttpPut]
-        IActionResult Update([FromBody] TEntity entity, [FromQuery] bool createIfNotExists = false);
+        IActionResult Update([FromBody] TEntity entity);
 
         [HttpDelete, Route("{id}")]
         IActionResult Delete([FromQuery]TId id);

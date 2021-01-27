@@ -73,30 +73,8 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(entity, false)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repo.UpdateAsync(entity)).MustHaveHappenedOnceExactly();
         }
-
-        [Fact]
-        public async Task Update_AnyEntityWithCreate_RepositoryUpdatesOrCreatesEntity()
-        {
-            // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyAsyncCRUDController(repo, logger);
-            var entity = new AnyEntity
-            {
-                Id = 1,
-                AnyString = "AnyString"
-            };
-
-            // Act
-            var result = await controller.Update(entity, true) as OkResult;
-
-            // Assert
-            result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(entity, true)).MustHaveHappenedOnceExactly();
-        }
-
 
         [Fact]
         public async Task Update_AnyEntityWithoutId_Returns400BadRequest()
@@ -111,11 +89,11 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             };
 
             // Act
-            var result = await controller.Update(entity, false) as BadRequestObjectResult;
+            var result = await controller.Update(entity) as BadRequestObjectResult;
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(entity, true)).MustNotHaveHappened();
+            A.CallTo(() => repo.UpdateAsync(entity)).MustNotHaveHappened();
         }
 
 
@@ -131,7 +109,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                 Id = 1,
                 AnyString = "AnyString"
             };
-            A.CallTo(() => repo.UpdateAsync(entity, false)).Throws<KeyNotFoundException>();
+            A.CallTo(() => repo.UpdateAsync(entity)).Throws<KeyNotFoundException>();
 
             // Act
             var result = await controller.Update(entity) as NotFoundObjectResult;

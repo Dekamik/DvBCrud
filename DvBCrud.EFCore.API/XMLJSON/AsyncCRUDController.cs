@@ -41,10 +41,10 @@ namespace DvBCrud.EFCore.API.XMLJSON
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] TEntity entity, [FromQuery] bool createIfNotExists = false)
+        public async Task<IActionResult> Update([FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {entity.Id}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
+            logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {entity.Id}");
 
             // Id must be predefined
             if (entity.Id.Equals(default(TId)))
@@ -56,7 +56,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
 
             try
             {
-                await repository.UpdateAsync(entity, createIfNotExists);
+                await repository.UpdateAsync(entity);
             }
             catch (KeyNotFoundException)
             {

@@ -26,7 +26,7 @@ namespace DvBCrud.EFCore.Repositories
             Set.Add(entity);
         }
 
-        public virtual void Update(TEntity entity, bool createIfNotExists = false)
+        public virtual void Update(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
@@ -38,20 +38,14 @@ namespace DvBCrud.EFCore.Repositories
             // If entity wasn't found, log a debug message
             if (existingEntity == null)
             {
-                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {entity.Id} for update{ (createIfNotExists ? ", creating entity" : "") }");
-
-                if (createIfNotExists)
-                {
-                    Create(entity);
-                }
-
+                logger.LogDebug($"{nameof(TEntity)} {entity.Id} not found");
                 return;
             }
 
             existingEntity.Copy(entity);
         }
 
-        public virtual async Task UpdateAsync(TEntity entity, bool createIfNotExists = false)
+        public virtual async Task UpdateAsync(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
@@ -63,13 +57,7 @@ namespace DvBCrud.EFCore.Repositories
             // If entity wasn't found, log a debug message
             if (existingEntity == null)
             {
-                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {entity.Id} for update{ (createIfNotExists ? ", creating entity" : "") }");
-
-                if (createIfNotExists)
-                {
-                    Create(entity);
-                }
-
+                logger.LogDebug($"{nameof(TEntity)} {entity.Id} not found");
                 return;
             }
 
