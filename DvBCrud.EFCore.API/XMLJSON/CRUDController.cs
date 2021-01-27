@@ -25,6 +25,11 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Create)} {nameof(TEntity)}");
 
+            if (entity.Id != null)
+            {
+                return BadRequest($"{nameof(TEntity)}.Id must not be predefined.");
+            }
+
             repository.Create(entity);
             repository.SaveChanges();
 

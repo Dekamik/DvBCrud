@@ -1,4 +1,5 @@
 ﻿using DvBCrud.EFCore.API.Mocks.XMLJSON;
+using DvBCrud.EFCore.Mocks.DbContexts;
 using DvBCrud.EFCore.Mocks.Entities;
 using DvBCrud.EFCore.Mocks.Repositories;
 using FakeItEasy;
@@ -26,6 +27,28 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             A.CallTo(() => repo.Create(entity)).MustHaveHappenedOnceExactly();
+        }
+
+        [Fact]
+        public void Create_AnyEntityWithId_Returns400BadRequest()
+        {
+            // Arrange
+            var repo = A.Fake<IAnyRepository>();
+            var logger = A.Fake<ILogger>();
+            var controller = new AnyCRUDController(repo, logger);
+            var entity = new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            };
+
+            // Act
+            var result = controller.Create(entity) as BadRequestObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(400);
+            A.CallTo(() => repo.Create(entity)).MustNotHaveHappened();
         }
 
         [Fact]

@@ -30,6 +30,28 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
+        public async Task Create_AnyEntityWithId_Returns400BadRequest()
+        {
+            // Arrange
+            var repo = A.Fake<IAnyRepository>();
+            var logger = A.Fake<ILogger>();
+            var controller = new AnyAsyncCRUDController(repo, logger);
+            var entity = new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            };
+
+            // Act
+            var result = await controller.Create(entity) as BadRequestObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(400);
+            A.CallTo(() => repo.Create(entity)).MustNotHaveHappened();
+        }
+
+        [Fact]
         public async Task Update_AnyEntity_RepositoryUpdatesEntity()
         {
             // Arrange
