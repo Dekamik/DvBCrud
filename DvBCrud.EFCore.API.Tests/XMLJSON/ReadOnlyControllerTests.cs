@@ -15,7 +15,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
     public class ReadOnlyControllerTests
     {
         [Fact]
-        public async Task Read_AnyId_ReturnsEntityFromRepository()
+        public void Read_AnyId_ReturnsEntityFromRepository()
         {
             var repo = A.Fake<IAnyReadOnlyRepository>();
             var logger = A.Fake<ILogger>();
@@ -27,7 +27,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             A.CallTo(() => repo.Get(1)).Returns(expected);
             var controller = new AnyReadOnlyController(repo, logger);
 
-            var result = (await controller.Read(1)).Result as OkObjectResult;
+            var result = controller.Read(1).Result as OkObjectResult;
 
             result.Should().NotBeNull();
             result.Value.Should().Be(expected);

@@ -25,12 +25,12 @@ namespace DvBCrud.EFCore.API.XMLJSON
         }
 
         [HttpGet, Route("{id}")]
-        public async Task<ActionResult<TEntity>> Read([FromQuery]TId id)
+        public ActionResult<TEntity> Read([FromQuery]TId id)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)}.Id = {id}");
 
-            TEntity entity = await repository.Get(id);
+            TEntity entity = repository.Get(id);
 
             logger.LogDebug($"{guid}: {nameof(Read)} OK");
             return Ok(entity);

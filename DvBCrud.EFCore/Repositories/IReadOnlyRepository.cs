@@ -23,7 +23,7 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TEntity"/> or null if it doesn't exist</returns>
-        Task<TEntity> Get(TId id);
+        TEntity Get(TId id);
 
         /// <summary>
         /// Finds multiple <typeparamref name="TEntity"/> instances whose Ids are contained within <paramref name="ids"/>

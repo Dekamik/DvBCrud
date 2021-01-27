@@ -30,13 +30,13 @@ namespace DvBCrud.EFCore.Repositories
             return Set;
         }
 
-        public virtual Task<TEntity> Get(TId id)
+        public virtual TEntity Get(TId id)
         {
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
             logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {id}");
-            return Set.SingleOrDefaultAsync(e => id.Equals(e.Id));
+            return Set.SingleOrDefault(e => id.Equals(e.Id));
         }
 
         public virtual IEnumerable<TEntity> GetRange(IEnumerable<TId> ids)

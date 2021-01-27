@@ -7,7 +7,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
     public interface IReadOnlyController<TEntity, TId>
     {
         [HttpGet, Route("{id}")]
-        Task<ActionResult<TEntity>> Read([FromQuery]TId id);
+        ActionResult<TEntity> Read([FromQuery]TId id);
 
         [HttpGet]
         ActionResult<IEnumerable<TEntity>> ReadRange([FromBody]IEnumerable<TId> ids);
