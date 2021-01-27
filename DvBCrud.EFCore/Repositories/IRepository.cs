@@ -51,7 +51,7 @@ namespace DvBCrud.EFCore.Repositories
         void DeleteRange(IEnumerable<TId> ids);
 
         /// <summary>
-        /// Persists modifications to DbContext
+        /// Persists modifications to DbContext.
         /// </summary>
         /// <returns>An async <see cref="Task"/></returns>
         Task SaveChanges();
