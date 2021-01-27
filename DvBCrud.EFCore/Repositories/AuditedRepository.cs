@@ -54,7 +54,7 @@ namespace DvBCrud.EFCore.Repositories
         #region Hidden methods
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use AuditedRepository.Create(TEntity, TUserId) instead")]
+        [Obsolete("Use AuditedRepository.Create(TId, TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override void Create(TEntity entity)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
@@ -63,7 +63,7 @@ namespace DvBCrud.EFCore.Repositories
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use AuditedRepository.Update(TEntity, TUserId) instead")]
+        [Obsolete("Use AuditedRepository.Update(TId, TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override void Update(TId id, TEntity entity)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
@@ -72,7 +72,7 @@ namespace DvBCrud.EFCore.Repositories
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use AuditedRepository.Update(TEntity, TUserId) instead")]
+        [Obsolete("Use AuditedRepository.UpdateAsync(TId, TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override Task UpdateAsync(TId id, TEntity entity)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
