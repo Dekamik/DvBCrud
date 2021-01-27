@@ -203,6 +203,41 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public async Task DeleteAsync_ExistingEntity_EntityDeleted()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteAsync_ExistingEntity_EntityDeleted));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            var entities = new[] {
+                new AnyEntity
+                {
+                    Id = 1,
+                    AnyString = "AnyString"
+                },
+                new AnyEntity
+                {
+                    Id = 2,
+                    AnyString = "AnyString"
+                }
+            };
+            dbContextProvider.Mock(entities);
+
+            await repository.DeleteAsync(1);
+            dbContextProvider.DbContext.SaveChanges();
+
+            var actual = dbContextProvider.DbContext.AnyEntities;
+            actual.Single().Should().BeEquivalentTo(entities.Last());
+        }
+
+        [Fact]
+        public void DeleteAsync_Null_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteAsync_Null_ThrowsArgumentNullException));
+            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+
+            repository.Invoking(r => r.DeleteAsync(null)).Should().ThrowAsync<ArgumentNullException>();
+        }
+
+        [Fact]
         public void SaveChanges_CallAfterAdd_ChangesSaved()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterAdd_ChangesSaved));

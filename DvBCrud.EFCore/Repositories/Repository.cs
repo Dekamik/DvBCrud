@@ -81,7 +81,25 @@ namespace DvBCrud.EFCore.Repositories
                 return;
             }
 
-            Set.RemoveRange(entity);
+            Set.Remove(entity);
+        }
+
+        public virtual async Task DeleteAsync(TId id)
+        {
+            if (id == null)
+                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+
+            logger.LogTrace($"Deleting {nameof(TEntity)} with Id {string.Join(", ", id)}");
+
+            var entity = await Set.FindAsync(id);
+
+            if (entity == null)
+            {
+                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {id} for deletion");
+                return;
+            }
+
+            Set.Remove(entity);
         }
 
         public virtual void SaveChanges()
