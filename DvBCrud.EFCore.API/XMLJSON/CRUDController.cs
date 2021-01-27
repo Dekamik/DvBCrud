@@ -23,9 +23,10 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Create)} {nameof(TEntity)}");
 
-            if (entity.Id != null)
+            // Id must NOT be predefined
+            if (!entity.Id.Equals(default(TId)))
             {
-                string message = $"{nameof(TEntity)}.Id must not be predefined.";
+                string message = $"{nameof(TEntity)}.Id must NOT be predefined.";
                 logger.LogDebug($"{guid}: {nameof(Create)} BAD REQUEST - {message}");
                 return BadRequest(message);
             }
@@ -42,6 +43,14 @@ namespace DvBCrud.EFCore.API.XMLJSON
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)}.Id = {entity}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
+
+            // Id must be predefined
+            if (entity.Id.Equals(default(TId)))
+            {
+                string message = $"{nameof(TEntity)}.Id must be defined.";
+                logger.LogDebug($"{guid}: {nameof(Update)} BAD REQUEST - {message}");
+                return BadRequest(message);
+            }
 
             repository.Update(entity, createIfNotExists);
             repository.SaveChanges();

@@ -19,7 +19,10 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var controller = new AnyCRUDController(repo, logger);
-            var entity = new AnyEntity();
+            var entity = new AnyEntity
+            {
+                AnyString = "AnyString"
+            };
 
             // Act
             var result = controller.Create(entity) as OkResult;
@@ -58,7 +61,10 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var controller = new AnyCRUDController(repo, logger);
-            var entity = new AnyEntity();
+            var entity = new AnyEntity {
+                Id = 1,
+                AnyString = "AnyString"
+            };
 
             // Act
             var result = controller.Update(entity) as OkResult;
@@ -75,7 +81,11 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var controller = new AnyCRUDController(repo, logger);
-            var entity = new AnyEntity();
+            var entity = new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            };
 
             // Act
             var result = controller.Update(entity, true) as OkResult;
@@ -83,6 +93,28 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             A.CallTo(() => repo.Update(entity, true)).MustHaveHappenedOnceExactly();
+        }
+
+
+        [Fact]
+        public void Update_AnyEntityWithoutId_Returns400BadRequest()
+        {
+            // Arrange
+            var repo = A.Fake<IAnyRepository>();
+            var logger = A.Fake<ILogger>();
+            var controller = new AnyCRUDController(repo, logger);
+            var entity = new AnyEntity
+            {
+                AnyString = "AnyString"
+            };
+
+            // Act
+            var result = controller.Update(entity, true) as BadRequestObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(400);
+            A.CallTo(() => repo.Update(entity, true)).MustNotHaveHappened();
         }
 
         [Fact]

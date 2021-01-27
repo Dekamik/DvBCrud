@@ -19,7 +19,10 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var controller = new AnyAsyncCRUDController(repo, logger);
-            var entity = new AnyEntity();
+            var entity = new AnyEntity 
+            {
+                AnyString = "AnyString"
+            };
 
             // Act
             var result = await controller.Create(entity) as OkResult;
@@ -58,7 +61,11 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var controller = new AnyAsyncCRUDController(repo, logger);
-            var entity = new AnyEntity();
+            var entity = new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            };
 
             // Act
             var result = await controller.Update(entity) as OkResult;
@@ -75,7 +82,11 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var controller = new AnyAsyncCRUDController(repo, logger);
-            var entity = new AnyEntity();
+            var entity = new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            };
 
             // Act
             var result = await controller.Update(entity, true) as OkResult;
@@ -83,6 +94,27 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             A.CallTo(() => repo.UpdateAsync(entity, true)).MustHaveHappenedOnceExactly();
+        }
+
+
+        [Fact]
+        public async Task Update_AnyEntityWithoutId_Returns400BadRequest()
+        {
+            // Arrange
+            var repo = A.Fake<IAnyRepository>();
+            var logger = A.Fake<ILogger>();
+            var controller = new AnyAsyncCRUDController(repo, logger);
+            var entity = new AnyEntity 
+            { 
+                AnyString = "AnyString"
+            };
+
+            // Act
+            var result = await controller.Update(entity, false) as BadRequestObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            A.CallTo(() => repo.UpdateAsync(entity, true)).MustNotHaveHappened();
         }
 
         [Fact]
