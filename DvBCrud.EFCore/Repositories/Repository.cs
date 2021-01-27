@@ -77,8 +77,9 @@ namespace DvBCrud.EFCore.Repositories
 
             if (entity == null)
             {
-                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {id} for deletion");
-                return;
+                var message = $"{nameof(TEntity)} {id} not found";
+                logger.LogDebug(message);
+                throw new KeyNotFoundException(message);
             }
 
             Set.Remove(entity);
@@ -95,8 +96,9 @@ namespace DvBCrud.EFCore.Repositories
 
             if (entity == null)
             {
-                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {id} for deletion");
-                return;
+                var message = $"Couldn't find {nameof(TEntity)} with Id {id} for deletion";
+                logger.LogDebug(message);
+                throw new KeyNotFoundException(message);
             }
 
             Set.Remove(entity);

@@ -151,12 +151,12 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void GetAsync_Null_ThrowsArgumentNullException()
+        public async Task GetAsync_Null_ThrowsArgumentNullException()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(GetAsync_Null_ThrowsArgumentNullException));
             var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
 
-            repository.Invoking(r => r.GetAsync(null)).Should().ThrowAsync<ArgumentNullException>();
+            await repository.Awaiting(r => r.GetAsync(null)).Should().ThrowAsync<ArgumentNullException>();
         }
     }
 }

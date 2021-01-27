@@ -159,12 +159,12 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void UpdateAsync_Null_ThrowsArgumentNullException()
+        public async Task UpdateAsync_Null_ThrowsArgumentNullException()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_Null_ThrowsArgumentNullException));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
 
-            repository.Invoking(r => r.UpdateAsync(1, null)).Should().ThrowAsync<ArgumentNullException>();
+            await repository.Awaiting(r => r.UpdateAsync(1, null)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
@@ -203,6 +203,17 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public void Delete_NonExistingId_ThrowsKeyNotFoundException()
+        {
+            // Arrange
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Delete_NonExistingId_ThrowsKeyNotFoundException));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+
+            // Act & Assert
+            repository.Invoking(r => r.Delete(1)).Should().Throw<KeyNotFoundException>();
+        }
+
+        [Fact]
         public async Task DeleteAsync_ExistingEntity_EntityDeleted()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteAsync_ExistingEntity_EntityDeleted));
@@ -229,12 +240,23 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void DeleteAsync_Null_ThrowsArgumentNullException()
+        public async Task DeleteAsync_Null_ThrowsArgumentNullException()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteAsync_Null_ThrowsArgumentNullException));
             var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
 
-            repository.Invoking(r => r.DeleteAsync(null)).Should().ThrowAsync<ArgumentNullException>();
+            await repository.Awaiting(r => r.DeleteAsync(null)).Should().ThrowAsync<ArgumentNullException>();
+        }
+
+        [Fact]
+        public async Task DeleteAsync_NonExistingId_ThrowsKeyNotFoundException()
+        {
+            // Arrange
+            using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteAsync_NonExistingId_ThrowsKeyNotFoundException));
+            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+
+            // Act and Assert
+            await repository.Awaiting(r => r.DeleteAsync(1)).Should().ThrowAsync<KeyNotFoundException>();
         }
 
         [Fact]
