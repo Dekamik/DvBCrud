@@ -32,19 +32,6 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        [HttpPost]
-        public IActionResult CreateRange([FromBody]IEnumerable<TEntity> entities)
-        {
-            var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(CreateRange)} {entities.Count()} {nameof(TEntity)}");
-
-            repository.CreateRange(entities);
-            repository.SaveChanges();
-
-            logger.LogDebug($"{guid}: {nameof(CreateRange)} OK");
-            return Ok();
-        }
-
         [HttpPut]
         public IActionResult Update([FromBody] TEntity entity, [FromQuery] bool createIfNotExists = false)
         {
@@ -58,19 +45,6 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        [HttpPut]
-        public IActionResult UpdateRange([FromBody]IEnumerable<TEntity> entities, [FromQuery]bool createIfNotExists = false)
-        {
-            var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(UpdateRange)} {entities.Count()} {nameof(TEntity)}.Id = {string.Join(", ", entities)}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
-
-            repository.UpdateRange(entities, createIfNotExists);
-            repository.SaveChanges();
-
-            logger.LogDebug($"{guid}: {nameof(UpdateRange)} OK");
-            return Ok();
-        }
-
         [HttpDelete, Route("{id}")]
         public IActionResult Delete([FromQuery]TId id)
         {
@@ -81,19 +55,6 @@ namespace DvBCrud.EFCore.API.XMLJSON
             repository.SaveChanges();
 
             logger.LogDebug($"{guid}: {nameof(Delete)} OK");
-            return Ok();
-        }
-
-        [HttpDelete]
-        public IActionResult DeleteRange([FromBody]IEnumerable<TId> id)
-        {
-            var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(DeleteRange)} {nameof(TEntity)}.Id = {string.Join(", ", id)}");
-
-            repository.DeleteRange(id);
-            repository.SaveChanges();
-
-            logger.LogDebug($"{guid}: {nameof(DeleteRange)} OK");
             return Ok();
         }
     }
