@@ -158,10 +158,10 @@ namespace DvBCrud.EFCore.Repositories
             dbContext.SaveChanges();
         }
 
-        public virtual async Task SaveChangesAsync()
+        public virtual Task SaveChangesAsync()
         {
             logger.LogTrace($"Repository for {nameof(TEntity)} saving changes to {nameof(TDbContext)}");
-            await dbContext.SaveChangesAsync();
+            return dbContext.SaveChangesAsync();
         }
     }
 }

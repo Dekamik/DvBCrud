@@ -45,7 +45,7 @@ namespace DvBCrud.EFCore.Repositories
             base.CreateRange(entities);
         }
 
-        public virtual async Task UpdateAsync(TEntity entity, TUserId userId, bool createIfNotExists = false)
+        public virtual void Update(TEntity entity, TUserId userId, bool createIfNotExists = false)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");
@@ -53,7 +53,18 @@ namespace DvBCrud.EFCore.Repositories
             entity.UpdatedAt = now;
             entity.UpdatedBy = userId;
 
-            await base.UpdateAsync(entity, createIfNotExists);
+            base.Update(entity, createIfNotExists);
+        }
+
+        public virtual Task UpdateAsync(TEntity entity, TUserId userId, bool createIfNotExists = false)
+        {
+            var now = DateTime.UtcNow;
+            logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");
+
+            entity.UpdatedAt = now;
+            entity.UpdatedBy = userId;
+
+            return base.UpdateAsync(entity, createIfNotExists);
         }
 
         public virtual void UpdateRange(IEnumerable<TEntity> entities, TUserId userId, bool createIfNotExists = false)
@@ -88,6 +99,15 @@ namespace DvBCrud.EFCore.Repositories
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
             throw new NotSupportedException("Use AuditedRepository.CreateRange(IEnumerable<TEntity>, TUserId) instead");
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Use AuditedRepository.Update(TEntity, TUserId) instead")]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
+        public override void Update(TEntity entity, bool createIfNotExists = false)
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
+        {
+            throw new NotSupportedException("Use AuditedRepository.Update(TEntity, TUserId) instead");
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
