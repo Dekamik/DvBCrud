@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.XMLJSON
@@ -43,7 +44,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public async Task<IActionResult> Update([FromBody] TEntity entity, [FromQuery] bool createIfNotExists = false)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)}.Id = {entity}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
+            logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {entity.Id}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
             // Id must be predefined
             if (entity.Id.Equals(default(TId)))
@@ -53,7 +54,17 @@ namespace DvBCrud.EFCore.API.XMLJSON
                 return BadRequest(message);
             }
 
-            await repository.UpdateAsync(entity, createIfNotExists);
+            try
+            {
+                await repository.UpdateAsync(entity, createIfNotExists);
+            }
+            catch (KeyNotFoundException)
+            {
+                string message = $"{nameof(TEntity)} {entity.Id} not found.";
+                logger.LogDebug($"{guid}: {nameof(Update)} NOT FOUND - {message}");
+                return NotFound(message);
+            }
+            
             await repository.SaveChangesAsync();
 
             logger.LogDebug($"{guid}: {nameof(Update)} OK");
@@ -64,7 +75,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public async Task<IActionResult> Delete([FromQuery]TId id)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)}.Id = {id}");
+            logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)} {id}");
 
             await Task.Run(() => repository.Delete(id));
             await repository.SaveChangesAsync();

@@ -5,6 +5,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -115,6 +116,29 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             A.CallTo(() => repo.UpdateAsync(entity, true)).MustNotHaveHappened();
+        }
+
+
+        [Fact]
+        public async Task Update_AnyNonExistingEntity_Returns404NotFound()
+        {
+            // Arrange
+            var repo = A.Fake<IAnyRepository>();
+            var logger = A.Fake<ILogger>();
+            var controller = new AnyAsyncCRUDController(repo, logger);
+            var entity = new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            };
+            A.CallTo(() => repo.UpdateAsync(entity, false)).Throws<KeyNotFoundException>();
+
+            // Act
+            var result = await controller.Update(entity) as NotFoundObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(404);
         }
 
         [Fact]
