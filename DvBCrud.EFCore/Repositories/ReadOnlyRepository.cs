@@ -26,25 +26,26 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual IEnumerable<TEntity> GetAll()
         {
-            logger.LogTrace($"Getting all {nameof(TEntity)} entities");
             return Set;
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
         public virtual TEntity Get(TId id)
         {
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
-            logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {id}");
             return Set.SingleOrDefault(e => id.Equals(e.Id));
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
         public virtual Task<TEntity> GetAsync(TId id)
         {
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
-            logger.LogTrace($"Getting {nameof(TEntity)} entity with Id {id}");
             return Set.SingleOrDefaultAsync(e => id.Equals(e.Id));
         }
     }

@@ -21,7 +21,7 @@ namespace DvBCrud.EFCore.Repositories
         public virtual void Create(TEntity entity, TUserId userId)
         {
             var now = DateTime.UtcNow;
-            logger.Log(AuditLogLevel, $"User {userId} called {nameof(Create)} for a new {nameof(TEntity)} at {now}");
+            logger.Log(AuditLogLevel, $"User {userId} called {nameof(Create)} for {nameof(TEntity)} at {now}");
 
             entity.CreatedAt = now;
             entity.CreatedBy = userId;
@@ -32,7 +32,7 @@ namespace DvBCrud.EFCore.Repositories
         public virtual void Update(TId id, TEntity entity, TUserId userId)
         {
             var now = DateTime.UtcNow;
-            logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");
+            logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for {nameof(TEntity)} {entity.Id} at {now}");
 
             entity.UpdatedAt = now;
             entity.UpdatedBy = userId;
@@ -43,7 +43,7 @@ namespace DvBCrud.EFCore.Repositories
         public virtual Task UpdateAsync(TId id, TEntity entity, TUserId userId)
         {
             var now = DateTime.UtcNow;
-            logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");
+            logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for {nameof(TEntity)} {entity.Id} at {now}");
 
             entity.UpdatedAt = now;
             entity.UpdatedBy = userId;

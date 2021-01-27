@@ -23,7 +23,6 @@ namespace DvBCrud.EFCore.Repositories
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
 
-            logger.LogTrace($"Creating a new {nameof(TEntity)}");
             Set.Add(entity);
         }
 
@@ -34,8 +33,6 @@ namespace DvBCrud.EFCore.Repositories
 
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
-
-            logger.LogTrace($"Updating {nameof(TEntity)} with Id {id}");
 
             var existingEntity = Set.Find(id);
 
@@ -58,8 +55,6 @@ namespace DvBCrud.EFCore.Repositories
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
 
-            logger.LogTrace($"Updating {nameof(TEntity)} with Id {id}");
-
             var existingEntity = await Set.FindAsync(id);
 
             // If entity wasn't found, log a debug message
@@ -76,8 +71,6 @@ namespace DvBCrud.EFCore.Repositories
         {
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
-
-            logger.LogTrace($"Deleting {nameof(TEntity)} with Id {string.Join(", ", id)}");
 
             var entity = Set.Find(id);
 
@@ -96,8 +89,6 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
-            logger.LogTrace($"Deleting {nameof(TEntity)} with Id {string.Join(", ", id)}");
-
             var entity = await Set.FindAsync(id);
 
             if (entity == null)
@@ -112,13 +103,11 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void SaveChanges()
         {
-            logger.LogTrace($"Repository for {nameof(TEntity)} saving changes to {nameof(TDbContext)}");
             dbContext.SaveChanges();
         }
 
         public virtual Task SaveChangesAsync()
         {
-            logger.LogTrace($"Repository for {nameof(TEntity)} saving changes to {nameof(TDbContext)}");
             return dbContext.SaveChangesAsync();
         }
     }
