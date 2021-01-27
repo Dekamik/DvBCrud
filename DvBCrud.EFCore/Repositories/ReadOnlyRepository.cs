@@ -39,7 +39,7 @@ namespace DvBCrud.EFCore.Repositories
             return Set.SingleOrDefaultAsync(e => id.Equals(e.Id));
         }
 
-        public IEnumerable<TEntity> GetRange(IEnumerable<TId> ids)
+        public virtual IEnumerable<TEntity> GetRange(IEnumerable<TId> ids)
         {
             if (ids == null)
                 throw new ArgumentNullException($"{ids} cannot be null");

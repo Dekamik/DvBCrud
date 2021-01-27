@@ -20,7 +20,7 @@ namespace DvBCrud.EFCore.Repositories
 
         }
 
-        public void Create(TEntity entity, TUserId userId)
+        public virtual void Create(TEntity entity, TUserId userId)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(Create)} for a new {nameof(TEntity)} at {now}");
@@ -31,7 +31,7 @@ namespace DvBCrud.EFCore.Repositories
             base.Create(entity);
         }
 
-        public void CreateRange(IEnumerable<TEntity> entities, TUserId userId)
+        public virtual void CreateRange(IEnumerable<TEntity> entities, TUserId userId)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(CreateRange)} for {entities.Count()} new {nameof(TEntity)} at {now}");
@@ -45,7 +45,7 @@ namespace DvBCrud.EFCore.Repositories
             base.CreateRange(entities);
         }
 
-        public async Task Update(TEntity entity, TUserId userId, bool createIfNotExists = false)
+        public virtual async Task Update(TEntity entity, TUserId userId, bool createIfNotExists = false)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(Update)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");
@@ -56,7 +56,7 @@ namespace DvBCrud.EFCore.Repositories
             await base.Update(entity, createIfNotExists);
         }
 
-        public void UpdateRange(IEnumerable<TEntity> entities, TUserId userId, bool createIfNotExists = false)
+        public virtual void UpdateRange(IEnumerable<TEntity> entities, TUserId userId, bool createIfNotExists = false)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateRange)} for {entities.Count()} {nameof(TEntity)} with Ids {string.Join(", ", entities)} at {now}");
