@@ -39,7 +39,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Arrange
             var repo = A.Fake<IAnyReadOnlyRepository>();
             var logger = A.Fake<ILogger>();
-            A.CallTo(() => repo.GetAsync(1)).Returns(Task.FromResult<AnyEntity>(null));
+            A.CallTo(() => repo.GetAsync(1)).Returns(null as AnyEntity);
             var controller = new AnyAsyncReadOnlyController(repo, logger);
 
             // Act
