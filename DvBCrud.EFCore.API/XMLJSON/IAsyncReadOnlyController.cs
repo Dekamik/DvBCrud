@@ -12,9 +12,6 @@ namespace DvBCrud.EFCore.API.XMLJSON
         Task<ActionResult<TEntity>> Read([FromQuery] TId id);
 
         [HttpGet]
-        Task<ActionResult<IEnumerable<TEntity>>> ReadRange([FromBody] IEnumerable<TId> ids);
-
-        [HttpGet]
         Task<ActionResult<IEnumerable<TEntity>>> ReadAll();
     }
 }

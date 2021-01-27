@@ -36,18 +36,6 @@ namespace DvBCrud.EFCore.API.XMLJSON
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<TEntity>> ReadRange([FromBody] IEnumerable<TId> ids)
-        {
-            var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(ReadRange)} {ids.Count()} {nameof(TEntity)}.Id = {string.Join(", ", ids)}");
-
-            IEnumerable<TEntity> entities = repository.GetRange(ids);
-
-            logger.LogDebug($"{guid}: {nameof(ReadRange)} OK");
-            return Ok(entities);
-        }
-
-        [HttpGet]
         public ActionResult<IEnumerable<TEntity>> ReadAll()
         {
             var guid = Guid.NewGuid();
