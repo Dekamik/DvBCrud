@@ -26,6 +26,13 @@ namespace DvBCrud.EFCore.Repositories
         TEntity Get(TId id);
 
         /// <summary>
+        /// Finds a single <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/> asynchronously
+        /// </summary>
+        /// <param name="id">Key value to query</param>
+        /// <returns>The matching <typeparamref name="TEntity"/> or null if it doesn't exist</returns>
+        Task<TEntity> GetAsync(TId id);
+
+        /// <summary>
         /// Finds multiple <typeparamref name="TEntity"/> instances whose Ids are contained within <paramref name="ids"/>
         /// </summary>
         /// <param name="ids">Key values to query</param>
