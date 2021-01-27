@@ -90,9 +90,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task Update_AnyAuditedEntity_EntityUpdated()
+        public async Task UpdateAsync_AnyAuditedEntity_EntityUpdated()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_AnyAuditedEntity_EntityUpdated));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_AnyAuditedEntity_EntityUpdated));
             var repository = new AnyAuditedRepository(dbContextProvider.DbContext, logger);
             var createdAt = DateTime.Parse($"{DateTime.Today.AddDays(-1):yyyy-MM-dd} 12:00:00");
             dbContextProvider.Mock(new[]
@@ -115,7 +115,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 UpdatedBy = 1
             };
 
-            await repository.Update(expected, 1);
+            await repository.UpdateAsync(expected, 1);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyAuditedEntities.Single();

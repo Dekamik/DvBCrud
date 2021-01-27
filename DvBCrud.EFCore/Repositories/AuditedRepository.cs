@@ -45,7 +45,7 @@ namespace DvBCrud.EFCore.Repositories
             base.CreateRange(entities);
         }
 
-        public virtual async Task Update(TEntity entity, TUserId userId, bool createIfNotExists = false)
+        public virtual async Task UpdateAsync(TEntity entity, TUserId userId, bool createIfNotExists = false)
         {
             var now = DateTime.UtcNow;
             logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for a {nameof(TEntity)} with Id {entity.Id} at {now}");

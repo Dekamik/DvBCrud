@@ -35,7 +35,7 @@ namespace DvBCrud.EFCore.Repositories
         /// <param name="entity">New entity data</param>
         /// <param name="userId">User ID</param>
         /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChanges"/> should be called after invocation if used.</param>
-        Task Update(TEntity entity, TUserId userId, bool createIfNotExists = false);
+        Task UpdateAsync(TEntity entity, TUserId userId, bool createIfNotExists = false);
 
         /// <summary>
         /// Updates the <typeparamref name="TEntity"/> in <paramref name="entities"/> found in database and sets UpdatedBy to <paramref name="userId"/> and UpdatedAt to <see cref="DateTime.UtcNow"/> for each <typeparamref name="TEntity"/> in <paramref name="entities"/>
