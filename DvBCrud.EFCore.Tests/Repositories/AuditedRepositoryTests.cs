@@ -45,51 +45,6 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void CreateRange_MultipleEntities_EntitiesCreated()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(CreateRange_MultipleEntities_EntitiesCreated));
-            var repository = new AnyAuditedRepository(dbContextProvider.DbContext, logger);
-            var entitiesToCreate = new[]
-            {
-                new AnyAuditedEntity
-                {
-                    AnyString = "AnyString"
-                },
-                new AnyAuditedEntity
-                {
-                    AnyString = "AnyString"
-                }
-            };
-            var expectedEntities = new[]
-            {
-                new AnyAuditedEntity
-                {
-                    AnyString = "AnyString",
-                    CreatedBy = 1
-                },
-                new AnyAuditedEntity
-                {
-                    AnyString = "AnyString",
-                    CreatedBy = 1
-                }
-            };
-            var expectedTime = DateTime.UtcNow;
-
-            repository.CreateRange(entitiesToCreate, 1);
-            dbContextProvider.DbContext.SaveChanges();
-
-            var actualEntities = dbContextProvider.DbContext.AnyAuditedEntities.ToArray();
-            for (int i = 0; i < dbContextProvider.DbContext.AnyAuditedEntities.Count(); i++)
-            {
-                var actual = actualEntities[i];
-                var expected = expectedEntities[i];
-
-                actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.Id).Excluding(x => x.CreatedAt));
-                actual.CreatedAt.Should().BeCloseTo(expectedTime);
-            }
-        }
-
-        [Fact]
         public void Update_AnyAuditedEntity_EntityUpdated()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(Update_AnyAuditedEntity_EntityUpdated));
@@ -155,64 +110,6 @@ namespace DvBCrud.EFCore.Tests.Repositories
             var actual = dbContextProvider.DbContext.AnyAuditedEntities.Single();
             actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.UpdatedAt));
             actual.UpdatedAt.Should().BeCloseTo(expectedTime);
-        }
-
-        [Fact]
-        public void UpdateRange_AnyAuditedEntities_EntitiesUpdated()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateRange_AnyAuditedEntities_EntitiesUpdated));
-            var repository = new AnyAuditedRepository(dbContextProvider.DbContext, logger);
-            var createdAt = DateTime.Parse($"{DateTime.Today.AddDays(-1):yyyy-MM-dd} 12:00:00");
-            dbContextProvider.Mock(new[]
-            {
-                new AnyAuditedEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString",
-                    CreatedBy = 1,
-                    CreatedAt = createdAt
-                },
-                new AnyAuditedEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString",
-                    CreatedBy = 1,
-                    CreatedAt = createdAt
-                }
-            });
-            var expectedEntities = new[]
-            {
-                new AnyAuditedEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyNewString",
-                    CreatedBy = 1,
-                    CreatedAt = createdAt,
-                    UpdatedBy = 1
-                },
-                new AnyAuditedEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyNewString",
-                    CreatedBy = 1,
-                    CreatedAt = createdAt,
-                    UpdatedBy = 1
-                }
-            };
-            var expectedTime = DateTime.UtcNow;
-
-            repository.UpdateRange(expectedEntities, 1);
-            dbContextProvider.DbContext.SaveChanges();
-
-            var actualEntities = dbContextProvider.DbContext.AnyAuditedEntities.ToArray();
-            for (int i = 0; i < dbContextProvider.DbContext.AnyAuditedEntities.Count(); i++)
-            {
-                var actual = actualEntities[i];
-                var expected = expectedEntities[i];
-
-                actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.Id).Excluding(x => x.UpdatedAt));
-                actual.UpdatedAt.Should().BeCloseTo(expectedTime);
-            }
         }
     }
 }

@@ -23,13 +23,6 @@ namespace DvBCrud.EFCore.Repositories
         void Create(TEntity entity, TUserId userId);
 
         /// <summary>
-        /// Creates all <typeparamref name="TEntity"/> in <paramref name="entities"/>, tracks them and sets CreatedBy to <paramref name="userId"/> and CreatedAt to <see cref="DateTime.UtcNow"/> for each <typeparamref name="TEntity"/> in <paramref name="entities"/>
-        /// </summary>
-        /// <param name="entities">List of <see cref="TEntity"/> to create</param>
-        /// <param name="userId">User ID</param>
-        void CreateRange(IEnumerable<TEntity> entities, TUserId userId);
-
-        /// <summary>
         /// Updates the specified <typeparamref name="TEntity"/> if found in database and sets UpdatedBy to <paramref name="userId"/> and UpdatedAt to <see cref="DateTime.UtcNow"/>
         /// </summary>
         /// <param name="entity">New entity data</param>
@@ -44,13 +37,5 @@ namespace DvBCrud.EFCore.Repositories
         /// <param name="userId">User ID</param>
         /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChanges"/> should be called after invocation if used.</param>
         Task UpdateAsync(TEntity entity, TUserId userId, bool createIfNotExists = false);
-
-        /// <summary>
-        /// Updates the <typeparamref name="TEntity"/> in <paramref name="entities"/> found in database and sets UpdatedBy to <paramref name="userId"/> and UpdatedAt to <see cref="DateTime.UtcNow"/> for each <typeparamref name="TEntity"/> in <paramref name="entities"/>
-        /// </summary>
-        /// <param name="entities">New entity data</param>
-        /// <param name="userId">User ID</param>
-        /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChanges"/> should be called after invocation if used.</param>
-        void UpdateRange(IEnumerable<TEntity> entities, TUserId userId, bool createIfNotExists = false);
     }
 }
