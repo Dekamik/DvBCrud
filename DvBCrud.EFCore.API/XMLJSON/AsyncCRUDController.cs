@@ -77,7 +77,17 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)} {id}");
 
-            await Task.Run(() => repository.Delete(id));
+            try
+            {
+                await Task.Run(() => repository.Delete(id));
+            }
+            catch (KeyNotFoundException)
+            {
+                string message = $"{nameof(TEntity)} {id} not found.";
+                logger.LogDebug($"{guid}: {nameof(Delete)} NOT FOUND - {message}");
+                return NotFound(message);
+            }
+            
             await repository.SaveChangesAsync();
 
             logger.LogDebug($"{guid}: {nameof(Delete)} OK");

@@ -157,5 +157,23 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             result.Should().NotBeNull();
             A.CallTo(() => repo.Delete(id)).MustHaveHappenedOnceExactly();
         }
+
+
+        [Fact]
+        public void Delete_NonExistingEntity_Returns404NotFound()
+        {
+            // Arrange
+            var repo = A.Fake<IAnyRepository>();
+            var logger = A.Fake<ILogger>();
+            var controller = new AnyCRUDController(repo, logger);
+            A.CallTo(() => repo.Delete(1)).Throws<KeyNotFoundException>();
+
+            // Act
+            var result = controller.Delete(1) as NotFoundObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(404);
+        }
     }
 }
