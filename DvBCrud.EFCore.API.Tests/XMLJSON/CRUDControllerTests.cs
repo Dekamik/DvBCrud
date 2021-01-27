@@ -13,7 +13,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
     public class CRUDControllerTests
     {
         [Fact]
-        public async Task Create_AnyEntity_RepositoryCreatesEntity()
+        public void Create_AnyEntity_RepositoryCreatesEntity()
         {
             // Arrange
             var repo = A.Fake<IAnyRepository>();
@@ -22,7 +22,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var entity = new AnyEntity();
 
             // Act
-            var result = await controller.Create(entity) as OkResult;
+            var result = controller.Create(entity) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
@@ -30,7 +30,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
-        public async Task Create_AnyEntities_RepositoryCreatesEntities()
+        public void Create_AnyEntities_RepositoryCreatesEntities()
         {
             // Arrange
             var repo = A.Fake<IAnyRepository>();
@@ -43,7 +43,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             };
 
             // Act
-            var result = await controller.CreateRange(entities) as OkResult;
+            var result = controller.CreateRange(entities) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
@@ -51,7 +51,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
-        public async Task Update_AnyEntity_RepositoryUpdatesEntity()
+        public void Update_AnyEntity_RepositoryUpdatesEntity()
         {
             // Arrange
             var repo = A.Fake<IAnyRepository>();
@@ -60,15 +60,15 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var entity = new AnyEntity();
 
             // Act
-            var result = await controller.Update(entity) as OkResult;
+            var result = controller.Update(entity) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(entity, false)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repo.Update(entity, false)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
-        public async Task Update_AnyEntityWithCreate_RepositoryUpdatesOrCreatesEntity()
+        public void Update_AnyEntityWithCreate_RepositoryUpdatesOrCreatesEntity()
         {
             // Arrange
             var repo = A.Fake<IAnyRepository>();
@@ -77,15 +77,15 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var entity = new AnyEntity();
 
             // Act
-            var result = await controller.Update(entity, true) as OkResult;
+            var result = controller.Update(entity, true) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(entity, true)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repo.Update(entity, true)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
-        public async Task Update_AnyEntities_RepositoryUpdatesEntities()
+        public void Update_AnyEntities_RepositoryUpdatesEntities()
         {
             // Arrange
             var repo = A.Fake<IAnyRepository>();
@@ -98,7 +98,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             };
 
             // Act
-            var result = await controller.UpdateRange(entities) as OkResult;
+            var result = controller.UpdateRange(entities) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
@@ -106,7 +106,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
-        public async Task Update_AnyEntitiesWithCreate_RepositoryUpdatesOrCreatesEntities()
+        public void Update_AnyEntitiesWithCreate_RepositoryUpdatesOrCreatesEntities()
         {
             // Arrange
             var repo = A.Fake<IAnyRepository>();
@@ -119,7 +119,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             };
 
             // Act
-            var result = await controller.UpdateRange(entities, true) as OkResult;
+            var result = controller.UpdateRange(entities, true) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
@@ -127,7 +127,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
-        public async Task Delete_AnyEntityWithCreate_RepositoryDeletesOrCreatesEntity()
+        public void Delete_AnyEntityWithCreate_RepositoryDeletesOrCreatesEntity()
         {
             // Arrange
             var repo = A.Fake<IAnyRepository>();
@@ -136,7 +136,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             int id = 1;
 
             // Act
-            var result = await controller.Delete(id) as OkResult;
+            var result = controller.Delete(id) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
@@ -144,7 +144,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
-        public async Task Delete_AnyEntitiesWithCreate_RepositoryDeletesOrCreatesEntities()
+        public void Delete_AnyEntitiesWithCreate_RepositoryDeletesOrCreatesEntities()
         {
             // Arrange
             var repo = A.Fake<IAnyRepository>();
@@ -153,7 +153,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var entities = new[] { 1, 2 };
 
             // Act
-            var result = await controller.DeleteRange(entities) as OkResult;
+            var result = controller.DeleteRange(entities) as OkResult;
 
             // Assert
             result.Should().NotBeNull();

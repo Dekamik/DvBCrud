@@ -21,78 +21,78 @@ namespace DvBCrud.EFCore.API.XMLJSON
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TEntity entity)
+        public IActionResult Create([FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Create)} {nameof(TEntity)}");
 
             repository.Create(entity);
-            await repository.SaveChangesAsync();
+            repository.SaveChanges();
 
             logger.LogDebug($"{guid}: {nameof(Create)} OK");
             return Ok();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRange([FromBody]IEnumerable<TEntity> entities)
+        public IActionResult CreateRange([FromBody]IEnumerable<TEntity> entities)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(CreateRange)} {entities.Count()} {nameof(TEntity)}");
 
             repository.CreateRange(entities);
-            await repository.SaveChangesAsync();
+            repository.SaveChanges();
 
             logger.LogDebug($"{guid}: {nameof(CreateRange)} OK");
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] TEntity entity, [FromQuery] bool createIfNotExists = false)
+        public IActionResult Update([FromBody] TEntity entity, [FromQuery] bool createIfNotExists = false)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)}.Id = {entity}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
-            await repository.UpdateAsync(entity, createIfNotExists);
-            await repository.SaveChangesAsync();
+            repository.Update(entity, createIfNotExists);
+            repository.SaveChanges();
 
             logger.LogDebug($"{guid}: {nameof(Update)} OK");
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateRange([FromBody]IEnumerable<TEntity> entities, [FromQuery]bool createIfNotExists = false)
+        public IActionResult UpdateRange([FromBody]IEnumerable<TEntity> entities, [FromQuery]bool createIfNotExists = false)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(UpdateRange)} {entities.Count()} {nameof(TEntity)}.Id = {string.Join(", ", entities)}{(createIfNotExists ? ", createIfNotExists = true" : "")}");
 
             repository.UpdateRange(entities, createIfNotExists);
-            await repository.SaveChangesAsync();
+            repository.SaveChanges();
 
             logger.LogDebug($"{guid}: {nameof(UpdateRange)} OK");
             return Ok();
         }
 
         [HttpDelete, Route("{id}")]
-        public async Task<IActionResult> Delete([FromQuery]TId id)
+        public IActionResult Delete([FromQuery]TId id)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)}.Id = {id}");
 
             repository.Delete(id);
-            await repository.SaveChangesAsync();
+            repository.SaveChanges();
 
             logger.LogDebug($"{guid}: {nameof(Delete)} OK");
             return Ok();
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteRange([FromBody]IEnumerable<TId> id)
+        public IActionResult DeleteRange([FromBody]IEnumerable<TId> id)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(DeleteRange)} {nameof(TEntity)}.Id = {string.Join(", ", id)}");
 
             repository.DeleteRange(id);
-            await repository.SaveChangesAsync();
+            repository.SaveChanges();
 
             logger.LogDebug($"{guid}: {nameof(DeleteRange)} OK");
             return Ok();
