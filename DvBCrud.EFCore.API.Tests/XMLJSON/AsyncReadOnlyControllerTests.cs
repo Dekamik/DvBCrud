@@ -32,9 +32,29 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             result.Value.Should().Be(expected);
         }
 
+
+        [Fact]
+        public async Task Read_AnyNonExistingId_Returns404NotFound()
+        {
+            // Arrange
+            var repo = A.Fake<IAnyReadOnlyRepository>();
+            var logger = A.Fake<ILogger>();
+            A.CallTo(() => repo.GetAsync(1)).Returns(Task.FromResult<AnyEntity>(null));
+            var controller = new AnyAsyncReadOnlyController(repo, logger);
+
+            // Act
+            var result = (await controller.Read(1)).Result as NotFoundResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(404);
+            A.CallTo(() => repo.GetAsync(1)).MustHaveHappenedOnceExactly();
+        }
+
         [Fact]
         public async Task ReadAll_Any_ReturnsAllEntitiesFromRepository()
         {
+            // Arrange
             var repo = A.Fake<IAnyReadOnlyRepository>();
             var logger = A.Fake<ILogger>();
             var expected = new[]
@@ -53,8 +73,10 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             A.CallTo(() => repo.GetAll()).Returns(expected);
             var controller = new AnyAsyncReadOnlyController(repo, logger);
 
+            // Act
             var result = (await controller.ReadAll()).Result as OkObjectResult;
 
+            // Assert
             result.Should().NotBeNull();
             result.Value.Should().Be(expected);
         }

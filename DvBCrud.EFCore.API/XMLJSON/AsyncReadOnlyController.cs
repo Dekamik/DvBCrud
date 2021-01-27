@@ -32,6 +32,11 @@ namespace DvBCrud.EFCore.API.XMLJSON
 
             TEntity entity = await repository.GetAsync(id);
 
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
             logger.LogDebug($"{guid}: {nameof(Read)} OK");
             return Ok(entity);
         }
