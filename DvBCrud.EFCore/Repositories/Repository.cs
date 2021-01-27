@@ -37,6 +37,31 @@ namespace DvBCrud.EFCore.Repositories
             Set.AddRange(entities);
         }
 
+        public virtual void Update(TEntity entity, bool createIfNotExists = false)
+        {
+            if (entity == null)
+                throw new ArgumentNullException($"{nameof(entity)} cannot be null");
+
+            logger.LogTrace($"Updating {nameof(TEntity)} with Id {entity.Id}");
+
+            var existingEntity = Set.Find(entity.Id);
+
+            // If entity wasn't found, log a debug message
+            if (existingEntity == null)
+            {
+                logger.LogDebug($"Couldn't find {nameof(TEntity)} with Id {entity.Id} for update{ (createIfNotExists ? ", creating entity" : "") }");
+
+                if (createIfNotExists)
+                {
+                    Create(entity);
+                }
+
+                return;
+            }
+
+            existingEntity.Copy(entity);
+        }
+
         public virtual async Task UpdateAsync(TEntity entity, bool createIfNotExists = false)
         {
             if (entity == null)
@@ -125,6 +150,12 @@ namespace DvBCrud.EFCore.Repositories
             }
 
             Set.RemoveRange(entities);
+        }
+
+        public virtual void SaveChanges()
+        {
+            logger.LogTrace($"Repository for {nameof(TEntity)} saving changes to {nameof(TDbContext)}");
+            dbContext.SaveChanges();
         }
 
         public virtual async Task SaveChangesAsync()

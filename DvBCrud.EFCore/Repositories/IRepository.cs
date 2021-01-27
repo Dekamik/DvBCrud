@@ -29,6 +29,13 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="entity">New entity data</param>
         /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChangesAsync"/> should be called after invocation if used.</param>
+        void Update(TEntity entity, bool createIfNotExists = false);
+
+        /// <summary>
+        /// Finds the tracked <typeparamref name="TEntity"/> by Id asynchronously and copies values from the <paramref name="entity"/> to its corresponding tracked <typeparamref name="TEntity"/>
+        /// </summary>
+        /// <param name="entity">New entity data</param>
+        /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChangesAsync"/> should be called after invocation if used.</param>
         Task UpdateAsync(TEntity entity, bool createIfNotExists = false);
 
         /// <summary>
@@ -53,7 +60,11 @@ namespace DvBCrud.EFCore.Repositories
         /// <summary>
         /// Persists modifications to DbContext
         /// </summary>
-        /// <returns>An async <see cref="Task"/></returns>
+        void SaveChanges();
+
+        /// <summary>
+        /// Persists modifications to DbContext asynchronously
+        /// </summary>
         Task SaveChangesAsync();
     }
 }
