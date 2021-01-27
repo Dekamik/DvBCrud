@@ -114,6 +114,19 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
+        public void Update_NullId_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NullId_ThrowsArgumentNullException));
+            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            var updatedEntity = new AnyNullableIdEntity
+            {
+                AnyString = "AnyNewString"
+            };
+
+            repository.Invoking(r => r.Update(null, updatedEntity)).Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
         public async Task UpdateAsync_ExistingEntity_EntityUpdatedAsync()
         {
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_ExistingEntity_EntityUpdatedAsync));
@@ -165,6 +178,19 @@ namespace DvBCrud.EFCore.Tests.Repositories
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
 
             await repository.Awaiting(r => r.UpdateAsync(1, null)).Should().ThrowAsync<ArgumentNullException>();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_NullId_ThrowsArgumentNullException()
+        {
+            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_NullId_ThrowsArgumentNullException));
+            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            var updatedEntity = new AnyNullableIdEntity
+            {
+                AnyString = "AnyNewString"
+            };
+
+            await repository.Awaiting(r => r.UpdateAsync(null, updatedEntity)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]

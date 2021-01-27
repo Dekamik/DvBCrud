@@ -29,6 +29,9 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void Update(TId id, TEntity entity)
         {
+            if (id == null)
+                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
 
@@ -49,6 +52,9 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual async Task UpdateAsync(TId id, TEntity entity)
         {
+            if (id == null)
+                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
 
