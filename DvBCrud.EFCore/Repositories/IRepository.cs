@@ -1,5 +1,4 @@
 ﻿using DvBCrud.EFCore.Entities;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.Repositories
@@ -19,18 +18,18 @@ namespace DvBCrud.EFCore.Repositories
         void Create(TEntity entity);
 
         /// <summary>
-        /// Finds the tracked <typeparamref name="TEntity"/> by Id and copies values from the <paramref name="entity"/> to its corresponding tracked <typeparamref name="TEntity"/>
+        /// Finds the tracked <typeparamref name="TEntity"/> by <paramref name="id"/> and copies values from the <paramref name="entity"/> to its corresponding tracked <typeparamref name="TEntity"/>
         /// </summary>
+        /// <param name="id">The Id of entity to update</param>
         /// <param name="entity">New entity data</param>
-        /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChangesAsync"/> should be called after invocation if used.</param>
-        void Update(TEntity entity);
+        void Update(TId id, TEntity entity);
 
         /// <summary>
-        /// Finds the tracked <typeparamref name="TEntity"/> by Id asynchronously and copies values from the <paramref name="entity"/> to its corresponding tracked <typeparamref name="TEntity"/>
+        /// Finds the tracked <typeparamref name="TEntity"/> by <paramref name="id"/> asynchronously and copies values from the <paramref name="entity"/> to its corresponding tracked <typeparamref name="TEntity"/>
         /// </summary>
+        /// <param name="id">The Id of entity to update</param>
         /// <param name="entity">New entity data</param>
-        /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChangesAsync"/> should be called after invocation if used.</param>
-        Task UpdateAsync(TEntity entity);
+        Task UpdateAsync(TId id, TEntity entity);
 
         /// <summary>
         /// Finds and removes the <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/>

@@ -69,11 +69,11 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             };
 
             // Act
-            var result = await controller.Update(entity) as OkResult;
+            var result = await controller.Update(1, entity) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(entity)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repo.UpdateAsync(1, entity)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
@@ -89,11 +89,11 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             };
 
             // Act
-            var result = await controller.Update(entity) as BadRequestObjectResult;
+            var result = await controller.Update(1, entity) as BadRequestObjectResult;
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(entity)).MustNotHaveHappened();
+            A.CallTo(() => repo.UpdateAsync(1, entity)).MustNotHaveHappened();
         }
 
 
@@ -109,10 +109,10 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                 Id = 1,
                 AnyString = "AnyString"
             };
-            A.CallTo(() => repo.UpdateAsync(entity)).Throws<KeyNotFoundException>();
+            A.CallTo(() => repo.UpdateAsync(1, entity)).Throws<KeyNotFoundException>();
 
             // Act
-            var result = await controller.Update(entity) as NotFoundObjectResult;
+            var result = await controller.Update(1, entity) as NotFoundObjectResult;
 
             // Assert
             result.Should().NotBeNull();

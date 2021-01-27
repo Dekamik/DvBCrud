@@ -39,23 +39,22 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        [HttpPut]
-        public IActionResult Update([FromBody] TEntity entity)
+        [HttpPut, Route("{id}")]
+        public IActionResult Update([FromQuery] TId id, [FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {entity.Id}");
+            logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {id}");
 
-            // Id must be predefined
-            if (entity.Id.Equals(default(TId)))
+            if (id.Equals(default(TId)))
             {
-                string message = $"{nameof(TEntity)}.Id must be defined.";
+                string message = $"{nameof(id)} must be defined.";
                 logger.LogDebug($"{guid}: {nameof(Update)} BAD REQUEST - {message}");
                 return BadRequest(message);
             }
 
             try
             {
-                repository.Update(entity);
+                repository.Update(id, entity);
             }
             catch (KeyNotFoundException)
             {

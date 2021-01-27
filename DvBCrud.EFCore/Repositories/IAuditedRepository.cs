@@ -1,6 +1,5 @@
 ﻿using DvBCrud.EFCore.Entities;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.Repositories
@@ -25,17 +24,17 @@ namespace DvBCrud.EFCore.Repositories
         /// <summary>
         /// Updates the specified <typeparamref name="TEntity"/> if found in database and sets UpdatedBy to <paramref name="userId"/> and UpdatedAt to <see cref="DateTime.UtcNow"/>
         /// </summary>
+        /// <param name="id">The Id of entity to update</param>
         /// <param name="entity">New entity data</param>
         /// <param name="userId">User ID</param>
-        /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChanges"/> should be called after invocation if used.</param>
-        void Update(TEntity entity, TUserId userId);
+        void Update(TId id, TEntity entity, TUserId userId);
 
         /// <summary>
         /// Updates the specified <typeparamref name="TEntity"/> asynchronously if found in database and sets UpdatedBy to <paramref name="userId"/> and UpdatedAt to <see cref="DateTime.UtcNow"/>
         /// </summary>
+        /// <param name="id">The Id of entity to update</param>
         /// <param name="entity">New entity data</param>
         /// <param name="userId">User ID</param>
-        /// <param name="createIfNotExists">If true, creates <paramref name="entity"/> if it isn't found. <see cref="SaveChanges"/> should be called after invocation if used.</param>
-        Task UpdateAsync(TEntity entity, TUserId userId);
+        Task UpdateAsync(TId id, TEntity entity, TUserId userId);
     }
 }

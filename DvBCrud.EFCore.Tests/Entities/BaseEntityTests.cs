@@ -1,4 +1,5 @@
 ﻿using DvBCrud.EFCore.Mocks.Entities;
+using FakeItEasy;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,29 @@ namespace DvBCrud.EFCore.Tests.Entities
         [Fact]
         public void Copy_AnyEntity_ValuesCopied()
         {
+            // Arrange
+            var original = new AnyEntity
+            {
+                Id = 1,
+                AnyString = "AnyString"
+            };
+            var newEntity = new AnyEntity
+            {
+                AnyString = "AnyOtherString"
+            };
+
+            // Act
+            newEntity.Copy(original);
+
+            // Assert
+            newEntity.AnyString.Should().Be(original.AnyString);
+        }
+
+
+        [Fact]
+        public void Copy_WithNewId_IdIgnored()
+        {
+            // Arrange
             var original = new AnyEntity
             {
                 Id = 1,
@@ -23,9 +47,11 @@ namespace DvBCrud.EFCore.Tests.Entities
                 AnyString = "AnyOtherString"
             };
 
+            // Act
             newEntity.Copy(original);
 
-            newEntity.Id.Should().NotBe(original.Id);
+            // Assert
+            newEntity.Id.Should().Be(newEntity.Id);
             newEntity.AnyString.Should().Be(original.AnyString);
         }
     }

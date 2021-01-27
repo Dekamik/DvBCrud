@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.Repositories
@@ -26,38 +27,39 @@ namespace DvBCrud.EFCore.Repositories
             Set.Add(entity);
         }
 
-        public virtual void Update(TEntity entity)
+        public virtual void Update(TId id, TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
 
-            logger.LogTrace($"Updating {nameof(TEntity)} with Id {entity.Id}");
+            logger.LogTrace($"Updating {nameof(TEntity)} with Id {id}");
 
-            var existingEntity = Set.Find(entity.Id);
+            var existingEntity = Set.Find(id);
 
             // If entity wasn't found, log a debug message
             if (existingEntity == null)
             {
-                logger.LogDebug($"{nameof(TEntity)} {entity.Id} not found");
-                return;
+                var message = $"{nameof(TEntity)} {id} not found";
+                logger.LogDebug(message);
+                throw new KeyNotFoundException(message);
             }
 
             existingEntity.Copy(entity);
         }
 
-        public virtual async Task UpdateAsync(TEntity entity)
+        public virtual async Task UpdateAsync(TId id, TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException($"{nameof(entity)} cannot be null");
 
-            logger.LogTrace($"Updating {nameof(TEntity)} with Id {entity.Id}");
+            logger.LogTrace($"Updating {nameof(TEntity)} with Id {id}");
 
-            var existingEntity = await Set.FindAsync(entity.Id);
+            var existingEntity = await Set.FindAsync(id);
 
             // If entity wasn't found, log a debug message
             if (existingEntity == null)
             {
-                logger.LogDebug($"{nameof(TEntity)} {entity.Id} not found");
+                logger.LogDebug($"{nameof(TEntity)} {id} not found");
                 return;
             }
 

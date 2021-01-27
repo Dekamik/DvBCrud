@@ -10,7 +10,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
         IActionResult Create([FromBody] TEntity entity);
 
         [HttpPut]
-        IActionResult Update([FromBody] TEntity entity);
+        IActionResult Update([FromQuery] TId id, [FromBody] TEntity entity);
 
         [HttpDelete, Route("{id}")]
         IActionResult Delete([FromQuery]TId id);

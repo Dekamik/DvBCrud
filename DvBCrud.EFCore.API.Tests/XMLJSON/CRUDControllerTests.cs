@@ -1,5 +1,4 @@
 ﻿using DvBCrud.EFCore.API.Mocks.XMLJSON;
-using DvBCrud.EFCore.Mocks.DbContexts;
 using DvBCrud.EFCore.Mocks.Entities;
 using DvBCrud.EFCore.Mocks.Repositories;
 using FakeItEasy;
@@ -62,40 +61,18 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var controller = new AnyCRUDController(repo, logger);
-            var entity = new AnyEntity {
-                Id = 1,
-                AnyString = "AnyString"
-            };
-
-            // Act
-            var result = controller.Update(entity) as OkResult;
-
-            // Assert
-            result.Should().NotBeNull();
-            A.CallTo(() => repo.Update(entity)).MustHaveHappenedOnceExactly();
-        }
-
-        [Fact]
-        public void Update_AnyEntityWithoutId_Returns400BadRequest()
-        {
-            // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyCRUDController(repo, logger);
-            var entity = new AnyEntity
+            var entity = new AnyEntity 
             {
                 AnyString = "AnyString"
             };
 
             // Act
-            var result = controller.Update(entity) as BadRequestObjectResult;
+            var result = controller.Update(1, entity) as OkResult;
 
             // Assert
             result.Should().NotBeNull();
-            result.StatusCode.Should().Be(400);
-            A.CallTo(() => repo.Update(entity)).MustNotHaveHappened();
+            A.CallTo(() => repo.Update(1, entity)).MustHaveHappenedOnceExactly();
         }
-
 
         [Fact]
         public void Update_AnyNonExistingEntity_Returns404NotFound()
@@ -106,13 +83,12 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var controller = new AnyCRUDController(repo, logger);
             var entity = new AnyEntity
             {
-                Id = 1,
                 AnyString = "AnyString"
             };
-            A.CallTo(() => repo.Update(entity)).Throws<KeyNotFoundException>();
+            A.CallTo(() => repo.Update(1, entity)).Throws<KeyNotFoundException>();
 
             // Act
-            var result = controller.Update(entity) as NotFoundObjectResult;
+            var result = controller.Update(1, entity) as NotFoundObjectResult;
 
             // Assert
             result.Should().NotBeNull();

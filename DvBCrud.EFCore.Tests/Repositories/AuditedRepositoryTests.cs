@@ -70,7 +70,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 UpdatedBy = 1
             };
 
-            repository.Update(expected, 1);
+            repository.Update(1, expected, 1);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyAuditedEntities.Single();
@@ -104,7 +104,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 UpdatedBy = 1
             };
 
-            await repository.UpdateAsync(expected, 1);
+            await repository.UpdateAsync(1, expected, 1);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyAuditedEntities.Single();

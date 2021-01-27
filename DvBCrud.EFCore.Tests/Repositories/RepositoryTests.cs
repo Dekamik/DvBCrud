@@ -5,6 +5,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -75,15 +76,14 @@ namespace DvBCrud.EFCore.Tests.Repositories
             });
             var expected = new AnyEntity
             {
-                Id = 1,
                 AnyString = "AnyNewString"
             };
 
-            repository.Update(expected);
+            repository.Update(1, expected);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 1);
-            actual.Should().BeEquivalentTo(expected);
+            actual.AnyString.Should().BeEquivalentTo(expected.AnyString);
         }
 
         [Fact]
@@ -98,15 +98,10 @@ namespace DvBCrud.EFCore.Tests.Repositories
             });
             var updatedEntity = new AnyEntity
             {
-                Id = 2,
                 AnyString = "AnyNewString"
             };
 
-            repository.Update(updatedEntity);
-            dbContextProvider.DbContext.SaveChanges();
-
-            var actual = dbContextProvider.DbContext.AnyEntities.SingleOrDefault(e => e.Id == 2);
-            actual.Should().BeNull();
+            repository.Invoking(r => r.Update(2, updatedEntity)).Should().Throw<KeyNotFoundException>();
         }
 
         [Fact]
@@ -115,7 +110,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             using var dbContextProvider = new AnyDbContextProvider(nameof(Update_Null_ThrowsArgumentNullException));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
 
-            repository.Invoking(r => r.Update(null)).Should().Throw<ArgumentNullException>();
+            repository.Invoking(r => r.Update(1, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -134,7 +129,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 AnyString = "AnyNewString"
             };
 
-            await repository.UpdateAsync(expected);
+            await repository.UpdateAsync(1, expected);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 1);
@@ -153,11 +148,10 @@ namespace DvBCrud.EFCore.Tests.Repositories
             });
             var updatedEntity = new AnyEntity
             {
-                Id = 2,
                 AnyString = "AnyNewString"
             };
 
-            await repository.UpdateAsync(updatedEntity);
+            await repository.UpdateAsync(2, updatedEntity);
             dbContextProvider.DbContext.SaveChanges();
 
             var actual = dbContextProvider.DbContext.AnyEntities.SingleOrDefault(e => e.Id == 2);
@@ -170,7 +164,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_Null_ThrowsArgumentNullException));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
 
-            repository.Invoking(r => r.UpdateAsync(null)).Should().ThrowAsync<ArgumentNullException>();
+            repository.Invoking(r => r.UpdateAsync(1, null)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
