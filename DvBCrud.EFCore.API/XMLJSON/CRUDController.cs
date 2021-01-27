@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
@@ -27,6 +25,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
 
             if (entity.Id != null)
             {
+                logger.LogDebug($"{guid}: {nameof(Create)} BAD REQUEST");
                 return BadRequest($"{nameof(TEntity)}.Id must not be predefined.");
             }
 
