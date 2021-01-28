@@ -6,6 +6,8 @@ dotnet: 3.1
 
 install: dotnet restore
 
+before_script: dotnet test
+
 script: 
-  - dotnet build
-  - dotnet test
+  - dotnet build DvBCrud.EFCore/DvBCrud.EFCore.csproj
+  - dotnet build DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
