@@ -11,8 +11,6 @@ namespace DvBCrud.EFCore.Repositories
         where TEntity : BaseAuditedEntity<TId, TUserId>
         where TDbContext : DbContext
     {
-        public LogLevel AuditLogLevel { get; set; } = LogLevel.Trace;
-
         public AuditedRepository(TDbContext dbContext, ILogger logger) : base(dbContext, logger)
         {
 
@@ -20,10 +18,7 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void Create(TEntity entity, TUserId userId)
         {
-            var now = DateTime.UtcNow;
-            logger.Log(AuditLogLevel, $"User {userId} called {nameof(Create)} for {nameof(TEntity)} at {now}");
-
-            entity.CreatedAt = now;
+            entity.CreatedAt = DateTime.UtcNow;
             entity.CreatedBy = userId;
 
             base.Create(entity);
@@ -31,10 +26,7 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void Update(TId id, TEntity entity, TUserId userId)
         {
-            var now = DateTime.UtcNow;
-            logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for {nameof(TEntity)} {entity.Id} at {now}");
-
-            entity.UpdatedAt = now;
+            entity.UpdatedAt = DateTime.UtcNow;
             entity.UpdatedBy = userId;
 
             base.Update(id, entity);
@@ -42,10 +34,7 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual Task UpdateAsync(TId id, TEntity entity, TUserId userId)
         {
-            var now = DateTime.UtcNow;
-            logger.Log(AuditLogLevel, $"User {userId} called {nameof(UpdateAsync)} for {nameof(TEntity)} {entity.Id} at {now}");
-
-            entity.UpdatedAt = now;
+            entity.UpdatedAt = DateTime.UtcNow;
             entity.UpdatedBy = userId;
 
             return base.UpdateAsync(id, entity);
@@ -54,7 +43,7 @@ namespace DvBCrud.EFCore.Repositories
         #region Hidden methods
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use AuditedRepository.Create(TId, TEntity, TUserId) instead")]
+        [Obsolete("Use AuditedRepository.Create(TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override void Create(TEntity entity)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
@@ -68,7 +57,7 @@ namespace DvBCrud.EFCore.Repositories
         public override void Update(TId id, TEntity entity)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
-            throw new NotSupportedException("Use AuditedRepository.Update(TEntity, TUserId) instead");
+            throw new NotSupportedException("Use AuditedRepository.Update(TId, TEntity, TUserId) instead");
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -77,7 +66,7 @@ namespace DvBCrud.EFCore.Repositories
         public override Task UpdateAsync(TId id, TEntity entity)
 #pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
-            throw new NotSupportedException("Use AuditedRepository.Update(TEntity, TUserId) instead");
+            throw new NotSupportedException("Use AuditedRepository.Update(TId, TEntity, TUserId) instead");
         }
 
         #endregion
