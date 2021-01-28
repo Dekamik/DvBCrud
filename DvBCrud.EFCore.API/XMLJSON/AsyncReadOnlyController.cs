@@ -27,7 +27,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public async Task<ActionResult<TEntity>> Read([FromQuery] TId id)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)}.Id = {id}");
+            logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
 
             TEntity entity = await repository.GetAsync(id);
 
