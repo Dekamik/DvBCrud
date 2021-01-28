@@ -3,7 +3,6 @@ using DvBCrud.EFCore.Mocks.Entities;
 using DvBCrud.EFCore.Mocks.Repositories;
 using FakeItEasy;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;

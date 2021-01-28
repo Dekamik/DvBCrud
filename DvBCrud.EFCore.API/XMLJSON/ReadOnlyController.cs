@@ -27,13 +27,15 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public ActionResult<TEntity> Read([FromQuery]TId id)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)}.Id = {id}");
+            logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
 
             TEntity entity = repository.Get(id);
 
             if (entity == null)
             {
-                return NotFound();
+                var message = $"{nameof(TEntity)} {id} not found.";
+                logger.LogDebug($"{guid}: {nameof(Read)} NOT FOUND - {message}");
+                return NotFound(message);
             }
 
             logger.LogDebug($"{guid}: {nameof(Read)} OK");
