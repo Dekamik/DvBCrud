@@ -34,7 +34,9 @@ namespace DvBCrud.EFCore.API.XMLJSON
 
             if (entity == null)
             {
-                return NotFound();
+                var message = $"{nameof(TEntity)} {id} not found.";
+                logger.LogDebug($"{guid}: {nameof(Read)} NOT FOUND - {message}");
+                return NotFound(message);
             }
 
             logger.LogDebug($"{guid}: {nameof(Read)} OK");

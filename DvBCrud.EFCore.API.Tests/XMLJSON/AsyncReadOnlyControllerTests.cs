@@ -43,7 +43,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             var controller = new AnyAsyncReadOnlyController(repo, logger);
 
             // Act
-            var result = (await controller.Read(1)).Result as NotFoundResult;
+            var result = (await controller.Read(1)).Result as NotFoundObjectResult;
 
             // Assert
             result.Should().NotBeNull();
