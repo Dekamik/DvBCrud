@@ -5,7 +5,6 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -16,6 +15,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         [Fact]
         public async Task Read_AnyId_ReturnsEntityFromRepository()
         {
+            // Arrange
             var repo = A.Fake<IAnyReadOnlyRepository>();
             var logger = A.Fake<ILogger>();
             var expected = new AnyEntity
@@ -26,8 +26,10 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             A.CallTo(() => repo.GetAsync(1)).Returns(expected);
             var controller = new AnyAsyncReadOnlyController(repo, logger);
 
+            // Act
             var result = (await controller.Read(1)).Result as OkObjectResult;
 
+            // Assert
             result.Should().NotBeNull();
             result.Value.Should().Be(expected);
         }
@@ -69,7 +71,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                     Id = 2,
                     AnyString = "AnyString"
                 }
-            }.AsEnumerable();
+            };
             A.CallTo(() => repo.GetAll()).Returns(expected);
             var controller = new AnyAsyncReadOnlyController(repo, logger);
 
