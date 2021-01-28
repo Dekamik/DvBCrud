@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Dennis von Bargen</Authors>
+    <Company>Dennis von Bargen</Company>
   </PropertyGroup>
 
   <ItemGroup>

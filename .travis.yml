@@ -8,6 +8,11 @@ install: dotnet restore
 
 before_script: dotnet test
 
-script: 
-  - dotnet build DvBCrud.EFCore/DvBCrud.EFCore.csproj
-  - dotnet build DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
+script: dotnet build DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj # Builds DvBCrud.EFCore aswell (as a dependency)
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: chmod +x ./deploy.sh && ./deploy.sh $NUGET_API_KEY $NUGET_SOURCE
+  on:
+    branch: master
