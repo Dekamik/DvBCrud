@@ -2,11 +2,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-ApiKey=$1
-Source=$2
+key=$1
+src=$2
 
-nuget pack DvBCrud.EFCore/DvBCrud.EFCore.csproj -Verbosity detailed
-nuget pack DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj -Verbosity detailed
+dotnet nuget pack DvBCrud.EFCore/DvBCrud.EFCore.csproj
+dotnet nuget pack DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
 
-nuget push DvBCrud.EFCore/bin/Debug/DvBCrud.EFCore.*.nupkg -Verbosity detailed -ApiKey $ApiKey -Source $Source
-nuget push DvBCrud.EFCore.API/bin/Debug/DvBCrud.EFCore.API.*.nupkg -Verbosity detailed -ApiKey $ApiKey -Source $Source
+dotnet nuget push DvBCrud.EFCore/bin/Debug/DvBCrud.EFCore.*.nupkg --api-key $key --source $src
+dotnet nuget push DvBCrud.EFCore.API/bin/Debug/DvBCrud.EFCore.API.*.nupkg --api-key $key --source $src
