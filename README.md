@@ -1,5 +1,7 @@
 # DvBCrud
 
+[![Build Status](https://travis-ci.com/Dekamik/DvBCrud.svg?branch=master)](https://travis-ci.com/Dekamik/DvBCrud)
+
 DvBCrud is a library for templating CRUD repositories and entities.
 
 This library aims to both standardize and enable rapid development of normal database operations and use-cases, per the "Don't Repeat Yourself" spirit.
