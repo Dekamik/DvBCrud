@@ -42,6 +42,10 @@ namespace DvBCrud.EFCore.Repositories
 
         #region Hidden methods
 
+        /// <summary>
+        /// Obsolete, use <see cref="Create(TEntity, TUserId)"/> instead.
+        /// </summary>
+        /// <exception cref="NotSupportedException">Thrown since this method is not supported</exception>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use AuditedRepository.Create(TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
@@ -51,6 +55,10 @@ namespace DvBCrud.EFCore.Repositories
             throw new NotSupportedException("Use AuditedRepository.Create(TEntity, TUserId) instead");
         }
 
+        /// <summary>
+        /// Obsolete, use <see cref="Update(TId, TEntity, TUserId)"/> instead.
+        /// </summary>
+        /// <exception cref="NotSupportedException">Thrown since this method is not supported</exception>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use AuditedRepository.Update(TId, TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
@@ -60,6 +68,10 @@ namespace DvBCrud.EFCore.Repositories
             throw new NotSupportedException("Use AuditedRepository.Update(TId, TEntity, TUserId) instead");
         }
 
+        /// <summary>
+        /// Obsolete, use <see cref="UpdateAsync(TId, TEntity, TUserId)"/> instead.
+        /// </summary>
+        /// <exception cref="NotSupportedException">Thrown since this method is not supported</exception>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use AuditedRepository.UpdateAsync(TId, TEntity, TUserId) instead")]
 #pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
