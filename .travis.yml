@@ -4,12 +4,10 @@ mono: none
 
 dotnet: 3.1
 
-install:
- - dotnet restore
-
 jobs:
   include:
   - stage: build
+    install: dotnet restore
     script: dotnet build
     workspaces:
       create:
