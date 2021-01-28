@@ -11,14 +11,14 @@ jobs:
   include:
   - stage: build
     script: dotnet build
+    workspaces:
+      create:
+        name: ws
   - stage: test
     script: dotnet test DvBCrud.EFCore.Tests/DvBCrud.EFCore.Tests.csproj
-  -
+    workspaces:
+      use: ws
+  - 
     script: dotnet test DvBCrud.EFCore.API.Tests/DvBCrud.EFCore.API.Tests.csproj
-  - stage: test coverage
-    script: bash <(curl -s https://codecov.io/bash)
-
-stages:
-  - build
-  - test
-  - test coverage
+    workspaces:
+      use: ws
