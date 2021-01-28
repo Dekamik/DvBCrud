@@ -87,9 +87,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public void Update_NonExistingEntity_EntityNotUpdated()
+        public void Update_NonExistingEntity_ThrowsKeyNotFoundException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_EntityNotUpdated));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_ThrowsKeyNotFoundException));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             dbContextProvider.Mock(new AnyEntity
             {
@@ -150,9 +150,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
         }
 
         [Fact]
-        public async Task UpdateAsync_NonExistingEntity_EntityNotUpdated()
+        public async Task UpdateAsync_NonExistingEntity_ThrowsKeyNotFoundException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_NonExistingEntity_EntityNotUpdated));
+            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_ThrowsKeyNotFoundException));
             var repository = new AnyRepository(dbContextProvider.DbContext, logger);
             dbContextProvider.Mock(new AnyEntity
             {
@@ -164,11 +164,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 AnyString = "AnyNewString"
             };
 
-            await repository.UpdateAsync(2, updatedEntity);
-            dbContextProvider.DbContext.SaveChanges();
-
-            var actual = dbContextProvider.DbContext.AnyEntities.SingleOrDefault(e => e.Id == 2);
-            actual.Should().BeNull();
+            await repository.Awaiting(r => r.UpdateAsync(2, updatedEntity)).Should().ThrowAsync<KeyNotFoundException>();
         }
 
         [Fact]

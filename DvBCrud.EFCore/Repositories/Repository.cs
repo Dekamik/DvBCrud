@@ -60,8 +60,9 @@ namespace DvBCrud.EFCore.Repositories
             // If entity wasn't found, log a debug message
             if (existingEntity == null)
             {
-                logger.LogDebug($"{nameof(TEntity)} {id} not found");
-                return;
+                var message = $"{nameof(TEntity)} {id} not found";
+                logger.LogDebug(message);
+                throw new KeyNotFoundException(message);
             }
 
             existingEntity.Copy(entity);
