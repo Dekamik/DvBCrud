@@ -18,6 +18,8 @@ namespace DvBCrud.EFCore.Repositories
 
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
         public virtual void Create(TEntity entity)
         {
             if (entity == null)
@@ -26,6 +28,10 @@ namespace DvBCrud.EFCore.Repositories
             Set.Add(entity);
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <typeparamref name="TEntity"/> with <paramref name="id"/> not found</exception>"
         public virtual void Update(TId id, TEntity entity)
         {
             if (id == null)
@@ -36,7 +42,6 @@ namespace DvBCrud.EFCore.Repositories
 
             var existingEntity = Set.Find(id);
 
-            // If entity wasn't found, log a debug message
             if (existingEntity == null)
             {
                 var message = $"{nameof(TEntity)} {id} not found";
@@ -47,6 +52,10 @@ namespace DvBCrud.EFCore.Repositories
             existingEntity.Copy(entity);
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <typeparamref name="TEntity"/> with <paramref name="id"/> not found</exception>"
         public virtual async Task UpdateAsync(TId id, TEntity entity)
         {
             if (id == null)
@@ -57,7 +66,6 @@ namespace DvBCrud.EFCore.Repositories
 
             var existingEntity = await Set.FindAsync(id);
 
-            // If entity wasn't found, log a debug message
             if (existingEntity == null)
             {
                 var message = $"{nameof(TEntity)} {id} not found";
@@ -68,6 +76,9 @@ namespace DvBCrud.EFCore.Repositories
             existingEntity.Copy(entity);
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <typeparamref name="TEntity"/> with <paramref name="id"/> not found</exception>"
         public virtual void Delete(TId id)
         {
             if (id == null)
@@ -85,6 +96,9 @@ namespace DvBCrud.EFCore.Repositories
             Set.Remove(entity);
         }
 
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <typeparamref name="TEntity"/> with <paramref name="id"/> not found</exception>"
         public virtual async Task DeleteAsync(TId id)
         {
             if (id == null)
