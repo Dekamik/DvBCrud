@@ -26,7 +26,7 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual IEnumerable<TEntity> GetAll()
         {
-            return Set;
+            return Set.AsNoTracking();
         }
 
         /// <inheritdoc/>
@@ -36,7 +36,7 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
-            return Set.FirstOrDefault(e => id.Equals(e.Id));
+            return Set.AsNoTracking().FirstOrDefault(e => e.Id.Equals(id));
         }
 
         /// <inheritdoc/>
@@ -46,7 +46,7 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
-            return Set.FirstOrDefaultAsync(e => id.Equals(e.Id));
+            return Set.AsNoTracking().FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
 
         /// <inheritdoc/>
