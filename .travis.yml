@@ -16,4 +16,3 @@ deploy:
   script: chmod +x ./deploy.sh && ./deploy.sh $TRAVIS_TAG $NUGET_API_KEY $NUGET_SOURCE
   on:
     tags: true
-    all_branches: true
