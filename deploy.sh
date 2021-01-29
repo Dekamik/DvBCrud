@@ -2,10 +2,6 @@
 set -eo pipefail
 IFS=$'\n\t'
 
-echo $1
-echo $2
-echo $3
-
 tag=$1
 key=$2
 src=$3

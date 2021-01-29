@@ -13,6 +13,7 @@ script: dotnet build DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj # Builds DvBCr
 deploy:
   skip_cleanup: true
   provider: script
-  script: chmod +x ./deploy.sh && ./deploy.sh $TRAVIS_BRANCH $NUGET_API_KEY $NUGET_SOURCE
+  script: chmod +x ./deploy.sh && ./deploy.sh $TRAVIS_TAG $NUGET_API_KEY $NUGET_SOURCE
   on:
     tags: true
+    all_branches: true
