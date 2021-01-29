@@ -16,7 +16,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public void Read_AnyId_ReturnsEntityFromRepository()
         {
             // Arrange
-            var repo = A.Fake<IAnyReadOnlyRepository>();
+            var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var expected = new AnyEntity
             {
@@ -39,7 +39,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public void Read_AnyNonExistingId_Returns404NotFound()
         {
             // Arrange
-            var repo = A.Fake<IAnyReadOnlyRepository>();
+            var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             A.CallTo(() => repo.Get(1)).Returns(null);
             var controller = new AnyReadOnlyController(repo, logger);
@@ -56,7 +56,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         [Fact]
         public void ReadAll_Any_ReturnsAllEntitiesFromRepository()
         {
-            var repo = A.Fake<IAnyReadOnlyRepository>();
+            var repo = A.Fake<IAnyRepository>();
             var logger = A.Fake<ILogger>();
             var expected = new[]
             {

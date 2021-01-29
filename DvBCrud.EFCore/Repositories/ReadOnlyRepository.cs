@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.Repositories
 {
+    [Obsolete("Read operations available on IRepository-derived classes")]
     public abstract class ReadOnlyRepository<TEntity, TId, TDbContext> : IReadOnlyRepository<TEntity, TId>
         where TEntity : BaseEntity<TId>
         where TDbContext : DbContext

@@ -10,7 +10,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
 {
     public abstract class ReadOnlyController<TEntity, TId, TRepository, TDbContext> : ControllerBase, IReadOnlyController<TEntity, TId>
         where TEntity : BaseEntity<TId>
-        where TRepository : IReadOnlyRepository<TEntity, TId>
+        where TRepository : IRepository<TEntity, TId>
         where TDbContext : DbContext
     {
         internal readonly TRepository repository;

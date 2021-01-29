@@ -1,4 +1,5 @@
 ﻿using DvBCrud.EFCore.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace DvBCrud.EFCore.Repositories
     /// </summary>
     /// <typeparam name="TEntity">Entity type</typeparam>
     /// <typeparam name="TId"><typeparamref name="TEntity"/> key type</typeparam>
+    [Obsolete("Read operations available on IRepository-derived classes")]
     public interface IReadOnlyRepository<TEntity, TId> where TEntity : BaseEntity<TId>
     {
         /// <summary>
