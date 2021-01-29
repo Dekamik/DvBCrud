@@ -36,7 +36,7 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
-            return Set.SingleOrDefault(e => id.Equals(e.Id));
+            return Set.FirstOrDefault(e => id.Equals(e.Id));
         }
 
         /// <inheritdoc/>
@@ -46,7 +46,7 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException($"{nameof(id)} cannot be null");
 
-            return Set.SingleOrDefaultAsync(e => id.Equals(e.Id));
+            return Set.FirstOrDefaultAsync(e => id.Equals(e.Id));
         }
 
         /// <inheritdoc/>
