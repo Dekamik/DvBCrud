@@ -39,7 +39,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             repository.Create(entityToCreate, 1);
             dbContextProvider.DbContext.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyAuditedEntities.Single();
+            var actual = dbContextProvider.DbContext.AnyAuditedEntities.First();
             actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.Id).Excluding(x => x.CreatedAt));
             actual.CreatedAt.Should().BeCloseTo(expectedTime);
         }

@@ -767,7 +767,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             dbContextProvider.DbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
 
             var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(modifiedEntity);
+            actual.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
