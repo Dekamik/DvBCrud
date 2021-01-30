@@ -12,19 +12,27 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 {
     public class ReadOnlyControllerTests
     {
+        private readonly ILogger logger;
+        private readonly IAnyRepository repository;
+        private readonly IAnyReadOnlyController controller;
+
+        public ReadOnlyControllerTests()
+        {
+            repository = A.Fake<IAnyRepository>();
+            logger = A.Fake<ILogger>();
+            controller = new AnyReadOnlyController(repository, logger);
+        }
+
         [Fact]
         public void Read_AnyId_ReturnsEntityFromRepository()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
             var expected = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
-            A.CallTo(() => repo.Get(1)).Returns(expected);
-            var controller = new AnyReadOnlyController(repo, logger);
+            A.CallTo(() => repository.Get(1)).Returns(expected);
 
             // Act
             var result = controller.Read(1).Result as OkObjectResult;
@@ -39,10 +47,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public void Read_AnyNonExistingId_Returns404NotFound()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            A.CallTo(() => repo.Get(1)).Returns(null);
-            var controller = new AnyReadOnlyController(repo, logger);
+            A.CallTo(() => repository.Get(1)).Returns(null);
 
             // Act
             var result = controller.Read(1).Result as NotFoundObjectResult;
@@ -50,14 +55,12 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(404);
-            A.CallTo(() => repo.Get(1)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repository.Get(1)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
         public void ReadAll_Any_ReturnsAllEntitiesFromRepository()
         {
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
             var expected = new[]
             {
                 new AnyEntity
@@ -71,8 +74,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                     AnyString = "AnyString"
                 }
             }.AsEnumerable();
-            A.CallTo(() => repo.GetAll()).Returns(expected);
-            var controller = new AnyReadOnlyController(repo, logger);
+            A.CallTo(() => repository.GetAll()).Returns(expected);
 
             var result = controller.ReadAll().Result as OkObjectResult;
 

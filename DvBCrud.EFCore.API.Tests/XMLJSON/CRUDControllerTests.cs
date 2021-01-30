@@ -12,13 +12,21 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 {
     public class CRUDControllerTests
     {
+        private readonly IAnyRepository repository;
+        private readonly ILogger logger;
+        private readonly IAnyCRUDController controller;
+
+        public CRUDControllerTests()
+        {
+            repository = A.Fake<IAnyRepository>();
+            logger = A.Fake<ILogger>();
+            controller = new AnyCRUDController(repository, logger);
+        }
+
         [Fact]
         public void Create_AnyEntity_RepositoryCreatesEntity()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyCRUDController(repo, logger);
             var entity = new AnyEntity
             {
                 AnyString = "AnyString"
@@ -29,16 +37,13 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.Create(entity)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repository.Create(entity)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
         public void Create_AnyEntityWithId_Returns400BadRequest()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyCRUDController(repo, logger);
             var entity = new AnyEntity
             {
                 Id = 1,
@@ -51,16 +56,13 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(400);
-            A.CallTo(() => repo.Create(entity)).MustNotHaveHappened();
+            A.CallTo(() => repository.Create(entity)).MustNotHaveHappened();
         }
 
         [Fact]
         public void Update_AnyEntity_RepositoryUpdatesEntity()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyCRUDController(repo, logger);
             var entity = new AnyEntity 
             {
                 AnyString = "AnyString"
@@ -71,21 +73,18 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.Update(1, entity)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repository.Update(1, entity)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
         public void Update_AnyNonExistingEntity_Returns404NotFound()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyCRUDController(repo, logger);
             var entity = new AnyEntity
             {
                 AnyString = "AnyString"
             };
-            A.CallTo(() => repo.Update(1, entity)).Throws<KeyNotFoundException>();
+            A.CallTo(() => repository.Update(1, entity)).Throws<KeyNotFoundException>();
 
             // Act
             var result = controller.Update(1, entity) as NotFoundObjectResult;
@@ -99,9 +98,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public void Delete_AnyEntityWithCreate_RepositoryDeletesOrCreatesEntity()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyCRUDController(repo, logger);
             int id = 1;
 
             // Act
@@ -109,7 +105,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.Delete(id)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repository.Delete(id)).MustHaveHappenedOnceExactly();
         }
 
 
@@ -117,10 +113,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public void Delete_NonExistingEntity_Returns404NotFound()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyCRUDController(repo, logger);
-            A.CallTo(() => repo.Delete(1)).Throws<KeyNotFoundException>();
+            A.CallTo(() => repository.Delete(1)).Throws<KeyNotFoundException>();
 
             // Act
             var result = controller.Delete(1) as NotFoundObjectResult;

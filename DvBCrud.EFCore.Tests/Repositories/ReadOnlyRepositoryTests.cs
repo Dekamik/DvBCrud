@@ -17,7 +17,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
     {
         private readonly ILogger logger;
         private readonly AnyDbContext dbContext;
-        private readonly IReadOnlyRepository<AnyEntity, int> repository;
+        private readonly IAnyReadOnlyRepository repository;
 
         public ReadOnlyRepositoryTests()
         {

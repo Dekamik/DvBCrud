@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DvBCrud.EFCore.API.Mocks.XMLJSON
 {
-    public class AnyReadOnlyController : ReadOnlyController<AnyEntity, int, IAnyRepository, AnyDbContext>
+    public class AnyReadOnlyController : ReadOnlyController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyReadOnlyController
     {
         public AnyReadOnlyController(IAnyRepository repository, ILogger logger) : base(repository, logger)
         {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DvBCrud.EFCore.Mocks.Repositories
 {
-    public class AnyAuditedRepository : AuditedRepository<AnyAuditedEntity, int, int, AnyDbContext>
+    public class AnyAuditedRepository : AuditedRepository<AnyAuditedEntity, int, int, AnyDbContext>, IAnyAuditedRepository
     {
         public AnyAuditedRepository(AnyDbContext dbContext, ILogger logger) : base(dbContext, logger)
         {

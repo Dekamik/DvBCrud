@@ -13,13 +13,21 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 {
     public class AsyncCRUDControllerTests
     {
+        private readonly IAnyRepository repo;
+        private readonly ILogger logger;
+        private readonly IAnyAsyncCRUDController controller;
+
+        public AsyncCRUDControllerTests()
+        {
+            repo = A.Fake<IAnyRepository>();
+            logger = A.Fake<ILogger>();
+            controller = new AnyAsyncCRUDController(repo, logger);
+        }
+
         [Fact]
         public async Task Create_AnyEntity_RepositoryCreatesEntity()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyAsyncCRUDController(repo, logger);
             var entity = new AnyEntity 
             {
                 AnyString = "AnyString"
@@ -37,9 +45,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task Create_AnyEntityWithId_Returns400BadRequest()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyAsyncCRUDController(repo, logger);
             var entity = new AnyEntity
             {
                 Id = 1,
@@ -59,9 +64,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task Update_AnyEntity_RepositoryUpdatesEntity()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyAsyncCRUDController(repo, logger);
             var entity = new AnyEntity
             {
                 Id = 1,
@@ -80,9 +82,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task Update_AnyEntityWithoutId_Returns400BadRequest()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyAsyncCRUDController(repo, logger);
             var entity = new AnyEntity 
             { 
                 AnyString = "AnyString"
@@ -101,9 +100,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task Update_AnyNonExistingEntity_Returns404NotFound()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyAsyncCRUDController(repo, logger);
             var entity = new AnyEntity
             {
                 Id = 1,
@@ -123,9 +119,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task Delete_AnyEntityWithCreate_RepositoryDeletesOrCreatesEntity()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyAsyncCRUDController(repo, logger);
             int id = 1;
 
             // Act
@@ -140,9 +133,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task Delete_NonExistingEntity_Returns404NotFound()
         {
             // Arrange
-            var repo = A.Fake<IAnyRepository>();
-            var logger = A.Fake<ILogger>();
-            var controller = new AnyAsyncCRUDController(repo, logger);
             A.CallTo(() => repo.Delete(1)).Throws<KeyNotFoundException>();
 
             // Act

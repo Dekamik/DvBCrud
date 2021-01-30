@@ -1,7 +1,6 @@
 ﻿using DvBCrud.EFCore.Mocks.DbContexts;
 using DvBCrud.EFCore.Mocks.Entities;
 using DvBCrud.EFCore.Mocks.Repositories;
-using DvBCrud.EFCore.Repositories;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +17,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
     {
         private readonly ILogger logger;
         private readonly AnyDbContext dbContext;
-        private readonly IRepository<AnyEntity, int> repository;
+        private readonly IAnyRepository repository;
 
         public RepositoryTests()
         {

@@ -12,19 +12,27 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 {
     public class AsyncReadOnlyControllerTests
     {
+        private readonly IAnyReadOnlyRepository repo;
+        private readonly ILogger logger;
+        private readonly IAnyAsyncReadOnlyController controller;
+
+        public AsyncReadOnlyControllerTests()
+        {
+            repo = A.Fake<IAnyReadOnlyRepository>();
+            logger = A.Fake<ILogger>();
+            controller = new AnyAsyncReadOnlyController(repo, logger);
+        }
+
         [Fact]
         public async Task Read_AnyId_ReturnsEntityFromRepository()
         {
             // Arrange
-            var repo = A.Fake<IAnyReadOnlyRepository>();
-            var logger = A.Fake<ILogger>();
             var expected = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
             A.CallTo(() => repo.GetAsync(1)).Returns(expected);
-            var controller = new AnyAsyncReadOnlyController(repo, logger);
 
             // Act
             var result = (await controller.Read(1)).Result as OkObjectResult;
@@ -39,10 +47,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task Read_AnyNonExistingId_Returns404NotFound()
         {
             // Arrange
-            var repo = A.Fake<IAnyReadOnlyRepository>();
-            var logger = A.Fake<ILogger>();
             A.CallTo(() => repo.GetAsync(1)).Returns(null as AnyEntity);
-            var controller = new AnyAsyncReadOnlyController(repo, logger);
 
             // Act
             var result = (await controller.Read(1)).Result as NotFoundObjectResult;
@@ -57,8 +62,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task ReadAll_Any_ReturnsAllEntitiesFromRepository()
         {
             // Arrange
-            var repo = A.Fake<IAnyReadOnlyRepository>();
-            var logger = A.Fake<ILogger>();
             var expected = new[]
             {
                 new AnyEntity
@@ -73,7 +76,6 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                 }
             };
             A.CallTo(() => repo.GetAll()).Returns(expected);
-            var controller = new AnyAsyncReadOnlyController(repo, logger);
 
             // Act
             var result = (await controller.ReadAll()).Result as OkObjectResult;
