@@ -1,8 +1,10 @@
 ﻿using DvBCrud.EFCore.Mocks.DbContexts;
 using DvBCrud.EFCore.Mocks.Entities;
 using DvBCrud.EFCore.Mocks.Repositories;
+using DvBCrud.EFCore.Repositories;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,17 +17,23 @@ namespace DvBCrud.EFCore.Tests.Repositories
     public class RepositoryTests
     {
         private readonly ILogger logger;
+        private readonly AnyDbContext dbContext;
+        private readonly IRepository<AnyEntity, int> repository;
 
         public RepositoryTests()
         {
+            var options = new DbContextOptionsBuilder<AnyDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+            dbContext = new AnyDbContext(options);
             logger = A.Fake<ILogger>();
+            repository = new AnyRepository(dbContext, logger);
         }
 
         [Fact]
         public void GetAll_Default_ReturnsAll()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(GetAll_Default_ReturnsAll));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -39,18 +47,20 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = repository.GetAll();
 
+            // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void Get_ExistingId_ReturnsEntity()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_ExistingId_ReturnsEntity));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -63,18 +73,20 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = repository.Get(1);
 
+            // Assert
             actual.Should().BeEquivalentTo(expected.First());
         }
 
         [Fact]
         public void Get_NonExistingId_ReturnsNull()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_NonExistingId_ReturnsNull));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -87,27 +99,30 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = repository.Get(3);
 
+            // Assert
             actual.Should().BeNull();
         }
 
         [Fact]
         public void Get_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_Null_ThrowsArgumentNullException));
-            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            // Arrange
+            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
 
-            repository.Invoking(r => r.Get(null)).Should().Throw<ArgumentNullException>();
+            // Act & Assert
+            nullableRepository.Invoking(r => r.Get(null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public async Task GetAsync_ExistingId_ReturnsEntity()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(GetAsync_ExistingId_ReturnsEntity));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -120,18 +135,20 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = await repository.GetAsync(1);
 
+            // Assert
             actual.Should().BeEquivalentTo(expected.First());
         }
 
         [Fact]
         public async Task GetAsync_NonExistingId_ReturnsNull()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(GetAsync_NonExistingId_ReturnsNull));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -144,195 +161,197 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = await repository.GetAsync(3);
 
+            // Assert
             actual.Should().BeNull();
         }
 
         [Fact]
         public async Task GetAsync_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(GetAsync_Null_ThrowsArgumentNullException));
-            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            // Arrange
+            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
 
-            await repository.Awaiting(r => r.GetAsync(null)).Should().ThrowAsync<ArgumentNullException>();
+            // Act & Assert
+            await nullableRepository.Awaiting(r => r.GetAsync(null)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
         public void Create_AnyEntity_EntityCreated()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Create_AnyEntity_EntityCreated));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new AnyEntity
             {
                 AnyString = "AnyString"
             };
 
+            // Act
             repository.Create(expected);
-            dbContextProvider.DbContext.SaveChanges();
+            dbContext.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().AnyString.Should().Be(expected.AnyString);
+            // Assert
+            dbContext.AnyEntities.First().AnyString.Should().Be(expected.AnyString);
         }
 
         [Fact]
         public void Create_ExistingEntity_ThrowsArgumentException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Create_ExistingEntity_ThrowsArgumentException));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContextProvider.Mock(entity);
+            dbContext.AnyEntities.Add(entity);
+            dbContext.SaveChanges();
 
+            // Act
             repository.Create(entity);
 
-            dbContextProvider.DbContext.Invoking(db => db.SaveChanges()).Should().Throw<ArgumentException>();
+            // Assert
+            dbContext.Invoking(db => db.SaveChanges()).Should().Throw<ArgumentException>();
         }
 
         [Fact]
         public void Create_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Create_Null_ThrowsArgumentNullException));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-
             repository.Invoking(r => r.Create(null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void Update_ExistingEntity_EntityUpdatedAsync()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_ExistingEntity_EntityUpdatedAsync));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
+            // Arrange
+            dbContext.AnyEntities.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
+            dbContext.SaveChanges();
             var expected = new AnyEntity
             {
                 AnyString = "AnyNewString"
             };
 
+            // Act
             repository.Update(1, expected);
-            dbContextProvider.DbContext.SaveChanges();
+            dbContext.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 1);
-            actual.AnyString.Should().BeEquivalentTo(expected.AnyString);
+            // Assert
+            dbContext.AnyEntities.First(e => e.Id == 1).AnyString.Should().BeEquivalentTo(expected.AnyString);
         }
 
         [Fact]
         public void Update_NonExistingEntity_ThrowsKeyNotFoundException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_ThrowsKeyNotFoundException));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
+            // Arrange
+            dbContext.AnyEntities.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
+            dbContext.SaveChanges();
             var updatedEntity = new AnyEntity
             {
                 AnyString = "AnyNewString"
             };
 
+            // Act & Assert
             repository.Invoking(r => r.Update(2, updatedEntity)).Should().Throw<KeyNotFoundException>();
         }
 
         [Fact]
         public void Update_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_Null_ThrowsArgumentNullException));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-
             repository.Invoking(r => r.Update(1, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void Update_NullId_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NullId_ThrowsArgumentNullException));
-            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            // Arrange
+            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
             var updatedEntity = new AnyNullableIdEntity
             {
                 AnyString = "AnyNewString"
             };
 
-            repository.Invoking(r => r.Update(null, updatedEntity)).Should().Throw<ArgumentNullException>();
+            // Act & Assert
+            nullableRepository.Invoking(r => r.Update(null, updatedEntity)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public async Task UpdateAsync_ExistingEntity_EntityUpdatedAsync()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_ExistingEntity_EntityUpdatedAsync));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
+            // Arrange
+            dbContext.AnyEntities.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
+            dbContext.SaveChanges();
             var expected = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyNewString"
             };
 
+            // Act
             await repository.UpdateAsync(1, expected);
-            dbContextProvider.DbContext.SaveChanges();
+            dbContext.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyEntities.Single(e => e.Id == 1);
-            actual.Should().BeEquivalentTo(expected);
+            // Assert
+            dbContext.AnyEntities.First(e => e.Id == 1).Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public async Task UpdateAsync_NonExistingEntity_ThrowsKeyNotFoundException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Update_NonExistingEntity_ThrowsKeyNotFoundException));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
+            // Arrange
+            dbContext.AnyEntities.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
+            dbContext.SaveChanges();
             var updatedEntity = new AnyEntity
             {
                 AnyString = "AnyNewString"
             };
 
+            // Act & Assert
             await repository.Awaiting(r => r.UpdateAsync(2, updatedEntity)).Should().ThrowAsync<KeyNotFoundException>();
         }
 
         [Fact]
         public async Task UpdateAsync_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_Null_ThrowsArgumentNullException));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-
             await repository.Awaiting(r => r.UpdateAsync(1, null)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
         public async Task UpdateAsync_NullId_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(UpdateAsync_NullId_ThrowsArgumentNullException));
-            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            // Arrange
+            var repository = new AnyNullableIdRepository(dbContext, logger);
             var updatedEntity = new AnyNullableIdEntity
             {
                 AnyString = "AnyNewString"
             };
 
+            // Act & Assert
             await repository.Awaiting(r => r.UpdateAsync(null, updatedEntity)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
         public void Delete_ExistingEntity_EntityDeleted()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Delete_ExistingEntity_EntityDeleted));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entities = new[] {
                 new AnyEntity
                 {
@@ -345,40 +364,38 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "AnyString"
                 }
             };
-            dbContextProvider.Mock(entities);
+            dbContext.AnyEntities.AddRange(entities);
+            dbContext.SaveChanges();
+            dbContext.AnyEntities.Should().Contain(entities);
 
+            // Act
             repository.Delete(1);
-            dbContextProvider.DbContext.SaveChanges();
+            dbContext.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(entities.Last());
+            // Assert
+            dbContext.AnyEntities.First().Should().BeEquivalentTo(entities.Last());
         }
 
         [Fact]
         public void Delete_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Delete_Null_ThrowsArgumentNullException));
-            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            // Arrange
+            var repository = new AnyNullableIdRepository(dbContext, logger);
 
+            // Act & Assert
             repository.Invoking(r => r.Delete(null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void Delete_NonExistingId_ThrowsKeyNotFoundException()
         {
-            // Arrange
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Delete_NonExistingId_ThrowsKeyNotFoundException));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-
-            // Act & Assert
             repository.Invoking(r => r.Delete(1)).Should().Throw<KeyNotFoundException>();
         }
 
         [Fact]
         public async Task DeleteAsync_ExistingEntity_EntityDeleted()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteAsync_ExistingEntity_EntityDeleted));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entities = new[] {
                 new AnyEntity
                 {
@@ -391,471 +408,278 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "AnyString"
                 }
             };
-            dbContextProvider.Mock(entities);
+            dbContext.AnyEntities.AddRange(entities);
+            dbContext.SaveChanges();
+            dbContext.AnyEntities.Should().Contain(entities);
 
+            // Act
             await repository.DeleteAsync(1);
-            dbContextProvider.DbContext.SaveChanges();
+            dbContext.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(entities.Last());
+            // Assert
+            dbContext.AnyEntities.First().Should().BeEquivalentTo(entities.Last());
         }
 
         [Fact]
         public async Task DeleteAsync_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteAsync_Null_ThrowsArgumentNullException));
-            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            // Arrange
+            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
 
-            await repository.Awaiting(r => r.DeleteAsync(null)).Should().ThrowAsync<ArgumentNullException>();
+            // Act & Assert
+            await nullableRepository.Awaiting(r => r.DeleteAsync(null)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
         public async Task DeleteAsync_NonExistingId_ThrowsKeyNotFoundException()
         {
-            // Arrange
-            using var dbContextProvider = new AnyDbContextProvider(nameof(DeleteAsync_NonExistingId_ThrowsKeyNotFoundException));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-
-            // Act and Assert
             await repository.Awaiting(r => r.DeleteAsync(1)).Should().ThrowAsync<KeyNotFoundException>();
         }
 
         [Fact]
         public void SaveChanges_CallAfterAdd_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterAdd_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Add(expected);
+            // Act
+            dbContext.AnyEntities.Add(expected);
             repository.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(expected);
+            // Assert
+            dbContext.AnyEntities.First().Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void SaveChanges_NoCallAfterAdd_ChangesNotSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterAdd_ChangesNotSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Add(entity);
+            // Act
+            dbContext.AnyEntities.Add(entity);
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void SaveChanges_CallAfterAddRange_ChangesSaved()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterAddRange_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            var expected = new[]
-            {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString"
-                },
-                new AnyEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString"
-                }
-            };
-
-            dbContextProvider.DbContext.AnyEntities.AddRange(expected);
-            repository.SaveChanges();
-
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Fact]
-        public void SaveChanges_NoCallAfterAddRange_ChangesNotSaved()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterAddRange_ChangesNotSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            var entities = new[]
-            {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString"
-                },
-                new AnyEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString"
-                }
-            };
-
-            dbContextProvider.DbContext.AnyEntities.AddRange(entities);
-
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEmpty();
+            // Assert
+            dbContext.AnyEntities.Should().BeEmpty();
         }
 
         [Fact]
         public void SaveChanges_CallAfterModify_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterModify_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
+            // Arrange
+            dbContext.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
+            dbContext.SaveChanges();
             var modifiedEntity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyNewString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
+            // Act
+            dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
             repository.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(modifiedEntity);
+            // Assert
+            dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
         public void SaveChanges_NoCallAfterModify_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterModify_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
+            // Arrange
+            dbContext.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
+            dbContext.SaveChanges();
             var modifiedEntity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyNewString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
+            // Act
+            dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(modifiedEntity);
+            // Assert
+            dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
         public void SaveChanges_CallAfterRemove_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterRemove_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContextProvider.Mock(entity);
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
+            dbContext.AnyEntities.Should().Contain(entity);
 
-            dbContextProvider.DbContext.AnyEntities.Remove(entity);
+            // Act
+            dbContext.AnyEntities.Remove(entity);
             repository.SaveChanges();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEmpty();
+            // Assert
+            dbContext.AnyEntities.Should().BeEmpty();
         }
 
         [Fact]
         public void SaveChanges_NoCallAfterRemove_ChangesNotSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterRemove_ChangesNotSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContextProvider.Mock(entity);
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
+            dbContext.AnyEntities.Should().Contain(entity);
 
-            dbContextProvider.DbContext.AnyEntities.Remove(entity);
+            // Act
+            dbContext.AnyEntities.Remove(entity);
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().Contain(entity);
-        }
-
-        [Fact]
-        public void SaveChanges_CallAfterRemoveRange_ChangesSaved()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_CallAfterRemoveRange_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            var entities = new[] {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString"
-                },
-                new AnyEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString"
-                }
-            };
-            dbContextProvider.Mock(entities);
-
-            dbContextProvider.DbContext.AnyEntities.RemoveRange(entities);
-            repository.SaveChanges();
-
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void SaveChanges_NoCallAfterRemoveRange_ChangesNotSaved()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChanges_NoCallAfterRemoveRange_ChangesNotSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            var entities = new[] {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString"
-                },
-                new AnyEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString"
-                }
-            };
-            dbContextProvider.Mock(entities);
-
-            dbContextProvider.DbContext.AnyEntities.RemoveRange(entities);
-
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEquivalentTo(entities);
+            // Assert
+            dbContext.AnyEntities.Should().Contain(entity);
         }
 
         [Fact]
         public async Task SaveChangesAsync_CallAfterAdd_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterAdd_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Add(expected);
+            // Act
+            dbContext.AnyEntities.Add(expected);
             await repository.SaveChangesAsync();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(expected);
+            // Assert
+            dbContext.AnyEntities.First().Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void SaveChangesAsync_NoCallAfterAdd_ChangesNotSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterAdd_ChangesNotSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Add(entity);
+            // Act
+            dbContext.AnyEntities.Add(entity);
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEmpty();
-        }
-
-        [Fact]
-        public async Task SaveChangesAsync_CallAfterAddRange_ChangesSaved()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterAddRange_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            var expected = new[]
-            {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString"
-                },
-                new AnyEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString"
-                }
-            };
-
-            dbContextProvider.DbContext.AnyEntities.AddRange(expected);
-            await repository.SaveChangesAsync();
-
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Fact]
-        public void SaveChangesAsync_NoCallAfterAddRange_ChangesNotSaved()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterAddRange_ChangesNotSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            var entities = new[]
-            {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString"
-                },
-                new AnyEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString"
-                }
-            };
-
-            dbContextProvider.DbContext.AnyEntities.AddRange(entities);
-
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEmpty();
+            // Assert
+            dbContext.AnyEntities.Should().BeEmpty();
         }
 
         [Fact]
         public async Task SaveChangesAsync_CallAfterModify_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterModify_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
+            // Arrange
+            dbContext.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
+            dbContext.SaveChanges();
             var modifiedEntity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyNewString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
+            // Act
+            dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
             await repository.SaveChangesAsync();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Single().Should().BeEquivalentTo(modifiedEntity);
+            // Assert
+            dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
         public void SaveChangesAsync_NoCallAfterModify_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterModify_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            dbContextProvider.Mock(new AnyEntity
+            // Arrange
+            dbContext.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
+            dbContext.SaveChanges();
             var modifiedEntity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyNewString"
             };
 
-            dbContextProvider.DbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
+            // Act
+            dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.First().Should().BeEquivalentTo(modifiedEntity);
+            // Assert
+            dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
         public async Task SaveChangesAsync_CallAfterRemove_ChangesSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterRemove_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContextProvider.Mock(entity);
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
+            dbContext.AnyEntities.Should().Contain(entity);
 
-            dbContextProvider.DbContext.AnyEntities.Remove(entity);
+            // Act
+            dbContext.AnyEntities.Remove(entity);
             await repository.SaveChangesAsync();
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEmpty();
+            // Assert
+            dbContext.AnyEntities.Should().BeEmpty();
         }
 
         [Fact]
         public void SaveChangesAsync_NoCallAfterRemove_ChangesNotSaved()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterRemove_ChangesNotSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var entity = new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContextProvider.Mock(entity);
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
+            dbContext.AnyEntities.Should().Contain(entity);
 
-            dbContextProvider.DbContext.AnyEntities.Remove(entity);
+            // Act
+            dbContext.AnyEntities.Remove(entity);
 
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().Contain(entity);
-        }
-
-        [Fact]
-        public async Task SaveChangesAsync_CallAfterRemoveRange_ChangesSaved()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_CallAfterRemoveRange_ChangesSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            var entities = new[] {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString"
-                },
-                new AnyEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString"
-                } 
-            };
-            dbContextProvider.Mock(entities);
-
-            dbContextProvider.DbContext.AnyEntities.RemoveRange(entities);
-            await repository.SaveChangesAsync();
-
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void SaveChangesAsync_NoCallAfterRemoveRange_ChangesNotSaved()
-        {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(SaveChangesAsync_NoCallAfterRemoveRange_ChangesNotSaved));
-            var repository = new AnyRepository(dbContextProvider.DbContext, logger);
-            var entities = new[] {
-                new AnyEntity
-                {
-                    Id = 1,
-                    AnyString = "AnyString"
-                },
-                new AnyEntity
-                {
-                    Id = 2,
-                    AnyString = "AnyString"
-                }
-            };
-            dbContextProvider.Mock(entities);
-
-            dbContextProvider.DbContext.AnyEntities.RemoveRange(entities);
-
-            var actual = dbContextProvider.DbContext.AnyEntities;
-            actual.Should().BeEquivalentTo(entities);
+            // Assert
+            dbContext.AnyEntities.Should().Contain(entity);
         }
     }
 }

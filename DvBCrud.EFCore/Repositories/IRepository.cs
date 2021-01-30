@@ -59,6 +59,12 @@ namespace DvBCrud.EFCore.Repositories
         void Delete(TId id);
 
         /// <summary>
+        /// Finds and removes the <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/> asynchronously
+        /// </summary>
+        /// <param name="id">Id of <typeparamref name="TEntity"/> to remove</param>
+        Task DeleteAsync(TId id);
+
+        /// <summary>
         /// Persists modifications to DbContext
         /// </summary>
         void SaveChanges();

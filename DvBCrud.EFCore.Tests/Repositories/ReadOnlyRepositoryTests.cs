@@ -1,8 +1,10 @@
 ﻿using DvBCrud.EFCore.Mocks.DbContexts;
 using DvBCrud.EFCore.Mocks.Entities;
 using DvBCrud.EFCore.Mocks.Repositories;
+using DvBCrud.EFCore.Repositories;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -14,17 +16,23 @@ namespace DvBCrud.EFCore.Tests.Repositories
     public class ReadOnlyRepositoryTests
     {
         private readonly ILogger logger;
+        private readonly AnyDbContext dbContext;
+        private readonly IReadOnlyRepository<AnyEntity, int> repository;
 
         public ReadOnlyRepositoryTests()
         {
+            var options = new DbContextOptionsBuilder<AnyDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options;
+            dbContext = new AnyDbContext(options);
             logger = A.Fake<ILogger>();
+            repository = new AnyReadOnlyRepository(dbContext, logger);
         }
 
         [Fact]
         public void GetAll_Default_ReturnsAll()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(GetAll_Default_ReturnsAll));
-            var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -38,18 +46,20 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = repository.GetAll();
 
+            // Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void Get_ExistingId_ReturnsEntity()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_ExistingId_ReturnsEntity));
-            var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -62,18 +72,20 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = repository.Get(1);
 
+            // Assert
             actual.Should().BeEquivalentTo(expected.First());
         }
 
         [Fact]
         public void Get_NonExistingId_ReturnsNull()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_NonExistingId_ReturnsNull));
-            var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -86,27 +98,30 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = repository.Get(3);
 
+            // Assert
             actual.Should().BeNull();
         }
 
         [Fact]
         public void Get_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(Get_Null_ThrowsArgumentNullException));
-            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            // Arrange
+            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
 
-            repository.Invoking(r => r.Get(null)).Should().Throw<ArgumentNullException>();
+            // Act & Assert
+            nullableRepository.Invoking(r => r.Get(null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public async Task GetAsync_ExistingId_ReturnsEntity()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(GetAsync_ExistingId_ReturnsEntity));
-            var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -119,18 +134,20 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = await repository.GetAsync(1);
 
+            // Assert
             actual.Should().BeEquivalentTo(expected.First());
         }
 
         [Fact]
         public async Task GetAsync_NonExistingId_ReturnsNull()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(GetAsync_NonExistingId_ReturnsNull));
-            var repository = new AnyReadOnlyRepository(dbContextProvider.DbContext, logger);
+            // Arrange
             var expected = new[]
             {
                 new AnyEntity
@@ -143,19 +160,23 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContextProvider.Mock(expected);
+            dbContext.AnyEntities.AddRange(expected);
+            dbContext.SaveChanges();
 
+            // Act
             var actual = await repository.GetAsync(3);
 
+            // Assert
             actual.Should().BeNull();
         }
 
         [Fact]
         public async Task GetAsync_Null_ThrowsArgumentNullException()
         {
-            using var dbContextProvider = new AnyDbContextProvider(nameof(GetAsync_Null_ThrowsArgumentNullException));
-            var repository = new AnyNullableIdRepository(dbContextProvider.DbContext, logger);
+            // Arrange
+            var repository = new AnyNullableIdRepository(dbContext, logger);
 
+            // Act & Assert
             await repository.Awaiting(r => r.GetAsync(null)).Should().ThrowAsync<ArgumentNullException>();
         }
     }
