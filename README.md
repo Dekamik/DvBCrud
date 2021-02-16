@@ -4,24 +4,33 @@ DvBCrud is a collection of CRUD templating libraries.
 
 This project aims to both standardize and enable rapid development of normal database operations and use-cases.
 
-## [DvBCrud.EFCore](DvBCrud.EFCore)
-[![Build Status](https://travis-ci.com/Dekamik/DvBCrud.svg?branch=master)](https://travis-ci.com/Dekamik/DvBCrud)
+## How it works
 
-The core implementation for handling repositories and entities using Entity Framework Core.
+These libraries have a unified logic that works the same across all projects.
+They compose of the following components:
 
-### [DvBCrud.EFCore.API](DvBCrud.EFCore.API)
+### Entities/Models
 
-Templates for generating CRUDControllers for Web APIs using EFCore.
+The object that represents an entry in the database.
 
-## [DvBCrud.MongoDB](https://github.com/Dekamik/DvBCrud.MongoDB)
+### Repositories
+
+The DTO object that allow developers to manipulate entities using CRUD actions.
+
+### CRUDControllers
+
+The API endpoint that allow clients to manipulate Entities by using REST actions.
+
+## Projects
+
+### [DvBCrud.EFCore](https://github.com/Dekamik/DvBCrud.EFCore)
+[![Build Status](https://travis-ci.com/Dekamik/DvBCrud.EFCore.svg?branch=master)](https://travis-ci.com/Dekamik/DvBCrud.EFCore)
+
+EFCore implementation.
+
+### [DvBCrud.MongoDB](https://github.com/Dekamik/DvBCrud.MongoDB)
 [![Build Status](https://travis-ci.com/Dekamik/DvBCrud.MongoDB.svg?branch=master)](https://travis-ci.com/Dekamik/DvBCrud.MongoDB)
 
-The core implementation for handling repositories and entities using MongoDB.
-
 WORK IN PROGRESS.
 
-### [DvBCrud.MongoDB.API](https://github.com/Dekamik/DvBCrud.MongoDB/tree/master/DvBCrud.MongoDB.API)
-
-Templates for generating CRUDControllers for Web APIs using MongoDB.
-
-WORK IN PROGRESS.
+MongoDB implementation.
