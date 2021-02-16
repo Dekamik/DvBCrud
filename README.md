@@ -106,7 +106,9 @@ public class ReadOnlyCustomerController : CRUDController<Customer, int, Customer
 }
 ```
 
-## Example: Non-deleteable endpoint
+The endpoint above will return a 403 FORBIDDEN response on requests for Create, Update and Delete actions.
+
+## Example: Endpoint with only Create, Read and Update actions
 
 You can also specify that only a selection of `CRUDAction`s are allowed in the overloaded constructor like below.
 
@@ -120,3 +122,5 @@ public class WritableCustomerController : CRUDController<Customer, int, Customer
     }
 }
 ```
+
+The endpoint above will return a 403 FORBIDDEN response on requests for the Delete action only.
