@@ -1,4 +1,5 @@
-﻿using DvBCrud.EFCore.Entities;
+﻿using DvBCrud.EFCore.API.CRUDActions;
+using DvBCrud.EFCore.Entities;
 using DvBCrud.EFCore.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +16,20 @@ namespace DvBCrud.EFCore.API.XMLJSON
     {
         protected readonly TRepository repository;
         protected readonly ILogger logger;
+        protected readonly CRUDActionPermissions crudActions;
 
         public CRUDController(TRepository repository, ILogger logger)
         {
             this.repository = repository;
             this.logger = logger;
+            this.crudActions = new CRUDActionPermissions();
+        }
+
+        public CRUDController(TRepository repository, ILogger logger, params CRUDAction[] allowedActions)
+        {
+            this.repository = repository;
+            this.logger = logger;
+            this.crudActions = new CRUDActionPermissions(allowedActions);
         }
 
         public IActionResult Create([FromBody] TEntity entity)
