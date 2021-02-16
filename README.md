@@ -44,3 +44,49 @@ The DTO object that allow developers to manipulate entities using CRUD actions.
 ### CRUDControllers
 
 The API endpoint that allow clients to manipulate Entities by using REST actions.
+
+## Example: Customer in a restaurant app
+
+This is an example implementation for a Customer endpoint that serves Customer data using DvBCrud.EFCore:
+
+`Customer.cs`
+```cs
+public class Customer : BaseEntity<int>
+{
+    public string Name { get; set; }
+    
+    public DateTime Birthdate { get; set; }
+
+    protected override void CopyImpl(BaseEntity<int> other)
+    {
+        var o = other as Customer;
+        Name = o.Name;
+        Birthdate = o.Birthdate;
+    }
+}
+```
+
+`CustomerRepository.cs`
+```cs
+public class CustomerRepository : Repository<Customer, int, RestaurantDbContext>
+{
+    public CustomerRepository(RestaurantDbContext dbContext, ILogger logger) : base(dbContext, logger)
+    {
+
+    }
+}
+```
+
+`CustomerController.cs`
+```cs
+public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
+{
+    public CustomerController(CustomerRepository anyRepository, ILogger logger) : base(anyRepository, logger)
+    {
+
+    }
+}
+```
+
+These three classes generate complete REST functionality for Customer data. 
+The endpoint will allow Create, Read, Update and Delete actions on Customer entities.
