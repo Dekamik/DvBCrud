@@ -96,7 +96,7 @@ public class CustomerController : CRUDController<Customer, int, CustomerReposito
 
 The endpoint above will return a 403 FORBIDDEN response on requests for Create, Update and Delete actions.
 
-## Example: Endpoint with only Create, Read and Update actions
+## Example: Writable endpoint that disallow the Delete action
 
 You can also define a selection of `CRUDAction`s to allow in the overloaded constructor like below.
 
