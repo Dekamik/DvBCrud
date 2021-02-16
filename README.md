@@ -81,7 +81,7 @@ public class CustomerRepository : Repository<Customer, int, RestaurantDbContext>
 ```cs
 public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public CustomerController(CustomerRepository anyRepository, ILogger logger) : base(anyRepository, logger)
+    public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger)
     {
 
     }
@@ -99,7 +99,7 @@ You want to write-protect your data? No problem. Simply define that only `CRUDAc
 ```cs
 public class ReadOnlyCustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public ReadOnlyCustomerController(CustomerRepository anyRepository, ILogger logger) : base(anyRepository, logger, CRUDAction.Read)
+    public ReadOnlyCustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
     {
 
     }
@@ -116,7 +116,7 @@ You can also specify that only a selection of `CRUDAction`s are allowed in the o
 ```cs
 public class WritableCustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public WritableCustomerController(CustomerRepository anyRepository, ILogger logger) : base(anyRepository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
+    public WritableCustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
     {
 
     }
