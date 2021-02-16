@@ -112,9 +112,9 @@ You can also specify that only a selection of `CRUDAction`s are allowed in the o
 
 `ReadOnlyCustomerController.cs`
 ```cs
-public class ReadOnlyCustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
+public class WritableCustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public ReadOnlyCustomerController(CustomerRepository anyRepository, ILogger logger) : base(anyRepository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
+    public WritableCustomerController(CustomerRepository anyRepository, ILogger logger) : base(anyRepository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
     {
 
     }
