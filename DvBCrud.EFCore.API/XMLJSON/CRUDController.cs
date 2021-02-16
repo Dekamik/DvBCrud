@@ -37,6 +37,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Create)} {nameof(TEntity)}");
 
+            if (!crudActions.IsActionAllowed(CRUDAction.Create))
+            {
+                var message = $"Create forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
+
             // Id must NOT be predefined
             if (!entity.Id.Equals(default(TId)))
             {
@@ -57,6 +64,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
 
+            if (!crudActions.IsActionAllowed(CRUDAction.Read))
+            {
+                var message = $"Read forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
+
             TEntity entity = repository.Get(id);
 
             if (entity == null)
@@ -75,6 +89,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(ReadAll)} {nameof(TEntity)}");
 
+            if (!crudActions.IsActionAllowed(CRUDAction.Read))
+            {
+                var message = $"Read forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(ReadAll)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
+
             IEnumerable<TEntity> entities = repository.GetAll();
 
             logger.LogDebug($"{guid}: {nameof(ReadAll)} OK");
@@ -85,6 +106,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {id}");
+
+            if (!crudActions.IsActionAllowed(CRUDAction.Update))
+            {
+                var message = $"Update forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
 
             if (id.Equals(default(TId)))
             {
@@ -115,6 +143,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)} {id}");
 
+            if (!crudActions.IsActionAllowed(CRUDAction.Delete))
+            {
+                var message = $"Delete forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
+
             try
             {
                 repository.Delete(id);
@@ -131,5 +166,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             logger.LogDebug($"{guid}: {nameof(Delete)} OK");
             return Ok();
         }
+
+        protected ObjectResult Forbidden(string message) => StatusCode(403, message);
     }
 }

@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace DvBCrud.EFCore.API.Mocks.XMLJSON
 {
-    public class AnyCreateUpdateController : CRUDController<AnyEntity, int, AnyRepository, AnyDbContext>
+    public class AnyCreateUpdateController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>
     {
-        public AnyCreateUpdateController(AnyRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Update)
+        public AnyCreateUpdateController(IAnyRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Update)
         {
         }
     }

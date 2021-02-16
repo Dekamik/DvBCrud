@@ -60,6 +60,22 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
+        public void Read_ReadForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyCreateUpdateController(repository, logger);
+            int id = 1;
+
+            // Act
+            var result = restrictedController.Read(id).Result as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.Get(id)).MustNotHaveHappened();
+        }
+
+        [Fact]
         public void ReadAll_Any_ReturnsAllEntitiesFromRepository()
         {
             var expected = new[]
@@ -81,6 +97,21 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             result.Should().NotBeNull();
             result.Value.Should().Be(expected);
+        }
+
+        [Fact]
+        public void ReadAll_ReadForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyCreateUpdateController(repository, logger);
+
+            // Act
+            var result = restrictedController.ReadAll().Result as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.GetAll()).MustNotHaveHappened();
         }
 
         [Fact]
@@ -120,6 +151,22 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
+        public void Create_CreateForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyReadOnlyController(repository, logger);
+            var entity = new AnyEntity();
+
+            // Act
+            var result = restrictedController.Create(entity) as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.Create(entity)).MustNotHaveHappened();
+        }
+
+        [Fact]
         public void Update_AnyEntity_RepositoryUpdatesEntity()
         {
             // Arrange
@@ -155,6 +202,23 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
+        public void Update_UpdateForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyReadOnlyController(repository, logger);
+            int id = 1;
+            var entity = new AnyEntity();
+
+            // Act
+            var result = restrictedController.Update(id, entity) as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.Update(id, entity)).MustNotHaveHappened();
+        }
+
+        [Fact]
         public void Delete_AnyEntityWithCreate_RepositoryDeletesOrCreatesEntity()
         {
             // Arrange
@@ -181,6 +245,22 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(404);
+        }
+
+        [Fact]
+        public void Delete_DeleteForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyReadOnlyController(repository, logger);
+            int id = 1;
+
+            // Act
+            var result = restrictedController.Delete(id) as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.Delete(id)).MustNotHaveHappened();
         }
     }
 }
