@@ -20,8 +20,14 @@ MongoDB implementation.
 
 ## How it works
 
-These libraries have a unified logic that works the same across all projects.
-They compose of the following components:
+The library consists of some base classes that implement common REST and CRUD functionality.
+
+The developer only has to define repositories and controllers that inherit from the base classes. 
+Once that is done, the defined repositories and controllers inherit all functionality from the base classes.
+
+The only caveat is that all entities must inherit from one of the BaseEntity classes.
+
+These libraries have a unified logic that work the same across all projects:
 
 ### Entities/Models
 
