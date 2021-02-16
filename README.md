@@ -88,5 +88,20 @@ public class CustomerController : CRUDController<Customer, int, CustomerReposito
 }
 ```
 
-These three classes generate complete REST functionality for Customer data. 
-The endpoint will allow Create, Read, Update and Delete actions on Customer entities.
+When `CustomerRepository` and `CustomerController` are registered in `Startup.cs`, these three classes generate complete REST functionality for Customer data. 
+This Customer endpoint will allow Create, Read, Update and Delete actions on Customer entities.
+
+## Example: Read-only endpoint
+
+You want to write-protect your data? No problem. Simply define which `CRUDAction`s are allowed in the overloaded constructor.
+
+`ReadOnlyCustomerController.cs`
+```cs
+public class ReadOnlyCustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
+{
+    public ReadOnlyCustomerController(CustomerRepository anyRepository, ILogger logger) : base(anyRepository, logger, <mark>CRUDAction.Read</mark>)
+    {
+
+    }
+}
+```
