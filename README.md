@@ -98,7 +98,7 @@ The endpoint above will return a 403 FORBIDDEN response on requests for Create, 
 
 ## Example: Endpoint with only Create, Read and Update actions
 
-You can also specify that only a selection of `CRUDAction`s are allowed in the overloaded constructor like below.
+You can also define a selection of `CRUDAction`s are allowed in the overloaded constructor like below.
 
 `ReadOnlyCustomerController.cs`
 ```cs
