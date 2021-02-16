@@ -56,9 +56,16 @@ public class AnyDbContext : DbContext
 
 Create the repository by defining its entity type (`AnyEntity`), the entity's Id type (`int`) and the DbContext type (`AnyDbContext`).
 
+`IAnyRepository.cs`
+```cs
+public interface IAnyRepository : IRepository<AnyEntity, int>
+{
+}
+```
+
 `AnyRepository.cs`
 ```cs
-public class AnyRepository : Repository<AnyEntity, int, AnyDbContext>
+public class AnyRepository : Repository<AnyEntity, int, AnyDbContext>, IAnyRepository
 {
     public AnyRepository(AnyDbContext dbContext, ILogger logger) : base(dbContext, logger)
     {
