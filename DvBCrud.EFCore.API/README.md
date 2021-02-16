@@ -9,6 +9,13 @@ DvBCrud.EFCore.API is a complement to DvBCrud.EFCore for streamlining developmen
 The `CRUDController` comes in two flavors: the synchronous `CRUDController` and the asynchronous `AsyncCRUDController`.
 Depending on your needs and use-case, you may use one or both of them.
 
+Both controller types implement the following actions:
+- `void Create(TEntity entity)` Creates entity.
+- `TEntity Read(TId id)` Gets entity with matching Id
+- `IEnumerable<TEntity> ReadAll()` Gets all entities
+- `void Update(TId id, TEntity entity)` Updates the matching entity
+- `void Delete(TId id)` Deletes the matching entity
+
 ## Getting started
 
 ### 1. Create entity and repository
@@ -36,7 +43,7 @@ Inject the controller in `Startup.cs` and you're good to go. The controller is n
 
 ## Restricting actions
 
-You can restrict which actions are permitted using the overloaded constructor when defining your controllers.
+You can restrict which actions are permitted calling the overloaded constructor when defining your controllers.
 When a forbidden action is requested, the endpoint will return a 403 FORBIDDEN response.
 
 If no actions are provided to the constructor, the controller will default to allow all actions.
