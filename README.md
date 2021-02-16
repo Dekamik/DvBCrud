@@ -81,13 +81,13 @@ This Customer endpoint will allow Create, Read, Update and Delete actions on Cus
 
 ## Example: Read-only endpoint
 
-You want to write-protect your data? No problem. Simply define that only `CRUDAction.Read` is allowed in the overloaded constructor like below.
+You want to make your data read-only? No problem. Simply define that only `CRUDAction.Read` is allowed in the overloaded constructor like below.
 
-`ReadOnlyCustomerController.cs`
+`CustomerController.cs`
 ```cs
-public class ReadOnlyCustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
+public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public ReadOnlyCustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
+    public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
     {
 
     }
@@ -100,11 +100,11 @@ The endpoint above will return a 403 FORBIDDEN response on requests for Create, 
 
 You can also define a selection of `CRUDAction`s to allow in the overloaded constructor like below.
 
-`ReadOnlyCustomerController.cs`
+`CustomerController.cs`
 ```cs
-public class WritableCustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
+public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public WritableCustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
+    public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
     {
 
     }
