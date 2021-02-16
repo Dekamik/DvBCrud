@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
+    [Obsolete("Use AsyncCRUDController and specify CRUDAction.Read as the only allowed action")]
     public abstract class AsyncReadOnlyController<TEntity, TId, TRepository, TDbContext> : ControllerBase, IAsyncReadOnlyController<TEntity, TId>
         where TEntity : BaseEntity<TId>
         where TRepository : IReadOnlyRepository<TEntity, TId>

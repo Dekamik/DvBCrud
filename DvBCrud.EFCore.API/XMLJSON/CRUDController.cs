@@ -8,17 +8,20 @@ using System.Collections.Generic;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
-    public abstract class CRUDController<TEntity, TId, TRepository, TDbContext> : ReadOnlyController<TEntity, TId, TRepository, TDbContext>, ICRUDController<TEntity, TId>
+    public abstract class CRUDController<TEntity, TId, TRepository, TDbContext> : ControllerBase, ICRUDController<TEntity, TId>
         where TEntity : BaseEntity<TId>
         where TRepository : IRepository<TEntity, TId>
         where TDbContext : DbContext
     {
-        public CRUDController(TRepository repository, ILogger logger) : base(repository, logger)
-        {
+        protected readonly TRepository repository;
+        protected readonly ILogger logger;
 
+        public CRUDController(TRepository repository, ILogger logger)
+        {
+            this.repository = repository;
+            this.logger = logger;
         }
 
-        [HttpPost]
         public IActionResult Create([FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
@@ -39,7 +42,35 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        [HttpPut, Route("{id}")]
+        public ActionResult<TEntity> Read([FromQuery] TId id)
+        {
+            var guid = Guid.NewGuid();
+            logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
+
+            TEntity entity = repository.Get(id);
+
+            if (entity == null)
+            {
+                var message = $"{nameof(TEntity)} {id} not found.";
+                logger.LogDebug($"{guid}: {nameof(Read)} NOT FOUND - {message}");
+                return NotFound(message);
+            }
+
+            logger.LogDebug($"{guid}: {nameof(Read)} OK");
+            return Ok(entity);
+        }
+
+        public ActionResult<IEnumerable<TEntity>> ReadAll()
+        {
+            var guid = Guid.NewGuid();
+            logger.LogDebug($"{guid}: {nameof(ReadAll)} {nameof(TEntity)}");
+
+            IEnumerable<TEntity> entities = repository.GetAll();
+
+            logger.LogDebug($"{guid}: {nameof(ReadAll)} OK");
+            return Ok(entities);
+        }
+
         public IActionResult Update([FromQuery] TId id, [FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
@@ -69,7 +100,6 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        [HttpDelete, Route("{id}")]
         public IActionResult Delete([FromQuery]TId id)
         {
             var guid = Guid.NewGuid();

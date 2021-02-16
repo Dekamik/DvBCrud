@@ -9,17 +9,20 @@ using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
-    public abstract class AsyncCRUDController<TEntity, TId, TRepository, TDbContext> : ReadOnlyController<TEntity, TId, TRepository, TDbContext>, IAsyncCRUDController<TEntity, TId>
+    public abstract class AsyncCRUDController<TEntity, TId, TRepository, TDbContext> : ControllerBase, IAsyncCRUDController<TEntity, TId>
         where TEntity : BaseEntity<TId>
         where TRepository : IRepository<TEntity, TId>
         where TDbContext : DbContext
     {
-        public AsyncCRUDController(TRepository repository, ILogger logger) : base(repository, logger)
-        {
+        protected readonly TRepository repository;
+        protected readonly ILogger logger;
 
+        public AsyncCRUDController(TRepository repository, ILogger logger)
+        {
+            this.repository = repository;
+            this.logger = logger;
         }
 
-        [HttpPost]
         public async Task<IActionResult> Create([FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
@@ -40,7 +43,35 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        [HttpPut, Route("{id}")]
+        public async Task<ActionResult<TEntity>> Read([FromQuery] TId id)
+        {
+            var guid = Guid.NewGuid();
+            logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
+
+            TEntity entity = await repository.GetAsync(id);
+
+            if (entity == null)
+            {
+                var message = $"{nameof(TEntity)} {id} not found.";
+                logger.LogDebug($"{guid}: {nameof(Read)} NOT FOUND - {message}");
+                return NotFound(message);
+            }
+
+            logger.LogDebug($"{guid}: {nameof(Read)} OK");
+            return Ok(entity);
+        }
+
+        public async Task<ActionResult<IEnumerable<TEntity>>> ReadAll()
+        {
+            var guid = Guid.NewGuid();
+            logger.LogDebug($"{guid}: {nameof(ReadAll)} {nameof(TEntity)}");
+
+            IEnumerable<TEntity> entities = await Task.Run(() => repository.GetAll());
+
+            logger.LogDebug($"{guid}: {nameof(ReadAll)} OK");
+            return Ok(entities);
+        }
+
         public async Task<IActionResult> Update([FromQuery]TId id, [FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
@@ -71,7 +102,6 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        [HttpDelete, Route("{id}")]
         public async Task<IActionResult> Delete([FromQuery]TId id)
         {
             var guid = Guid.NewGuid();

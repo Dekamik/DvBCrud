@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
+    [Obsolete("Use CRUDController and specify CRUDAction.Read as the only allowed action")]
     public abstract class ReadOnlyController<TEntity, TId, TRepository, TDbContext> : ControllerBase, IReadOnlyController<TEntity, TId>
         where TEntity : BaseEntity<TId>
         where TRepository : IRepository<TEntity, TId>

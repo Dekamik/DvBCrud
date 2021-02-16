@@ -1,5 +1,6 @@
 ﻿using DvBCrud.EFCore.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.XMLJSON
@@ -10,7 +11,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
         [HttpPost]
         Task<IActionResult> Create([FromBody] TEntity entity);
 
-        [HttpPut]
+        [HttpGet, Route("{id}")]
+        Task<ActionResult<TEntity>> Read([FromQuery] TId id);
+
+        [HttpGet]
+        Task<ActionResult<IEnumerable<TEntity>>> ReadAll();
+
+        [HttpPut, Route("{id}")]
         Task<IActionResult> Update([FromQuery] TId id, [FromBody] TEntity entity);
 
         [HttpDelete, Route("{id}")]

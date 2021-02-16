@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
+    [Obsolete("Use AsyncCRUDController and specify CRUDAction.Read as the only allowed action")]
     public interface IAsyncReadOnlyController<TEntity, TId>
     {
         [HttpGet, Route("{id}")]
