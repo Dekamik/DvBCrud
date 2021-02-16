@@ -10,11 +10,11 @@ The `CRUDController` comes in two flavors: the synchronous `CRUDController` and 
 Depending on your needs and use-case, you may use one or both of them.
 
 Both controller types implement the following actions:
-- `void Create(TEntity entity)`{:.cs} Creates entity.
-- `TEntity Read(TId id)`{:.cs} Gets entity with matching Id
-- `IEnumerable<TEntity> ReadAll()`{:.cs} Gets all entities
-- `void Update(TId id, TEntity entity)`{:.cs} Updates the matching entity
-- `void Delete(TId id)`{:.cs} Deletes the matching entity
+- `void Create(TEntity entity)`{:.language-cs} Creates entity.
+- `TEntity Read(TId id)`{:.language-cs} Gets entity with matching Id
+- `IEnumerable<TEntity> ReadAll()`{:.language-cs} Gets all entities
+- `void Update(TId id, TEntity entity)`{:.language-cs} Updates the matching entity
+- `void Delete(TId id)`{:.language-cs} Deletes the matching entity
 
 ## Getting started
 
