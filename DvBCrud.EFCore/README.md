@@ -10,7 +10,7 @@ The basic workflow goes like this:
 
 1. Define your entity by inheriting `BaseEntity` or `BaseAuditedEntity`.
 2. Add it to your `DbContext`.
-3. Define the repository and its functionality by inheriting `ReadOnlyRepository`, `Repository` or `AuditedRepository` (requires `BaseAuditedEntity`-derived entity).
+3. Define the repository and its functionality by inheriting `Repository` or `AuditedRepository` (requires `BaseAuditedEntity`-derived entity).
 
 And that's it. Migrate using EFCore and you have fully functional and fully tested database CRUD couplings for your application. 
 All CRUD functionality is already written and available.
