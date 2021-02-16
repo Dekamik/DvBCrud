@@ -31,19 +31,7 @@ The defined repositories and controllers will then inherit all or selected CRUD 
 
 For this to work, all entities must inherit from a BaseEntity class.
 
-These libraries have a unified logic that work the same across all projects:
-
-### Entities/Models
-
-The object that represents an entry in the database.
-
-### Repositories
-
-The DTO object that allow developers to manipulate entities using CRUD actions.
-
-### CRUDControllers
-
-The API endpoint that allow clients to manipulate Entities by using REST actions.
+These libraries have a unified structure across all projects.
 
 ## Example: Customer in a restaurant app
 
