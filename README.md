@@ -8,11 +8,15 @@ This project aims to both standardize and enable rapid development of normal dat
 
 ### [DvBCrud.EFCore](https://github.com/Dekamik/DvBCrud.EFCore)
 [![Build Status](https://travis-ci.com/Dekamik/DvBCrud.EFCore.svg?branch=master)](https://travis-ci.com/Dekamik/DvBCrud.EFCore)
+![Nuget](https://img.shields.io/nuget/v/DvBCrud.EFCore?label=DvBCrud.EFCore)
+![Nuget](https://img.shields.io/nuget/v/DvBCrud.EFCore.API?label=DvBCrud.EFCore.API)
 
 EFCore implementation.
 
 ### [DvBCrud.MongoDB](https://github.com/Dekamik/DvBCrud.MongoDB)
 [![Build Status](https://travis-ci.com/Dekamik/DvBCrud.MongoDB.svg?branch=master)](https://travis-ci.com/Dekamik/DvBCrud.MongoDB)
+![Nuget](https://img.shields.io/nuget/v/DvBCrud.MongoDB?label=DvBCrud.MongoDB)
+![Nuget](https://img.shields.io/nuget/v/DvBCrud.MongoDB.API?label=DvBCrud.MongoDB.API)
 
 WORK IN PROGRESS.
 
