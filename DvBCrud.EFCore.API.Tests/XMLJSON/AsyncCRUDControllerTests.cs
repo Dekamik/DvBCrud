@@ -13,15 +13,15 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 {
     public class AsyncCRUDControllerTests
     {
-        private readonly IAnyRepository repo;
+        private readonly IAnyRepository repository;
         private readonly ILogger logger;
         private readonly IAnyAsyncCRUDController controller;
 
         public AsyncCRUDControllerTests()
         {
-            repo = A.Fake<IAnyRepository>();
+            repository = A.Fake<IAnyRepository>();
             logger = A.Fake<ILogger>();
-            controller = new AnyAsyncCRUDController(repo, logger);
+            controller = new AnyAsyncCRUDController(repository, logger);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                 Id = 1,
                 AnyString = "AnyString"
             };
-            A.CallTo(() => repo.GetAsync(1)).Returns(expected);
+            A.CallTo(() => repository.GetAsync(1)).Returns(expected);
 
             // Act
             var result = (await controller.Read(1)).Result as OkObjectResult;
@@ -48,7 +48,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         public async Task Read_AnyNonExistingId_Returns404NotFound()
         {
             // Arrange
-            A.CallTo(() => repo.GetAsync(1)).Returns(null as AnyEntity);
+            A.CallTo(() => repository.GetAsync(1)).Returns(null as AnyEntity);
 
             // Act
             var result = (await controller.Read(1)).Result as NotFoundObjectResult;
@@ -56,7 +56,23 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(404);
-            A.CallTo(() => repo.GetAsync(1)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repository.GetAsync(1)).MustHaveHappenedOnceExactly();
+        }
+
+        [Fact]
+        public async Task Read_ReadForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyAsyncCreateUpdateController(repository, logger);
+            int id = 1;
+
+            // Act
+            var result = (await restrictedController.Read(id)).Result as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.GetAsync(id)).MustNotHaveHappened();
         }
 
         [Fact]
@@ -76,7 +92,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                     AnyString = "AnyString"
                 }
             };
-            A.CallTo(() => repo.GetAll()).Returns(expected);
+            A.CallTo(() => repository.GetAll()).Returns(expected);
 
             // Act
             var result = (await controller.ReadAll()).Result as OkObjectResult;
@@ -84,6 +100,21 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             result.Value.Should().Be(expected);
+        }
+
+        [Fact]
+        public async Task ReadAll_ReadForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyAsyncCreateUpdateController(repository, logger);
+
+            // Act
+            var result = (await restrictedController.ReadAll()).Result as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.GetAll()).MustNotHaveHappened();
         }
 
         [Fact]
@@ -100,7 +131,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.Create(entity)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repository.Create(entity)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
@@ -119,7 +150,23 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(400);
-            A.CallTo(() => repo.Create(entity)).MustNotHaveHappened();
+            A.CallTo(() => repository.Create(entity)).MustNotHaveHappened();
+        }
+
+        [Fact]
+        public async Task Create_CreateForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyAsyncReadOnlyController(repository, logger);
+            var entity = new AnyEntity();
+
+            // Act
+            var result = await restrictedController.Create(entity) as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.Create(entity)).MustNotHaveHappened();
         }
 
         [Fact]
@@ -137,7 +184,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(1, entity)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repository.UpdateAsync(1, entity)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
@@ -154,7 +201,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.UpdateAsync(1, entity)).MustNotHaveHappened();
+            A.CallTo(() => repository.UpdateAsync(1, entity)).MustNotHaveHappened();
         }
 
 
@@ -167,7 +214,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
                 Id = 1,
                 AnyString = "AnyString"
             };
-            A.CallTo(() => repo.UpdateAsync(1, entity)).Throws<KeyNotFoundException>();
+            A.CallTo(() => repository.UpdateAsync(1, entity)).Throws<KeyNotFoundException>();
 
             // Act
             var result = await controller.Update(1, entity) as NotFoundObjectResult;
@@ -175,6 +222,23 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(404);
+        }
+
+        [Fact]
+        public async Task Update_UpdateForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyAsyncReadOnlyController(repository, logger);
+            int id = 1;
+            var entity = new AnyEntity();
+
+            // Act
+            var result = await restrictedController.Update(id, entity) as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.Update(id, entity)).MustNotHaveHappened();
         }
 
         [Fact]
@@ -188,14 +252,14 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
 
             // Assert
             result.Should().NotBeNull();
-            A.CallTo(() => repo.Delete(id)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => repository.Delete(id)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
         public async Task Delete_NonExistingEntity_Returns404NotFound()
         {
             // Arrange
-            A.CallTo(() => repo.Delete(1)).Throws<KeyNotFoundException>();
+            A.CallTo(() => repository.Delete(1)).Throws<KeyNotFoundException>();
 
             // Act
             var result = await controller.Delete(1) as NotFoundObjectResult;
@@ -203,6 +267,22 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Assert
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(404);
+        }
+
+        [Fact]
+        public async Task Delete_DeleteForbidden_ReturnsForbidden()
+        {
+            // Arrange
+            var restrictedController = new AnyAsyncReadOnlyController(repository, logger);
+            int id = 1;
+
+            // Act
+            var result = await restrictedController.Delete(id) as ObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(403);
+            A.CallTo(() => repository.Delete(id)).MustNotHaveHappened();
         }
     }
 }

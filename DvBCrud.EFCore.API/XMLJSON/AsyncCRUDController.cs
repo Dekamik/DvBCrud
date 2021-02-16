@@ -1,4 +1,5 @@
-﻿using DvBCrud.EFCore.Entities;
+﻿using DvBCrud.EFCore.API.CRUDActions;
+using DvBCrud.EFCore.Entities;
 using DvBCrud.EFCore.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,17 +17,33 @@ namespace DvBCrud.EFCore.API.XMLJSON
     {
         protected readonly TRepository repository;
         protected readonly ILogger logger;
+        protected readonly CRUDActionPermissions crudActions;
 
         public AsyncCRUDController(TRepository repository, ILogger logger)
         {
             this.repository = repository;
             this.logger = logger;
+            this.crudActions = new CRUDActionPermissions();
+        }
+
+        public AsyncCRUDController(TRepository repository, ILogger logger, params CRUDAction[] allowedActions)
+        {
+            this.repository = repository;
+            this.logger = logger;
+            this.crudActions = new CRUDActionPermissions(allowedActions);
         }
 
         public async Task<IActionResult> Create([FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Create)} {nameof(TEntity)}");
+
+            if (!crudActions.IsActionAllowed(CRUDAction.Create))
+            {
+                var message = $"Create forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
 
             // Id must NOT be predefined
             if (!entity.Id.Equals(default(TId)))
@@ -48,6 +65,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
 
+            if (!crudActions.IsActionAllowed(CRUDAction.Read))
+            {
+                var message = $"Read forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
+
             TEntity entity = await repository.GetAsync(id);
 
             if (entity == null)
@@ -66,6 +90,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(ReadAll)} {nameof(TEntity)}");
 
+            if (!crudActions.IsActionAllowed(CRUDAction.Read))
+            {
+                var message = $"Read forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
+
             IEnumerable<TEntity> entities = await Task.Run(() => repository.GetAll());
 
             logger.LogDebug($"{guid}: {nameof(ReadAll)} OK");
@@ -76,6 +107,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {id}");
+
+            if (!crudActions.IsActionAllowed(CRUDAction.Update))
+            {
+                var message = $"Update forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
 
             // Id must be predefined
             if (entity.Id.Equals(default(TId)))
@@ -107,6 +145,13 @@ namespace DvBCrud.EFCore.API.XMLJSON
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)} {id}");
 
+            if (!crudActions.IsActionAllowed(CRUDAction.Delete))
+            {
+                var message = $"Delete forbidden on {nameof(TEntity)}";
+                logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
+                return Forbidden(message);
+            }
+
             try
             {
                 await Task.Run(() => repository.Delete(id));
@@ -123,5 +168,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             logger.LogDebug($"{guid}: {nameof(Delete)} OK");
             return Ok();
         }
+
+        protected ObjectResult Forbidden(string message) => StatusCode(403, message);
     }
 }
