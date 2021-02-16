@@ -24,12 +24,12 @@ MongoDB implementation.
 
 ## How it works
 
-The library consists of some base classes that implement common REST and CRUD functionality.
+The library consists of base classes that implement common REST and CRUD functionality.
 
-The developer only has to define repositories and controllers that inherit from the base classes. 
-Once that is done, the defined repositories and controllers inherit all functionality from the base classes.
+The developer defines repositories and controllers that inherit from a base class. 
+The defined repositories and controllers will then inherit all or selected CRUD functionality from the base class.
 
-The only caveat is that all entities must inherit from one of the BaseEntity classes.
+For this to work, all entities must inherit from a BaseEntity class.
 
 These libraries have a unified logic that work the same across all projects:
 
