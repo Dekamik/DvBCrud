@@ -69,6 +69,7 @@ public class CustomerRepository : Repository<Customer, int, RestaurantDbContext>
 ```cs
 public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
+    [ApiController]
     public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger)
     {
 
@@ -93,6 +94,7 @@ You want to make your data read-only? No problem. Simply define that only `CRUDA
 ```cs
 public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
+    [ApiController]
     public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
     {
 
@@ -110,6 +112,7 @@ You can also define a selection of `CRUDAction`s to allow in the overloaded cons
 ```cs
 public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
+    [ApiController]
     public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
     {
 
