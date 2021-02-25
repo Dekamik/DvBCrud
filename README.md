@@ -58,7 +58,7 @@ public class Customer : BaseEntity<int>
 ```cs
 public class CustomerRepository : Repository<Customer, int, RestaurantDbContext>
 {
-    public CustomerRepository(RestaurantDbContext dbContext, ILogger logger) : base(dbContext, logger)
+    public CustomerRepository(RestaurantDbContext dbContext, ILogger<CustomerRepository> logger) : base(dbContext, logger)
     {
     }
 }
@@ -68,7 +68,7 @@ public class CustomerRepository : Repository<Customer, int, RestaurantDbContext>
 ```cs
 public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger)
+    public CustomerController(CustomerRepository repository, ILogger<CustomerController> logger) : base(repository, logger)
     {
     }
 }
@@ -91,7 +91,7 @@ You want to make your data read-only? No problem. Simply define that only `CRUDA
 ```cs
 public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
+    public CustomerController(CustomerRepository repository, ILogger<CustomerRepository> logger) : base(repository, logger, CRUDAction.Read)
     {
     }
 }
@@ -107,7 +107,7 @@ You can also define a selection of `CRUDAction`s to allow in the overloaded cons
 ```cs
 public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
 {
-    public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
+    public CustomerController(CustomerRepository repository, ILogger<CustomerRepository> logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
     {
     }
 }
