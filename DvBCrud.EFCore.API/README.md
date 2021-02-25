@@ -37,13 +37,6 @@ Follow [this guide](../DvBCrud.EFCore) to create your entities and your reposito
 
 Create the CRUDController for the entity and its repository
 
-`IAnyController.cs`
-```cs
-public interface IAnyController : ICRUDController<AnyEntity, int>
-{
-}
-```
-
 `AnyController.cs`
 ```cs
 public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
