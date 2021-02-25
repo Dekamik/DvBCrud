@@ -60,7 +60,6 @@ public class CustomerRepository : Repository<Customer, int, RestaurantDbContext>
 {
     public CustomerRepository(RestaurantDbContext dbContext, ILogger logger) : base(dbContext, logger)
     {
-
     }
 }
 ```
@@ -95,7 +94,6 @@ public class CustomerController : CRUDController<Customer, int, CustomerReposito
 {
     public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
     {
-
     }
 }
 ```
@@ -112,7 +110,6 @@ public class CustomerController : CRUDController<Customer, int, CustomerReposito
 {
     public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
     {
-
     }
 }
 ```
