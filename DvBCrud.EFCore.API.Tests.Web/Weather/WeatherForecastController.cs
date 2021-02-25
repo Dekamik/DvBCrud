@@ -1,5 +1,4 @@
 ﻿using DvBCrud.EFCore.API.XMLJSON;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace DvBCrud.EFCore.API.Tests.Web.Weather

@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
-    public abstract class AsyncCRUDController<TEntity, TId, TRepository, TDbContext> : ControllerBase, IAsyncCRUDController<TEntity, TId>
+    [ApiController]
+    [Route("[controller]")]
+    public abstract class AsyncCRUDController<TEntity, TId, TRepository, TDbContext> : ControllerBase
         where TEntity : BaseEntity<TId>
         where TRepository : IRepository<TEntity, TId>
         where TDbContext : DbContext
@@ -33,6 +35,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             this.crudActions = new CRUDActionPermissions(allowedActions);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
@@ -60,7 +63,8 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        public async Task<ActionResult<TEntity>> Read([FromQuery] TId id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TEntity>> Read(TId id)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
@@ -85,6 +89,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok(entity);
         }
 
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<TEntity>>> ReadAll()
         {
             var guid = Guid.NewGuid();
@@ -103,7 +108,8 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok(entities);
         }
 
-        public async Task<IActionResult> Update([FromQuery]TId id, [FromBody] TEntity entity)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(TId id, [FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {id}");
@@ -140,7 +146,8 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        public async Task<IActionResult> Delete([FromQuery]TId id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(TId id)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)} {id}");

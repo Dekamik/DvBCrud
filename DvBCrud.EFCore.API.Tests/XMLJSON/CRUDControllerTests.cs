@@ -15,7 +15,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
     {
         private readonly IAnyRepository repository;
         private readonly ILogger logger;
-        private readonly IAnyCRUDController controller;
+        private readonly AnyCRUDController controller;
 
         public CRUDControllerTests()
         {

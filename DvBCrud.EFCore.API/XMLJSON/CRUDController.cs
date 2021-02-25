@@ -11,7 +11,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
 {
     [ApiController]
     [Route("[controller]")]
-    public abstract class CRUDController<TEntity, TId, TRepository, TDbContext> : ControllerBase, ICRUDController<TEntity, TId>
+    public abstract class CRUDController<TEntity, TId, TRepository, TDbContext> : ControllerBase
         where TEntity : BaseEntity<TId>
         where TRepository : IRepository<TEntity, TId>
         where TDbContext : DbContext
