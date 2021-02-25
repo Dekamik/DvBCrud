@@ -39,11 +39,11 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public async Task<IActionResult> Create([FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Create)} {nameof(TEntity)}");
+            logger.LogDebug($"{guid}: {nameof(Create)} {typeof(TEntity).Name}");
 
             if (!crudActions.IsActionAllowed(CRUDAction.Create))
             {
-                var message = $"Create forbidden on {nameof(TEntity)}";
+                var message = $"Create forbidden on {typeof(TEntity).Name}";
                 logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
                 return Forbidden(message);
             }
@@ -51,7 +51,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             // Id must NOT be predefined
             if (!entity.Id.Equals(default(TId)))
             {
-                string message = $"{nameof(TEntity)}.Id must NOT be predefined.";
+                string message = $"{typeof(TEntity).Name}.Id must NOT be predefined.";
                 logger.LogDebug($"{guid}: {nameof(Create)} BAD REQUEST - {message}");
                 return BadRequest(message);
             }
@@ -67,11 +67,11 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public async Task<ActionResult<TEntity>> Read(TId id)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
+            logger.LogDebug($"{guid}: {nameof(Read)} {typeof(TEntity).Name} {id}");
 
             if (!crudActions.IsActionAllowed(CRUDAction.Read))
             {
-                var message = $"Read forbidden on {nameof(TEntity)}";
+                var message = $"Read forbidden on {typeof(TEntity).Name}";
                 logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
                 return Forbidden(message);
             }
@@ -80,7 +80,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
 
             if (entity == null)
             {
-                var message = $"{nameof(TEntity)} {id} not found.";
+                var message = $"{typeof(TEntity).Name} {id} not found.";
                 logger.LogDebug($"{guid}: {nameof(Read)} NOT FOUND - {message}");
                 return NotFound(message);
             }
@@ -93,11 +93,11 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public async Task<ActionResult<IEnumerable<TEntity>>> ReadAll()
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(ReadAll)} {nameof(TEntity)}");
+            logger.LogDebug($"{guid}: {nameof(ReadAll)} {typeof(TEntity).Name}");
 
             if (!crudActions.IsActionAllowed(CRUDAction.Read))
             {
-                var message = $"Read forbidden on {nameof(TEntity)}";
+                var message = $"Read forbidden on {typeof(TEntity).Name}";
                 logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
                 return Forbidden(message);
             }
@@ -112,11 +112,11 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public async Task<IActionResult> Update(TId id, [FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {id}");
+            logger.LogDebug($"{guid}: {nameof(Update)} {typeof(TEntity).Name} {id}");
 
             if (!crudActions.IsActionAllowed(CRUDAction.Update))
             {
-                var message = $"Update forbidden on {nameof(TEntity)}";
+                var message = $"Update forbidden on {typeof(TEntity).Name}";
                 logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
                 return Forbidden(message);
             }
@@ -135,7 +135,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             }
             catch (KeyNotFoundException)
             {
-                string message = $"{nameof(TEntity)} {entity.Id} not found.";
+                string message = $"{typeof(TEntity).Name} {entity.Id} not found.";
                 logger.LogDebug($"{guid}: {nameof(Update)} NOT FOUND - {message}");
                 return NotFound(message);
             }
@@ -150,11 +150,11 @@ namespace DvBCrud.EFCore.API.XMLJSON
         public async Task<IActionResult> Delete(TId id)
         {
             var guid = Guid.NewGuid();
-            logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)} {id}");
+            logger.LogDebug($"{guid}: {nameof(Delete)} {typeof(TEntity).Name} {id}");
 
             if (!crudActions.IsActionAllowed(CRUDAction.Delete))
             {
-                var message = $"Delete forbidden on {nameof(TEntity)}";
+                var message = $"Delete forbidden on {typeof(TEntity).Name}";
                 logger.LogDebug($"{guid}: {nameof(Read)} FORBIDDEN - {message}");
                 return Forbidden(message);
             }
@@ -165,7 +165,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             }
             catch (KeyNotFoundException)
             {
-                string message = $"{nameof(TEntity)} {id} not found.";
+                string message = $"{typeof(TEntity).Name} {id} not found.";
                 logger.LogDebug($"{guid}: {nameof(Delete)} NOT FOUND - {message}");
                 return NotFound(message);
             }
