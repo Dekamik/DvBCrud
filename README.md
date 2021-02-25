@@ -70,7 +70,6 @@ public class CustomerController : CRUDController<Customer, int, CustomerReposito
 {
     public CustomerController(CustomerRepository repository, ILogger logger) : base(repository, logger)
     {
-
     }
 }
 ```
