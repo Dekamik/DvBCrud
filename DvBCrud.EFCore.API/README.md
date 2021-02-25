@@ -2,6 +2,17 @@
 
 Library for rapidly developing CRUD API-endpoints for database entities.
 
+## Table of Contents
+
+- [How it works](#How-it-works)
+- [Getting started](#Getting-started)
+    * [1. Create entity and repository](#1.-Create-entity-and-repository)
+    * [2. Create a CRUDController](#2.-Create-a-CRUDController)
+    * [3. Use it](#3.-Use-it)
+- [Restricting actions](#Restricting-actions)
+    * [Read-only endpoint](#Read-only-endpoint)
+    * [Non-deleteable endpoint](#Non-deleteable-endpoint)
+
 ## How it works
 
 DvBCrud.EFCore.API is a complement to DvBCrud.EFCore for streamlining development of CRUD APIs.

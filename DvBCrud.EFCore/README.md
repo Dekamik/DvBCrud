@@ -2,6 +2,15 @@
 
 The core implementation for handling repositories and entities using Entity Framework Core.
 
+## Table of Contents
+
+- [How it works](#How-it-works)
+- [Getting started](#Getting-started)
+    * [1. Create the entity](#1.-Create-the-entity)
+    * [2. Add it to your DbContext](#2.-Add-it-to-your-DbContext)
+    * [3. Create the repository](#3.-Create-the-repository)
+    * [4. Use it](#4.-Use-it)
+
 ## How it works
 
 DvBCrud.EFCore streamlines the process of developing a Code-First database by implementing basic CRUD functionality through using generics and polymorphism.
