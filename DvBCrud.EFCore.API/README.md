@@ -35,6 +35,7 @@ public interface IAnyController : ICRUDController<AnyEntity, int>
 
 `AnyController.cs`
 ```cs
+[ApiController]
 public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
 {
     public AnyController(IAnyRepository anyRepository, ILogger logger) : base(anyRepository, logger)
@@ -61,7 +62,8 @@ Here are some examples:
 
 `AnyController.cs`
 ```cs
-public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyReadOnlyController
+[ApiController]
+public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
 {
     public AnyController(IAnyRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
     {
@@ -74,7 +76,8 @@ public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyD
 
 `AnyController.cs`
 ```cs
-public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyReadOnlyController
+[ApiController]
+public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
 {
     public AnyController(IAnyRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
     {
