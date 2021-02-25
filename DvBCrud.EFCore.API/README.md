@@ -10,11 +10,11 @@ The `CRUDController` comes in two flavors: the synchronous `CRUDController` and 
 Depending on your needs and use-case, you may use one or both of them.
 
 Both controller types implement the following actions:
-- `void Create(TEntity entity)` Creates entity.
-- `TEntity Read(TId id)` Gets entity with matching Id
-- `IEnumerable<TEntity> ReadAll()` Gets all entities
-- `void Update(TId id, TEntity entity)` Updates the matching entity
-- `void Delete(TId id)` Deletes the matching entity
+* CREATE: `POST /Customer/`
+* READ: `GET /Customer/{id}`
+* READ ALL: `GET /Customer/`
+* UPDATE: `PUT /Customer/{id}`
+* DELETE: `DELETE /Customer/{id}`
 
 ## Getting started
 
