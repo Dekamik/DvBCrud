@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.API.Mocks", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.Mocks", "DvBCrud.EFCore.Mocks\DvBCrud.EFCore.Mocks.csproj", "{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore.API.Tests.Web", "DvBCrud.EFCore.API.Tests.Web\DvBCrud.EFCore.API.Tests.Web.csproj", "{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,10 @@ Global
 		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

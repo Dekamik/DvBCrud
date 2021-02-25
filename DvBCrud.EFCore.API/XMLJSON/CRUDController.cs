@@ -9,6 +9,8 @@ using System.Collections.Generic;
 
 namespace DvBCrud.EFCore.API.XMLJSON
 {
+    [ApiController]
+    [Route("[controller]")]
     public abstract class CRUDController<TEntity, TId, TRepository, TDbContext> : ControllerBase, ICRUDController<TEntity, TId>
         where TEntity : BaseEntity<TId>
         where TRepository : IRepository<TEntity, TId>
@@ -32,6 +34,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             this.crudActions = new CRUDActionPermissions(allowedActions);
         }
 
+        [HttpPost]
         public IActionResult Create([FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
@@ -59,7 +62,8 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        public ActionResult<TEntity> Read([FromQuery] TId id)
+        [HttpGet("{id}")]
+        public ActionResult<TEntity> Read(TId id)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Read)} {nameof(TEntity)} {id}");
@@ -84,6 +88,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok(entity);
         }
 
+        [HttpGet]
         public ActionResult<IEnumerable<TEntity>> ReadAll()
         {
             var guid = Guid.NewGuid();
@@ -102,7 +107,8 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok(entities);
         }
 
-        public IActionResult Update([FromQuery] TId id, [FromBody] TEntity entity)
+        [HttpPut("{id}")]
+        public IActionResult Update(TId id, [FromBody] TEntity entity)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Update)} {nameof(TEntity)} {id}");
@@ -138,7 +144,8 @@ namespace DvBCrud.EFCore.API.XMLJSON
             return Ok();
         }
 
-        public IActionResult Delete([FromQuery]TId id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(TId id)
         {
             var guid = Guid.NewGuid();
             logger.LogDebug($"{guid}: {nameof(Delete)} {nameof(TEntity)} {id}");

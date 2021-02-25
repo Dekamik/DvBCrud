@@ -21,11 +21,11 @@ The `CRUDController` comes in two flavors: the synchronous `CRUDController` and 
 Depending on your needs and use-case, you may use one or both of them.
 
 Both controller types implement the following actions:
-* CREATE: `POST /Customer/`
-* READ: `GET /Customer/{id}`
-* READ ALL: `GET /Customer/`
-* UPDATE: `PUT /Customer/{id}`
-* DELETE: `DELETE /Customer/{id}`
+* CREATE: `POST /customer/`
+* READ: `GET /customer/{id}`
+* READ ALL: `GET /customer/`
+* UPDATE: `PUT /customer/{id}`
+* DELETE: `DELETE /customer/{id}`
 
 ## Getting started
 
@@ -46,12 +46,10 @@ public interface IAnyController : ICRUDController<AnyEntity, int>
 
 `AnyController.cs`
 ```cs
-[ApiController]
 public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
 {
     public AnyController(IAnyRepository anyRepository, ILogger logger) : base(anyRepository, logger)
     {
-
     }
 }
 ```
@@ -73,12 +71,10 @@ Here are some examples:
 
 `AnyController.cs`
 ```cs
-[ApiController]
 public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
 {
     public AnyController(IAnyRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
     {
-
     }
 }
 ```
@@ -87,12 +83,10 @@ public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyD
 
 `AnyController.cs`
 ```cs
-[ApiController]
 public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
 {
     public AnyController(IAnyRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
     {
-
     }
 }
 ```
