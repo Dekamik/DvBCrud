@@ -75,11 +75,11 @@ public class CustomerController : CRUDController<Customer, int, CustomerReposito
 ```
 
 When `CustomerRepository` is registered in `Startup.cs`, these three classes generate these REST endpoints for manipulating Customer data:
-* CREATE: `POST /Customer/`
-* READ: `GET /Customer/{id}`
-* READ ALL: `GET /Customer/`
-* UPDATE: `PUT /Customer/{id}`
-* DELETE: `DELETE /Customer/{id}`
+* CREATE: `POST /customer/`
+* READ: `GET /customer/{id}`
+* READ ALL: `GET /customer/`
+* UPDATE: `PUT /customer/{id}`
+* DELETE: `DELETE /customer/{id}`
 
 You can of-course extend both CustomerRepository and CustomerController with additional functionality.
 
