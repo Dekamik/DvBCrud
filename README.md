@@ -57,7 +57,7 @@ public class WeatherForecast : BaseEntity<int>
 
 `WeatherForecastRepository.cs`
 ```cs
-public class WeatherForecastRepository : Repository<WeatherForecast, int, WebDbContext>, IWeatherForecastRepository
+public class WeatherForecastRepository : Repository<WeatherForecast, int, WebDbContext>
 {
     public WeatherForecastRepository(WebDbContext dbContext, ILogger<WeatherForecastRepository> logger) : base(dbContext, logger)
     {
