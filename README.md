@@ -35,7 +35,7 @@ These libraries have a unified structure across all projects.
 
 ## Example: Customer in a restaurant app
 
-This is an example implementation for a Customer endpoint that serves Customer data using DvBCrud.EFCore:
+This is a simplified example for a Customer endpoint that serves Customer data using DvBCrud.EFCore:
 
 `Customer.cs`
 ```cs
