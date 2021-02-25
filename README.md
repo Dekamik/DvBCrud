@@ -25,73 +25,74 @@ MongoDB implementation.
 ## How it works
 
 The library consists of base classes that implement common REST and CRUD functionality.
-
-The developer defines repositories and controllers that inherit from a base class. 
-The defined repositories and controllers will then inherit all or selected CRUD functionality from the base class.
-
-For this to work, all entities must inherit from a BaseEntity class.
+The developer defines entities, repositories and controllers that inherit CRUD functionality from base classes.
 
 These libraries have a unified structure across all projects.
 
-## Example: Customer in a restaurant app
+## Example: Weather forecasts
 
-This is a simplified example for a Customer endpoint that serves Customer data using DvBCrud.EFCore:
+This is a simplified example demonstrating a WeatherForecast endpoint that serves weather data using DvBCrud.EFCore:
 
-`Customer.cs`
+`WeatherForecast.cs`
 ```cs
-public class Customer : BaseEntity<int>
+public class WeatherForecast : BaseEntity<int>
 {
-    public string Name { get; set; }
-    
-    public DateTime Birthdate { get; set; }
+    public DateTime Date { get; set; }
+
+    public int TemperatureC { get; set; }
+
+    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+
+    public string Summary { get; set; }
 
     protected override void CopyImpl(BaseEntity<int> other)
     {
-        var o = other as Customer;
-        Name = o.Name;
-        Birthdate = o.Birthdate;
+        WeatherForecast o = other as WeatherForecast;
+        Date = o.Date;
+        TemperatureC = o.TemperatureC;
+        Summary = o.Summary;
     }
 }
 ```
 
-`CustomerRepository.cs`
+`WeatherForecastRepository.cs`
 ```cs
-public class CustomerRepository : Repository<Customer, int, RestaurantDbContext>
+public class WeatherForecastRepository : Repository<WeatherForecast, int, WebDbContext>, IWeatherForecastRepository
 {
-    public CustomerRepository(RestaurantDbContext dbContext, ILogger<CustomerRepository> logger) : base(dbContext, logger)
+    public WeatherForecastRepository(WebDbContext dbContext, ILogger<WeatherForecastRepository> logger) : base(dbContext, logger)
     {
     }
 }
 ```
 
-`CustomerController.cs`
+`WeatherForecastController.cs`
 ```cs
-public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
+public class WeatherForecastController : CRUDController<WeatherForecast, int, WeatherForecastRepository, WebDbContext>
 {
-    public CustomerController(CustomerRepository repository, ILogger<CustomerController> logger) : base(repository, logger)
+    public WeatherForecastController(IWeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger)
     {
     }
 }
 ```
 
-When `CustomerRepository` is registered in `Startup.cs`, these three classes generate these REST endpoints for manipulating Customer data:
+When `WeatherForecastRepository` is registered in `Startup.cs`, these three classes generate these REST endpoints for manipulating weather data:
 * CREATE: `POST /customer/`
 * READ: `GET /customer/{id}`
 * READ ALL: `GET /customer/`
 * UPDATE: `PUT /customer/{id}`
 * DELETE: `DELETE /customer/{id}`
 
-You can of-course extend both CustomerRepository and CustomerController with additional functionality.
+You can of-course extend both WeatherForecastRepository and WeatherForecastController with additional functionality.
 
 ## Example: Read-only endpoint
 
 You want to make your data read-only? No problem. Simply define that only `CRUDAction.Read` is allowed in the overloaded constructor like below.
 
-`CustomerController.cs`
+`WeatherForecastController.cs`
 ```cs
-public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
+public class WeatherForecastController : CRUDController<WeatherForecast, int, WeatherForecastRepository, WebDbContext>
 {
-    public CustomerController(CustomerRepository repository, ILogger<CustomerRepository> logger) : base(repository, logger, CRUDAction.Read)
+    public WeatherForecastController(IWeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger, CRUDAction.Read)
     {
     }
 }
@@ -103,11 +104,11 @@ The endpoint above will return a 403 FORBIDDEN response on requests for Create, 
 
 You can also define a selection of `CRUDAction`s to allow in the overloaded constructor like below.
 
-`CustomerController.cs`
+`WeatherForecastController.cs`
 ```cs
-public class CustomerController : CRUDController<Customer, int, CustomerRepository, RestaurantDbContext>
+public class WeatherForecastController : CRUDController<WeatherForecast, int, WeatherForecastRepository, WebDbContext>
 {
-    public CustomerController(CustomerRepository repository, ILogger<CustomerRepository> logger) : base(repository, logger, CRUDAction.Create, CRUDAction.Read, CRUDAction.Update)
+    public WeatherForecastController(IWeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
     {
     }
 }
