@@ -76,7 +76,7 @@ public class CustomerController : CRUDController<Customer, int, CustomerReposito
 }
 ```
 
-When `CustomerRepository` and is registered in `Startup.cs`, these three classes generate these REST endpoints for manipulating Customer data:
+When `CustomerRepository` is registered in `Startup.cs`, these three classes generate these REST endpoints for manipulating Customer data:
 * CREATE: `POST /Customer/`
 * READ: `GET /Customer/{id}`
 * READ ALL: `GET /Customer/`
