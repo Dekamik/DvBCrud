@@ -57,7 +57,7 @@ public class WeatherForecast : BaseEntity<int>
 }
 ```
 
-2. Add it to the DbContext
+2. (EFCore) Add it to the DbContext
 
 `WebDbContext.cs`
 ```cs
