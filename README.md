@@ -76,11 +76,11 @@ public class WeatherForecastController : CRUDController<WeatherForecast, int, We
 ```
 
 When `WeatherForecastRepository` is registered in `Startup.cs`, these three classes generate these REST endpoints for manipulating weather data:
-* CREATE: `POST /customer/`
-* READ: `GET /customer/{id}`
-* READ ALL: `GET /customer/`
-* UPDATE: `PUT /customer/{id}`
-* DELETE: `DELETE /customer/{id}`
+* CREATE: `POST /weatherforecast/`
+* READ: `GET /weatherforecast/{id}`
+* READ ALL: `GET /weatherforecast/`
+* UPDATE: `PUT /weatherforecast/{id}`
+* DELETE: `DELETE /weatherforecast/{id}`
 
 You can of-course extend both WeatherForecastRepository and WeatherForecastController with additional functionality.
 
