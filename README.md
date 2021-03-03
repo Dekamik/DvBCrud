@@ -33,6 +33,8 @@ These libraries have a unified structure across all projects.
 
 This is a simplified example demonstrating a WeatherForecast endpoint that serves weather data using DvBCrud.EFCore:
 
+1. Create entity
+
 `WeatherForecast.cs`
 ```cs
 public class WeatherForecast : BaseEntity<int>
@@ -55,6 +57,22 @@ public class WeatherForecast : BaseEntity<int>
 }
 ```
 
+2. Add it to the DbContext
+
+`WebDbContext.cs`
+```cs
+public class WebDbContext : DbContext
+{
+    public WebDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
+    public DbSet<WeatherForecast> WeatherForecasts { get; set; }
+}
+```
+
+3. Create the repository
+
 `WeatherForecastRepository.cs`
 ```cs
 public class WeatherForecastRepository : Repository<WeatherForecast, int, WebDbContext>
@@ -65,17 +83,36 @@ public class WeatherForecastRepository : Repository<WeatherForecast, int, WebDbC
 }
 ```
 
+4. Register the repository in `Startup.cs`
+
+`Startup.ConfigureServices`
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<WebDbContext>(options =>
+    {
+        {...}
+    });
+
+    services.AddTransient<WeatherForecastRepository>();
+
+    services.AddControllers();
+}
+```
+
+5. Create the controller
+
 `WeatherForecastController.cs`
 ```cs
 public class WeatherForecastController : CRUDController<WeatherForecast, int, WeatherForecastRepository, WebDbContext>
 {
-    public WeatherForecastController(IWeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger)
+    public WeatherForecastController(WeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger)
     {
     }
 }
 ```
 
-When `WeatherForecastRepository` is registered in `Startup.cs`, these three classes generate these REST endpoints for manipulating weather data:
+This generates these REST endpoints for manipulating weather data:
 * CREATE: `POST /weatherforecast/`
 * READ: `GET /weatherforecast/{id}`
 * READ ALL: `GET /weatherforecast/`
@@ -92,7 +129,7 @@ You want to make your data read-only? No problem. Simply define that only `CRUDA
 ```cs
 public class WeatherForecastController : CRUDController<WeatherForecast, int, WeatherForecastRepository, WebDbContext>
 {
-    public WeatherForecastController(IWeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger, CRUDAction.Read)
+    public WeatherForecastController(WeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger, CRUDAction.Read)
     {
     }
 }
@@ -108,7 +145,7 @@ You can also define a selection of `CRUDAction`s to allow in the overloaded cons
 ```cs
 public class WeatherForecastController : CRUDController<WeatherForecast, int, WeatherForecastRepository, WebDbContext>
 {
-    public WeatherForecastController(IWeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
+    public WeatherForecastController(WeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
     {
     }
 }
