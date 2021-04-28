@@ -1,8 +1,10 @@
 using DvBCrud.EFCore.Entities;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DvBCrud.EFCore.API.Tests.Web.Weather
 {
+    [ExcludeFromCodeCoverage]
     public class WeatherForecast : BaseEntity<int>
     {
         public DateTime Date { get; set; }

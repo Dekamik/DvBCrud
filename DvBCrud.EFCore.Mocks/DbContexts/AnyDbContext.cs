@@ -1,8 +1,10 @@
-﻿using DvBCrud.EFCore.Mocks.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using DvBCrud.EFCore.Mocks.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DvBCrud.EFCore.Mocks.DbContexts
 {
+    [ExcludeFromCodeCoverage]
     public class AnyDbContext : DbContext
     {
         public AnyDbContext(DbContextOptions options) : base(options)
@@ -11,8 +13,6 @@ namespace DvBCrud.EFCore.Mocks.DbContexts
         }
 
         public DbSet<AnyEntity> AnyEntities { get; set; }
-
-        public DbSet<AnyNullableIdEntity> AnyNullableIdEntities { get; set; }
 
         public DbSet<AnyAuditedEntity> AnyAuditedEntities { get; set; }
     }
