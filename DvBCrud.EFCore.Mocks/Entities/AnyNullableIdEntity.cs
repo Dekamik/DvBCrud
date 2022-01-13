@@ -1,7 +1,9 @@
-﻿using DvBCrud.EFCore.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using DvBCrud.EFCore.Entities;
 
 namespace DvBCrud.EFCore.Mocks.Entities
 {
+    [ExcludeFromCodeCoverage]
     public class AnyNullableIdEntity : BaseEntity<string>
     {
         public string AnyString { get; set; }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DvBCrud.EFCore.API.Tests.Web.Weather;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace DvBCrud.EFCore.API.Tests.Web
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public Startup(IConfiguration configuration)

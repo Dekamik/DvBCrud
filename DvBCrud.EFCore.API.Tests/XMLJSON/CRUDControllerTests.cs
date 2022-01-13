@@ -172,6 +172,7 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
             // Arrange
             var entity = new AnyEntity 
             {
+                Id = 1,
                 AnyString = "AnyString"
             };
 
@@ -184,11 +185,29 @@ namespace DvBCrud.EFCore.API.Tests.XMLJSON
         }
 
         [Fact]
+        public void Update_AnyEntityWithoutId_Returns400BadRequest()
+        {
+            // Arrange
+            var entity = new AnyEntity 
+            { 
+                AnyString = "AnyString"
+            };
+
+            // Act
+            var result = controller.Update(1, entity) as BadRequestObjectResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            A.CallTo(() => repository.Update(1, entity)).MustNotHaveHappened();
+        }
+
+        [Fact]
         public void Update_AnyNonExistingEntity_Returns404NotFound()
         {
             // Arrange
             var entity = new AnyEntity
             {
+                Id = 1,
                 AnyString = "AnyString"
             };
             A.CallTo(() => repository.Update(1, entity)).Throws<KeyNotFoundException>();

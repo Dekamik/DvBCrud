@@ -120,7 +120,7 @@ namespace DvBCrud.EFCore.API.XMLJSON
                 return Forbidden(message);
             }
 
-            if (id.Equals(default(TId)))
+            if (entity.Id.Equals(default(TId)))
             {
                 string message = $"{nameof(id)} must be defined.";
                 logger.LogDebug($"{guid}: {nameof(Update)} BAD REQUEST - {message}");
