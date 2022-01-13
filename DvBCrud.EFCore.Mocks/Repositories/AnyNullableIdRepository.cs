@@ -7,7 +7,7 @@ namespace DvBCrud.EFCore.Mocks.Repositories
 {
     public class AnyNullableIdRepository : Repository<AnyNullableIdEntity, string, AnyDbContext>
     {
-        public AnyNullableIdRepository(AnyDbContext dbContext, ILogger logger) : base(dbContext, logger)
+        public AnyNullableIdRepository(AnyDbContext context, ILogger logger) : base(context, logger)
         {
 
         }

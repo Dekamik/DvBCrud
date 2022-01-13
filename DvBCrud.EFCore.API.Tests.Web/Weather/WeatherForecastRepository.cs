@@ -5,7 +5,7 @@ namespace DvBCrud.EFCore.API.Tests.Web.Weather
 {
     public class WeatherForecastRepository : Repository<WeatherForecast, int, WebDbContext>, IWeatherForecastRepository
     {
-        public WeatherForecastRepository(WebDbContext dbContext, ILogger<WeatherForecastRepository> logger) : base(dbContext, logger)
+        public WeatherForecastRepository(WebDbContext context, ILogger<WeatherForecastRepository> logger) : base(context, logger)
         {
         }
     }

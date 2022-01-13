@@ -12,16 +12,16 @@ namespace DvBCrud.EFCore.Repositories
         where TEntity : BaseEntity<TId>
         where TDbContext : DbContext
     {
-        internal readonly TDbContext dbContext;
+        protected readonly TDbContext Context;
 
-        internal readonly ILogger logger;
+        protected readonly ILogger Logger;
 
-        private DbSet<TEntity> Set => dbContext.Set<TEntity>();
+        private DbSet<TEntity> Set => Context.Set<TEntity>();
 
-        public Repository(TDbContext dbContext, ILogger logger)
+        public Repository(TDbContext context, ILogger logger)
         {
-            this.dbContext = dbContext;
-            this.logger = logger;
+            Context = context;
+            Logger = logger;
         }
 
         public virtual IEnumerable<TEntity> GetAll()
@@ -76,7 +76,7 @@ namespace DvBCrud.EFCore.Repositories
             if (existingEntity == null)
             {
                 var message = $"{nameof(TEntity)} {id} not found";
-                logger.LogDebug(message);
+                Logger.LogDebug(message);
                 throw new KeyNotFoundException(message);
             }
 
@@ -100,7 +100,7 @@ namespace DvBCrud.EFCore.Repositories
             if (existingEntity == null)
             {
                 var message = $"{nameof(TEntity)} {id} not found";
-                logger.LogDebug(message);
+                Logger.LogDebug(message);
                 throw new KeyNotFoundException(message);
             }
 
@@ -120,7 +120,7 @@ namespace DvBCrud.EFCore.Repositories
             if (entity == null)
             {
                 var message = $"{nameof(TEntity)} {id} not found";
-                logger.LogDebug(message);
+                Logger.LogDebug(message);
                 throw new KeyNotFoundException(message);
             }
 
@@ -140,7 +140,7 @@ namespace DvBCrud.EFCore.Repositories
             if (entity == null)
             {
                 var message = $"Couldn't find {nameof(TEntity)} with Id {id} for deletion";
-                logger.LogDebug(message);
+                Logger.LogDebug(message);
                 throw new KeyNotFoundException(message);
             }
 
@@ -149,12 +149,12 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void SaveChanges()
         {
-            dbContext.SaveChanges();
+            Context.SaveChanges();
         }
 
         public virtual Task SaveChangesAsync()
         {
-            return dbContext.SaveChangesAsync();
+            return Context.SaveChangesAsync();
         }
     }
 }

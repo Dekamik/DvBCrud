@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.Repositories
 {
-    public class AuditedRepository<TEntity, TId, TUserId, TDbContext> : Repository<TEntity, TId, TDbContext>, IAuditedRepository<TEntity, TId, TUserId>
+    public abstract class AuditedRepository<TEntity, TId, TUserId, TDbContext> : Repository<TEntity, TId, TDbContext>, IAuditedRepository<TEntity, TId, TUserId>
         where TEntity : BaseAuditedEntity<TId, TUserId>
         where TDbContext : DbContext
     {
-        public AuditedRepository(TDbContext dbContext, ILogger logger) : base(dbContext, logger)
+        public AuditedRepository(TDbContext context, ILogger logger) : base(context, logger)
         {
 
         }
 
         public virtual void Create(TEntity entity, TUserId userId)
         {
-            entity.CreatedAt = DateTime.UtcNow;
+            entity.CreatedAt = DateTimeOffset.UtcNow;
             entity.CreatedBy = userId;
 
             base.Create(entity);
@@ -26,7 +26,7 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual void Update(TId id, TEntity entity, TUserId userId)
         {
-            entity.UpdatedAt = DateTime.UtcNow;
+            entity.UpdatedAt = DateTimeOffset.UtcNow;
             entity.UpdatedBy = userId;
 
             base.Update(id, entity);
@@ -34,7 +34,7 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual Task UpdateAsync(TId id, TEntity entity, TUserId userId)
         {
-            entity.UpdatedAt = DateTime.UtcNow;
+            entity.UpdatedAt = DateTimeOffset.UtcNow;
             entity.UpdatedBy = userId;
 
             return base.UpdateAsync(id, entity);
