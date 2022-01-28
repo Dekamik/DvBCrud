@@ -50,7 +50,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             // Assert
             var actual = dbContext.AnyAuditedEntities.First();
             actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.Id).Excluding(x => x.CreatedAt));
-            actual.CreatedAt.Should().BeCloseTo(expectedTime);
+            actual.CreatedAt.Should().BeCloseTo(expectedTime, TimeSpan.FromSeconds(1));
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             // Assert
             var actual = dbContext.AnyAuditedEntities.First();
             actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.UpdatedAt));
-            actual.UpdatedAt.Should().BeCloseTo(expectedTime);
+            actual.UpdatedAt.Should().BeCloseTo(expectedTime, TimeSpan.FromSeconds(1));
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             // Assert
             var actual = dbContext.AnyAuditedEntities.First();
             actual.Should().BeEquivalentTo(expected, opts => opts.Excluding(x => x.UpdatedAt));
-            actual.UpdatedAt.Should().BeCloseTo(expectedTime);
+            actual.UpdatedAt.Should().BeCloseTo(expectedTime, TimeSpan.FromSeconds(1));
         }
 
 

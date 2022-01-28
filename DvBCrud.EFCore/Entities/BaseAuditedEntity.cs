@@ -8,9 +8,9 @@ namespace DvBCrud.EFCore.Entities
 
         public TUserId CreatedBy { get; set; }
 
-        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
 
-        public TUserId? UpdatedBy { get; set; }
+        public TUserId UpdatedBy { get; set; }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="other"/> is null</exception>
