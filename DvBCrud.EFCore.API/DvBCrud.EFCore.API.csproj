@@ -5,6 +5,7 @@
     <Authors>Dennis von Bargen</Authors>
     <Company>Dennis von Bargen</Company>
     <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
