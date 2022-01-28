@@ -59,7 +59,7 @@ jobs:
         run: dotnet build DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
 
       - name: Pack
-        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore/DvBCrud.EFCore.API.csproj
+        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
 
       - name: Publish
-        run: dotnet nuget push DvBCrud.EFCore/bin/Release/DvBCrud.EFCore.API.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push DvBCrud.EFCore.API/bin/Release/DvBCrud.EFCore.API.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
