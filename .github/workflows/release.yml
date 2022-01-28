@@ -14,7 +14,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.x'
+          dotnet-version: '6.0.x'
           
       - name: Install dependencies
         run: dotnet restore
@@ -32,7 +32,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.x'
+          dotnet-version: '6.0.x'
 
       - name: Build
         run: dotnet build DvBCrud.EFCore/DvBCrud.EFCore.csproj
@@ -55,7 +55,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.x'
+          dotnet-version: '6.0.x'
 
       - name: Build
         run: dotnet build DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
