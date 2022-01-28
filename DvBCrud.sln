@@ -10,15 +10,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.Tests", "DvB
 		{D2565219-C14B-44CC-969E-1EDBE01A04ED} = {D2565219-C14B-44CC-969E-1EDBE01A04ED}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8A23A7BB-9063-4647-B494-FBF99C9EF63A}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		.travis.yml = .travis.yml
-		deploy.sh = deploy.sh
-		LICENSE = LICENSE
-		README.md = README.md
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.API", "DvBCrud.EFCore.API\DvBCrud.EFCore.API.csproj", "{E27EB620-1DF5-49ED-9C65-9B1DB6AFBCA1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D2565219-C14B-44CC-969E-1EDBE01A04ED} = {D2565219-C14B-44CC-969E-1EDBE01A04ED}

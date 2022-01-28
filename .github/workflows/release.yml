@@ -1,0 +1,69 @@
+on:
+  workflow_dispatch:
+  release:
+    types:
+      - created
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+    
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+          
+      - name: Install dependencies
+        run: dotnet restore
+        
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+
+  release-core:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+
+      - name: Build
+        run: dotnet build DvBCrud.EFCore/DvBCrud.EFCore.csproj
+      
+      - name: Pack
+        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore/DvBCrud.EFCore.csproj
+      
+      - name: Publish
+        run: dotnet nuget push DvBCrud.EFCore/bin/Release/DvBCrud.EFCore.*.nupkg -k $NUGET_AUTH_TOKEN -s "https://api.nuget.org/v3/index.json"
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }}
+  
+  release-api:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+
+      - name: Build
+        run: dotnet build DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
+
+      - name: Pack
+        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore/DvBCrud.EFCore.API.csproj
+
+      - name: Publish
+        run: dotnet nuget push DvBCrud.EFCore/bin/Release/DvBCrud.EFCore.API.*.nupkg -k $NUGET_AUTH_TOKEN -s "https://api.nuget.org/v3/index.json"
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }}
