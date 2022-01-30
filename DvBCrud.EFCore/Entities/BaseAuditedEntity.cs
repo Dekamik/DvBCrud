@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DvBCrud.EFCore.Entities
 {
     public abstract class BaseAuditedEntity<TId, TUserId> : BaseEntity<TId>
     {
+        [Required]
         public DateTimeOffset CreatedAt { get; set; }
 
+        [Required]
         public TUserId CreatedBy { get; set; }
 
         public DateTimeOffset? UpdatedAt { get; set; }
