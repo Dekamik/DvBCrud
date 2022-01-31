@@ -14,7 +14,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
 {
     public class AuditedRepositoryTests
     {
-        private readonly ILogger logger;
+        private readonly ILogger<AnyAuditedRepository> logger;
         private readonly AnyDbContext dbContext;
         private readonly IAnyAuditedRepository repository;
 
@@ -24,7 +24,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
             dbContext = new AnyDbContext(options);
-            logger = A.Fake<ILogger>();
+            logger = A.Fake<ILogger<AnyAuditedRepository>>();
             repository = new AnyAuditedRepository(dbContext, logger);
         }
 

@@ -18,7 +18,7 @@ namespace DvBCrud.EFCore.Repositories
 
         private DbSet<TEntity> Set => Context.Set<TEntity>();
 
-        public Repository(TDbContext context, ILogger logger)
+        public Repository(TDbContext context, ILogger<Repository<TEntity, TId, TDbContext>> logger)
         {
             Context = context;
             Logger = logger;

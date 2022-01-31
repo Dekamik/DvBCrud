@@ -15,18 +15,17 @@ namespace DvBCrud.EFCore.Tests.Repositories
 {
     public class RepositoryTests
     {
-        private readonly ILogger logger;
-        private readonly AnyDbContext dbContext;
-        private readonly IAnyRepository repository;
+        private readonly AnyDbContext _dbContext;
+        private readonly IAnyRepository _repository;
 
         public RepositoryTests()
         {
             var options = new DbContextOptionsBuilder<AnyDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
-            dbContext = new AnyDbContext(options);
-            logger = A.Fake<ILogger>();
-            repository = new AnyRepository(dbContext, logger);
+            _dbContext = new AnyDbContext(options);
+            var logger = A.Fake<ILogger<AnyRepository>>();
+            _repository = new AnyRepository(_dbContext, logger);
         }
 
         [Fact]
@@ -46,11 +45,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContext.AnyEntities.AddRange(expected);
-            dbContext.SaveChanges();
+            _dbContext.AnyEntities.AddRange(expected);
+            _dbContext.SaveChanges();
 
             // Act
-            var actual = repository.GetAll();
+            var actual = _repository.GetAll();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -72,11 +71,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContext.AnyEntities.AddRange(expected);
-            dbContext.SaveChanges();
+            _dbContext.AnyEntities.AddRange(expected);
+            _dbContext.SaveChanges();
 
             // Act
-            var actual = repository.Get(1);
+            var actual = _repository.Get(1);
 
             // Assert
             actual.Should().BeEquivalentTo(expected.First());
@@ -98,11 +97,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContext.AnyEntities.AddRange(expected);
-            dbContext.SaveChanges();
+            _dbContext.AnyEntities.AddRange(expected);
+            _dbContext.SaveChanges();
 
             // Act
-            var actual = repository.Get(3);
+            var actual = _repository.Get(3);
 
             // Assert
             actual.Should().BeNull();
@@ -112,7 +111,8 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public void Get_Null_ThrowsArgumentNullException()
         {
             // Arrange
-            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
+            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
+            var nullableRepository = new AnyNullableIdRepository(_dbContext, logger);
 
             // Act & Assert
             nullableRepository.Invoking(r => r.Get(null)).Should().Throw<ArgumentNullException>();
@@ -134,11 +134,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContext.AnyEntities.AddRange(expected);
-            dbContext.SaveChanges();
+            _dbContext.AnyEntities.AddRange(expected);
+            _dbContext.SaveChanges();
 
             // Act
-            var actual = await repository.GetAsync(1);
+            var actual = await _repository.GetAsync(1);
 
             // Assert
             actual.Should().BeEquivalentTo(expected.First());
@@ -160,11 +160,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "Any"
                 }
             };
-            dbContext.AnyEntities.AddRange(expected);
-            dbContext.SaveChanges();
+            _dbContext.AnyEntities.AddRange(expected);
+            _dbContext.SaveChanges();
 
             // Act
-            var actual = await repository.GetAsync(3);
+            var actual = await _repository.GetAsync(3);
 
             // Assert
             actual.Should().BeNull();
@@ -174,7 +174,8 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public async Task GetAsync_Null_ThrowsArgumentNullException()
         {
             // Arrange
-            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
+            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
+            var nullableRepository = new AnyNullableIdRepository(_dbContext, logger);
 
             // Act & Assert
             await nullableRepository.Awaiting(r => r.GetAsync(null)).Should().ThrowAsync<ArgumentNullException>();
@@ -190,11 +191,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            repository.Create(expected);
-            dbContext.SaveChanges();
+            _repository.Create(expected);
+            _dbContext.SaveChanges();
 
             // Assert
-            dbContext.AnyEntities.First().AnyString.Should().Be(expected.AnyString);
+            _dbContext.AnyEntities.First().AnyString.Should().Be(expected.AnyString);
         }
 
         [Fact]
@@ -206,75 +207,76 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContext.AnyEntities.Add(entity);
-            dbContext.SaveChanges();
+            _dbContext.AnyEntities.Add(entity);
+            _dbContext.SaveChanges();
 
             // Act
-            repository.Create(entity);
+            _repository.Create(entity);
 
             // Assert
-            dbContext.Invoking(db => db.SaveChanges()).Should().Throw<ArgumentException>();
+            _dbContext.Invoking(db => db.SaveChanges()).Should().Throw<ArgumentException>();
         }
 
         [Fact]
         public void Create_Null_ThrowsArgumentNullException()
         {
-            repository.Invoking(r => r.Create(null)).Should().Throw<ArgumentNullException>();
+            _repository.Invoking(r => r.Create(null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void Update_ExistingEntity_EntityUpdatedAsync()
         {
             // Arrange
-            dbContext.AnyEntities.Add(new AnyEntity
+            _dbContext.AnyEntities.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             var expected = new AnyEntity
             {
                 AnyString = "AnyNewString"
             };
 
             // Act
-            repository.Update(1, expected);
-            dbContext.SaveChanges();
+            _repository.Update(1, expected);
+            _dbContext.SaveChanges();
 
             // Assert
-            dbContext.AnyEntities.First(e => e.Id == 1).AnyString.Should().BeEquivalentTo(expected.AnyString);
+            _dbContext.AnyEntities.First(e => e.Id == 1).AnyString.Should().BeEquivalentTo(expected.AnyString);
         }
 
         [Fact]
         public void Update_NonExistingEntity_ThrowsKeyNotFoundException()
         {
             // Arrange
-            dbContext.AnyEntities.Add(new AnyEntity
+            _dbContext.AnyEntities.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             var updatedEntity = new AnyEntity
             {
                 AnyString = "AnyNewString"
             };
 
             // Act & Assert
-            repository.Invoking(r => r.Update(2, updatedEntity)).Should().Throw<KeyNotFoundException>();
+            _repository.Invoking(r => r.Update(2, updatedEntity)).Should().Throw<KeyNotFoundException>();
         }
 
         [Fact]
         public void Update_Null_ThrowsArgumentNullException()
         {
-            repository.Invoking(r => r.Update(1, null)).Should().Throw<ArgumentNullException>();
+            _repository.Invoking(r => r.Update(1, null)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void Update_NullId_ThrowsArgumentNullException()
         {
             // Arrange
-            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
+            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
+            var nullableRepository = new AnyNullableIdRepository(_dbContext, logger);
             var updatedEntity = new AnyNullableIdEntity
             {
                 AnyString = "AnyNewString"
@@ -288,12 +290,12 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public async Task UpdateAsync_ExistingEntity_EntityUpdatedAsync()
         {
             // Arrange
-            dbContext.AnyEntities.Add(new AnyEntity
+            _dbContext.AnyEntities.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             var expected = new AnyEntity
             {
                 Id = 1,
@@ -301,43 +303,44 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            await repository.UpdateAsync(1, expected);
-            dbContext.SaveChanges();
+            await _repository.UpdateAsync(1, expected);
+            _dbContext.SaveChanges();
 
             // Assert
-            dbContext.AnyEntities.First(e => e.Id == 1).Should().BeEquivalentTo(expected);
+            _dbContext.AnyEntities.First(e => e.Id == 1).Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public async Task UpdateAsync_NonExistingEntity_ThrowsKeyNotFoundException()
         {
             // Arrange
-            dbContext.AnyEntities.Add(new AnyEntity
+            _dbContext.AnyEntities.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             var updatedEntity = new AnyEntity
             {
                 AnyString = "AnyNewString"
             };
 
             // Act & Assert
-            await repository.Awaiting(r => r.UpdateAsync(2, updatedEntity)).Should().ThrowAsync<KeyNotFoundException>();
+            await _repository.Awaiting(r => r.UpdateAsync(2, updatedEntity)).Should().ThrowAsync<KeyNotFoundException>();
         }
 
         [Fact]
         public async Task UpdateAsync_Null_ThrowsArgumentNullException()
         {
-            await repository.Awaiting(r => r.UpdateAsync(1, null)).Should().ThrowAsync<ArgumentNullException>();
+            await _repository.Awaiting(r => r.UpdateAsync(1, null)).Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Fact]
         public async Task UpdateAsync_NullId_ThrowsArgumentNullException()
         {
             // Arrange
-            var repository = new AnyNullableIdRepository(dbContext, logger);
+            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
+            var repository = new AnyNullableIdRepository(_dbContext, logger);
             var updatedEntity = new AnyNullableIdEntity
             {
                 AnyString = "AnyNewString"
@@ -363,23 +366,24 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "AnyString"
                 }
             };
-            dbContext.AnyEntities.AddRange(entities);
-            dbContext.SaveChanges();
-            dbContext.AnyEntities.Should().Contain(entities);
+            _dbContext.AnyEntities.AddRange(entities);
+            _dbContext.SaveChanges();
+            _dbContext.AnyEntities.Should().Contain(entities);
 
             // Act
-            repository.Delete(1);
-            dbContext.SaveChanges();
+            _repository.Delete(1);
+            _dbContext.SaveChanges();
 
             // Assert
-            dbContext.AnyEntities.First().Should().BeEquivalentTo(entities.Last());
+            _dbContext.AnyEntities.First().Should().BeEquivalentTo(entities.Last());
         }
 
         [Fact]
         public void Delete_Null_ThrowsArgumentNullException()
         {
             // Arrange
-            var repository = new AnyNullableIdRepository(dbContext, logger);
+            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
+            var repository = new AnyNullableIdRepository(_dbContext, logger);
 
             // Act & Assert
             repository.Invoking(r => r.Delete(null)).Should().Throw<ArgumentNullException>();
@@ -388,7 +392,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         [Fact]
         public void Delete_NonExistingId_ThrowsKeyNotFoundException()
         {
-            repository.Invoking(r => r.Delete(1)).Should().Throw<KeyNotFoundException>();
+            _repository.Invoking(r => r.Delete(1)).Should().Throw<KeyNotFoundException>();
         }
 
         [Fact]
@@ -407,23 +411,24 @@ namespace DvBCrud.EFCore.Tests.Repositories
                     AnyString = "AnyString"
                 }
             };
-            dbContext.AnyEntities.AddRange(entities);
-            dbContext.SaveChanges();
-            dbContext.AnyEntities.Should().Contain(entities);
+            _dbContext.AnyEntities.AddRange(entities);
+            _dbContext.SaveChanges();
+            _dbContext.AnyEntities.Should().Contain(entities);
 
             // Act
-            await repository.DeleteAsync(1);
-            dbContext.SaveChanges();
+            await _repository.DeleteAsync(1);
+            _dbContext.SaveChanges();
 
             // Assert
-            dbContext.AnyEntities.First().Should().BeEquivalentTo(entities.Last());
+            _dbContext.AnyEntities.First().Should().BeEquivalentTo(entities.Last());
         }
 
         [Fact]
         public async Task DeleteAsync_Null_ThrowsArgumentNullException()
         {
             // Arrange
-            var nullableRepository = new AnyNullableIdRepository(dbContext, logger);
+            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
+            var nullableRepository = new AnyNullableIdRepository(_dbContext, logger);
 
             // Act & Assert
             await nullableRepository.Awaiting(r => r.DeleteAsync(null)).Should().ThrowAsync<ArgumentNullException>();
@@ -432,7 +437,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         [Fact]
         public async Task DeleteAsync_NonExistingId_ThrowsKeyNotFoundException()
         {
-            await repository.Awaiting(r => r.DeleteAsync(1)).Should().ThrowAsync<KeyNotFoundException>();
+            await _repository.Awaiting(r => r.DeleteAsync(1)).Should().ThrowAsync<KeyNotFoundException>();
         }
 
         [Fact]
@@ -446,11 +451,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            dbContext.AnyEntities.Add(expected);
-            repository.SaveChanges();
+            _dbContext.AnyEntities.Add(expected);
+            _repository.SaveChanges();
 
             // Assert
-            dbContext.AnyEntities.First().Should().BeEquivalentTo(expected);
+            _dbContext.AnyEntities.First().Should().BeEquivalentTo(expected);
         }
 
         [Fact]
@@ -464,22 +469,22 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            dbContext.AnyEntities.Add(entity);
+            _dbContext.AnyEntities.Add(entity);
 
             // Assert
-            dbContext.AnyEntities.Should().BeEmpty();
+            _dbContext.AnyEntities.Should().BeEmpty();
         }
 
         [Fact]
         public void SaveChanges_CallAfterModify_ChangesSaved()
         {
             // Arrange
-            dbContext.Add(new AnyEntity
+            _dbContext.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             var modifiedEntity = new AnyEntity
             {
                 Id = 1,
@@ -487,23 +492,23 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
-            repository.SaveChanges();
+            _dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
+            _repository.SaveChanges();
 
             // Assert
-            dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
+            _dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
         public void SaveChanges_NoCallAfterModify_ChangesSaved()
         {
             // Arrange
-            dbContext.Add(new AnyEntity
+            _dbContext.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             var modifiedEntity = new AnyEntity
             {
                 Id = 1,
@@ -511,10 +516,10 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
+            _dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
 
             // Assert
-            dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
+            _dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
@@ -526,16 +531,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContext.Add(entity);
-            dbContext.SaveChanges();
-            dbContext.AnyEntities.Should().Contain(entity);
+            _dbContext.Add(entity);
+            _dbContext.SaveChanges();
+            _dbContext.AnyEntities.Should().Contain(entity);
 
             // Act
-            dbContext.AnyEntities.Remove(entity);
-            repository.SaveChanges();
+            _dbContext.AnyEntities.Remove(entity);
+            _repository.SaveChanges();
 
             // Assert
-            dbContext.AnyEntities.Should().BeEmpty();
+            _dbContext.AnyEntities.Should().BeEmpty();
         }
 
         [Fact]
@@ -547,15 +552,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContext.Add(entity);
-            dbContext.SaveChanges();
-            dbContext.AnyEntities.Should().Contain(entity);
+            _dbContext.Add(entity);
+            _dbContext.SaveChanges();
+            _dbContext.AnyEntities.Should().Contain(entity);
 
             // Act
-            dbContext.AnyEntities.Remove(entity);
+            _dbContext.AnyEntities.Remove(entity);
 
             // Assert
-            dbContext.AnyEntities.Should().Contain(entity);
+            _dbContext.AnyEntities.Should().Contain(entity);
         }
 
         [Fact]
@@ -569,11 +574,11 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            dbContext.AnyEntities.Add(expected);
-            await repository.SaveChangesAsync();
+            _dbContext.AnyEntities.Add(expected);
+            await _repository.SaveChangesAsync();
 
             // Assert
-            dbContext.AnyEntities.First().Should().BeEquivalentTo(expected);
+            _dbContext.AnyEntities.First().Should().BeEquivalentTo(expected);
         }
 
         [Fact]
@@ -587,22 +592,22 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            dbContext.AnyEntities.Add(entity);
+            _dbContext.AnyEntities.Add(entity);
 
             // Assert
-            dbContext.AnyEntities.Should().BeEmpty();
+            _dbContext.AnyEntities.Should().BeEmpty();
         }
 
         [Fact]
         public async Task SaveChangesAsync_CallAfterModify_ChangesSaved()
         {
             // Arrange
-            dbContext.Add(new AnyEntity
+            _dbContext.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             var modifiedEntity = new AnyEntity
             {
                 Id = 1,
@@ -610,23 +615,23 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
-            await repository.SaveChangesAsync();
+            _dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
+            await _repository.SaveChangesAsync();
 
             // Assert
-            dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
+            _dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
         public void SaveChangesAsync_NoCallAfterModify_ChangesSaved()
         {
             // Arrange
-            dbContext.Add(new AnyEntity
+            _dbContext.Add(new AnyEntity
             {
                 Id = 1,
                 AnyString = "AnyString"
             });
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             var modifiedEntity = new AnyEntity
             {
                 Id = 1,
@@ -634,10 +639,10 @@ namespace DvBCrud.EFCore.Tests.Repositories
             };
 
             // Act
-            dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
+            _dbContext.AnyEntities.Find(modifiedEntity.Id).AnyString = modifiedEntity.AnyString;
 
             // Assert
-            dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
+            _dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
         }
 
         [Fact]
@@ -649,16 +654,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContext.Add(entity);
-            dbContext.SaveChanges();
-            dbContext.AnyEntities.Should().Contain(entity);
+            _dbContext.Add(entity);
+            _dbContext.SaveChanges();
+            _dbContext.AnyEntities.Should().Contain(entity);
 
             // Act
-            dbContext.AnyEntities.Remove(entity);
-            await repository.SaveChangesAsync();
+            _dbContext.AnyEntities.Remove(entity);
+            await _repository.SaveChangesAsync();
 
             // Assert
-            dbContext.AnyEntities.Should().BeEmpty();
+            _dbContext.AnyEntities.Should().BeEmpty();
         }
 
         [Fact]
@@ -670,15 +675,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = 1,
                 AnyString = "AnyString"
             };
-            dbContext.Add(entity);
-            dbContext.SaveChanges();
-            dbContext.AnyEntities.Should().Contain(entity);
+            _dbContext.Add(entity);
+            _dbContext.SaveChanges();
+            _dbContext.AnyEntities.Should().Contain(entity);
 
             // Act
-            dbContext.AnyEntities.Remove(entity);
+            _dbContext.AnyEntities.Remove(entity);
 
             // Assert
-            dbContext.AnyEntities.Should().Contain(entity);
+            _dbContext.AnyEntities.Should().Contain(entity);
         }
     }
 }

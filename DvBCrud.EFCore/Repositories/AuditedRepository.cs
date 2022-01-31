@@ -11,7 +11,7 @@ namespace DvBCrud.EFCore.Repositories
         where TEntity : BaseAuditedEntity<TId, TUserId>
         where TDbContext : DbContext
     {
-        public AuditedRepository(TDbContext context, ILogger logger) : base(context, logger)
+        public AuditedRepository(TDbContext context, ILogger<AuditedRepository<TEntity, TId, TUserId, TDbContext>> logger) : base(context, logger)
         {
 
         }

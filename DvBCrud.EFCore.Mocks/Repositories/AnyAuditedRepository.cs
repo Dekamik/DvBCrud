@@ -9,7 +9,7 @@ namespace DvBCrud.EFCore.Mocks.Repositories
     [ExcludeFromCodeCoverage]
     public class AnyAuditedRepository : AuditedRepository<AnyAuditedEntity, int, int, AnyDbContext>, IAnyAuditedRepository
     {
-        public AnyAuditedRepository(AnyDbContext context, ILogger logger) : base(context, logger)
+        public AnyAuditedRepository(AnyDbContext context, ILogger<AnyAuditedRepository> logger) : base(context, logger)
         {
 
         }
