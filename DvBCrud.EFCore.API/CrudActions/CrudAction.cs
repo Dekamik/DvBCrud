@@ -1,6 +1,6 @@
-﻿namespace DvBCrud.EFCore.API.CRUDActions
+﻿namespace DvBCrud.EFCore.API.CrudActions
 {
-    public enum CRUDAction
+    public enum CrudAction
     {
         Create,
         Read,

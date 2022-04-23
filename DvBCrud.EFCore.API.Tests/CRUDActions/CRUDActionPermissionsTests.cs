@@ -1,4 +1,4 @@
-﻿using DvBCrud.EFCore.API.CRUDActions;
+﻿using DvBCrud.EFCore.API.CrudActions;
 using FluentAssertions;
 using Xunit;
 
@@ -9,31 +9,31 @@ namespace DvBCrud.EFCore.API.Tests.CRUDActions
         [Fact]
         public void IsActionAllowed_AllowedActionsNotDefined_AllActionsAllowed()
         {
-            var crudActions = new CRUDActionPermissions();
-            crudActions.IsActionAllowed(CRUDAction.Create).Should().BeTrue();
-            crudActions.IsActionAllowed(CRUDAction.Read).Should().BeTrue();
-            crudActions.IsActionAllowed(CRUDAction.Update).Should().BeTrue();
-            crudActions.IsActionAllowed(CRUDAction.Delete).Should().BeTrue();
+            var crudActions = new CrudActionPermissions();
+            crudActions.IsActionAllowed(CrudAction.Create).Should().BeTrue();
+            crudActions.IsActionAllowed(CrudAction.Read).Should().BeTrue();
+            crudActions.IsActionAllowed(CrudAction.Update).Should().BeTrue();
+            crudActions.IsActionAllowed(CrudAction.Delete).Should().BeTrue();
         }
 
         [Fact]
         public void IsActionAllowed_ReadOnlyActions_OnlyReadAllowed()
         {
-            var crudActions = new CRUDActionPermissions(CRUDAction.Read);
-            crudActions.IsActionAllowed(CRUDAction.Create).Should().BeFalse();
-            crudActions.IsActionAllowed(CRUDAction.Read).Should().BeTrue();
-            crudActions.IsActionAllowed(CRUDAction.Update).Should().BeFalse();
-            crudActions.IsActionAllowed(CRUDAction.Delete).Should().BeFalse();
+            var crudActions = new CrudActionPermissions(CrudAction.Read);
+            crudActions.IsActionAllowed(CrudAction.Create).Should().BeFalse();
+            crudActions.IsActionAllowed(CrudAction.Read).Should().BeTrue();
+            crudActions.IsActionAllowed(CrudAction.Update).Should().BeFalse();
+            crudActions.IsActionAllowed(CrudAction.Delete).Should().BeFalse();
         }
 
         [Fact]
         public void IsActionAllowed_NoDelete_OnlyDeleteForbidden()
         {
-            var crudActions = new CRUDActionPermissions(CRUDAction.Create, CRUDAction.Read, CRUDAction.Update);
-            crudActions.IsActionAllowed(CRUDAction.Create).Should().BeTrue();
-            crudActions.IsActionAllowed(CRUDAction.Read).Should().BeTrue();
-            crudActions.IsActionAllowed(CRUDAction.Update).Should().BeTrue();
-            crudActions.IsActionAllowed(CRUDAction.Delete).Should().BeFalse();
+            var crudActions = new CrudActionPermissions(CrudAction.Create, CrudAction.Read, CrudAction.Update);
+            crudActions.IsActionAllowed(CrudAction.Create).Should().BeTrue();
+            crudActions.IsActionAllowed(CrudAction.Read).Should().BeTrue();
+            crudActions.IsActionAllowed(CrudAction.Update).Should().BeTrue();
+            crudActions.IsActionAllowed(CrudAction.Delete).Should().BeFalse();
         }
     }
 }
