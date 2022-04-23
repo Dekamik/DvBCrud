@@ -24,8 +24,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
             _dbContext = new AnyDbContext(options);
-            var logger = A.Fake<ILogger<AnyRepository>>();
-            _repository = new AnyRepository(_dbContext, logger);
+            _repository = new AnyRepository(_dbContext);
         }
 
         [Fact]
@@ -111,8 +110,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public void Get_Null_ThrowsArgumentNullException()
         {
             // Arrange
-            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
-            var nullableRepository = new AnyNullableIdRepository(_dbContext, logger);
+            var nullableRepository = new AnyNullableIdRepository(_dbContext);
 
             // Act & Assert
             nullableRepository.Invoking(r => r.Get(null)).Should().Throw<ArgumentNullException>();
@@ -174,8 +172,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public async Task GetAsync_Null_ThrowsArgumentNullException()
         {
             // Arrange
-            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
-            var nullableRepository = new AnyNullableIdRepository(_dbContext, logger);
+            var nullableRepository = new AnyNullableIdRepository(_dbContext);
 
             // Act & Assert
             await nullableRepository.Awaiting(r => r.GetAsync(null)).Should().ThrowAsync<ArgumentNullException>();
@@ -275,8 +272,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public void Update_NullId_ThrowsArgumentNullException()
         {
             // Arrange
-            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
-            var nullableRepository = new AnyNullableIdRepository(_dbContext, logger);
+            var nullableRepository = new AnyNullableIdRepository(_dbContext);
             var updatedEntity = new AnyNullableIdEntity
             {
                 AnyString = "AnyNewString"
@@ -339,8 +335,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public async Task UpdateAsync_NullId_ThrowsArgumentNullException()
         {
             // Arrange
-            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
-            var repository = new AnyNullableIdRepository(_dbContext, logger);
+            var repository = new AnyNullableIdRepository(_dbContext);
             var updatedEntity = new AnyNullableIdEntity
             {
                 AnyString = "AnyNewString"
@@ -382,8 +377,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public void Delete_Null_ThrowsArgumentNullException()
         {
             // Arrange
-            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
-            var repository = new AnyNullableIdRepository(_dbContext, logger);
+            var repository = new AnyNullableIdRepository(_dbContext);
 
             // Act & Assert
             repository.Invoking(r => r.Delete(null)).Should().Throw<ArgumentNullException>();
@@ -427,8 +421,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public async Task DeleteAsync_Null_ThrowsArgumentNullException()
         {
             // Arrange
-            var logger = A.Fake<ILogger<AnyNullableIdRepository>>();
-            var nullableRepository = new AnyNullableIdRepository(_dbContext, logger);
+            var nullableRepository = new AnyNullableIdRepository(_dbContext);
 
             // Act & Assert
             await nullableRepository.Awaiting(r => r.DeleteAsync(null)).Should().ThrowAsync<ArgumentNullException>();

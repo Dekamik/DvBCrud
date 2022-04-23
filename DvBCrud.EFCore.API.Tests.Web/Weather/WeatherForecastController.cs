@@ -7,7 +7,7 @@ namespace DvBCrud.EFCore.API.Tests.Web.Weather
     [ExcludeFromCodeCoverage]
     public class WeatherForecastController : CrudController<WeatherForecast, int, IWeatherForecastRepository>
     {
-        public WeatherForecastController(IWeatherForecastRepository repository, ILogger<WeatherForecastController> logger) : base(repository, logger)
+        public WeatherForecastController(IWeatherForecastRepository repository) : base(repository)
         {
 
         }

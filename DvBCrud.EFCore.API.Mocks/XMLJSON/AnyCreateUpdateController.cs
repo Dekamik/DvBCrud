@@ -11,7 +11,7 @@ namespace DvBCrud.EFCore.API.Mocks.XMLJSON
     [ExcludeFromCodeCoverage]
     public class AnyCreateUpdateController : CrudController<AnyEntity, int, IAnyRepository>
     {
-        public AnyCreateUpdateController(IAnyRepository repository, ILogger logger) : base(repository, logger, CrudAction.Create, CrudAction.Update)
+        public AnyCreateUpdateController(IAnyRepository repository, ILogger logger) : base(repository, CrudAction.Create, CrudAction.Update)
         {
         }
     }

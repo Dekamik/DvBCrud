@@ -23,14 +23,14 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TEntity"/></returns>
-        TEntity Get(TId id);
+        TEntity? Get(TId id);
 
         /// <summary>
         /// Finds a single <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/> asynchronously
         /// </summary>
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TEntity"/></returns>
-        Task<TEntity> GetAsync(TId id);
+        Task<TEntity?> GetAsync(TId id);
 
         /// <summary>
         /// Creates the specified <paramref name="entity"/> and tracks it

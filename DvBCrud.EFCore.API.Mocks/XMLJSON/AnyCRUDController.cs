@@ -10,7 +10,7 @@ namespace DvBCrud.EFCore.API.Mocks.XMLJSON
     [ExcludeFromCodeCoverage]
     public class AnyCRUDController : CrudController<AnyEntity, int, IAnyRepository>
     {
-        public AnyCRUDController(IAnyRepository anyRepository, ILogger logger) : base(anyRepository, logger)
+        public AnyCRUDController(IAnyRepository anyRepository, ILogger logger) : base(anyRepository)
         {
 
         }

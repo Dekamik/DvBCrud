@@ -14,39 +14,36 @@ namespace DvBCrud.EFCore.Repositories
     {
         protected readonly TDbContext Context;
 
-        protected readonly ILogger Logger;
-
         private DbSet<TEntity> Set => Context.Set<TEntity>();
 
-        public Repository(TDbContext context, ILogger<Repository<TEntity, TId, TDbContext>> logger)
+        public Repository(TDbContext context)
         {
             Context = context;
-            Logger = logger;
         }
 
         public virtual IEnumerable<TEntity> GetAll()
         {
-            return Set.AsNoTracking();
+            return Set;
         }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
-        public virtual TEntity Get(TId id)
+        public virtual TEntity? Get(TId id)
         {
             if (id == null)
-                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+                throw new ArgumentNullException(nameof(id));
 
-            return Set.AsNoTracking().FirstOrDefault(e => e.Id.Equals(id));
+            return Set.FirstOrDefault(e => e.Id != null && e.Id.Equals(id));
         }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
-        public virtual Task<TEntity> GetAsync(TId id)
+        public virtual Task<TEntity?> GetAsync(TId id)
         {
             if (id == null)
-                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+                throw new ArgumentNullException(nameof(id));
 
-            return Set.AsNoTracking().FirstOrDefaultAsync(e => e.Id.Equals(id));
+            return Set.FirstOrDefaultAsync(e => e.Id != null && e.Id.Equals(id));
         }
 
         /// <inheritdoc/>
@@ -54,7 +51,7 @@ namespace DvBCrud.EFCore.Repositories
         public virtual void Create(TEntity entity)
         {
             if (entity == null)
-                throw new ArgumentNullException($"{nameof(entity)} cannot be null");
+                throw new ArgumentNullException(nameof(entity));
 
             Set.Add(entity);
         }
@@ -66,17 +63,16 @@ namespace DvBCrud.EFCore.Repositories
         public virtual void Update(TId id, TEntity entity)
         {
             if (id == null)
-                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+                throw new ArgumentNullException(nameof(id));
 
             if (entity == null)
-                throw new ArgumentNullException($"{nameof(entity)} cannot be null");
+                throw new ArgumentNullException(nameof(entity));
 
             var existingEntity = Set.Find(id);
 
             if (existingEntity == null)
             {
                 var message = $"{nameof(TEntity)} {id} not found";
-                Logger.LogDebug(message);
                 throw new KeyNotFoundException(message);
             }
 
@@ -90,17 +86,16 @@ namespace DvBCrud.EFCore.Repositories
         public virtual async Task UpdateAsync(TId id, TEntity entity)
         {
             if (id == null)
-                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+                throw new ArgumentNullException(nameof(id));
 
             if (entity == null)
-                throw new ArgumentNullException($"{nameof(entity)} cannot be null");
+                throw new ArgumentNullException(nameof(entity));
 
             var existingEntity = await Set.FindAsync(id);
 
             if (existingEntity == null)
             {
                 var message = $"{nameof(TEntity)} {id} not found";
-                Logger.LogDebug(message);
                 throw new KeyNotFoundException(message);
             }
 
@@ -113,14 +108,13 @@ namespace DvBCrud.EFCore.Repositories
         public virtual void Delete(TId id)
         {
             if (id == null)
-                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+                throw new ArgumentNullException(nameof(id));
 
             var entity = Set.Find(id);
 
             if (entity == null)
             {
                 var message = $"{nameof(TEntity)} {id} not found";
-                Logger.LogDebug(message);
                 throw new KeyNotFoundException(message);
             }
 
@@ -133,14 +127,13 @@ namespace DvBCrud.EFCore.Repositories
         public virtual async Task DeleteAsync(TId id)
         {
             if (id == null)
-                throw new ArgumentNullException($"{nameof(id)} cannot be null");
+                throw new ArgumentNullException(nameof(id));
 
             var entity = await Set.FindAsync(id);
 
             if (entity == null)
             {
                 var message = $"Couldn't find {nameof(TEntity)} with Id {id} for deletion";
-                Logger.LogDebug(message);
                 throw new KeyNotFoundException(message);
             }
 
