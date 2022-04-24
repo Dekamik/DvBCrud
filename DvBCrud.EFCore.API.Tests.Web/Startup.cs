@@ -24,7 +24,7 @@ namespace DvBCrud.EFCore.API.Tests.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WebDbContext>(options =>
+            services.AddDbContext<WeatherDbContext>(options =>
             {
                 options.UseInMemoryDatabase(databaseName: "WebDB");
             });
@@ -34,6 +34,8 @@ namespace DvBCrud.EFCore.API.Tests.Web
             services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
             services.AddControllers();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +44,8 @@ namespace DvBCrud.EFCore.API.Tests.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseRouting();

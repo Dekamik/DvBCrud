@@ -4,9 +4,9 @@ using DvBCrud.EFCore.Repositories;
 namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data
 {
     [ExcludeFromCodeCoverage]
-    public class WeatherForecastRepository : Repository<WeatherForecast, int, WebDbContext>, IWeatherForecastRepository
+    public class WeatherForecastRepository : Repository<WeatherForecast, int, WeatherDbContext>, IWeatherForecastRepository
     {
-        public WeatherForecastRepository(WebDbContext context) : base(context)
+        public WeatherForecastRepository(WeatherDbContext context) : base(context)
         {
         }
     }

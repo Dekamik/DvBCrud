@@ -15,7 +15,7 @@ namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data
 
         protected override void CopyImpl(BaseEntity<int> other)
         {
-            WeatherForecast o = other as WeatherForecast;
+            var o = other as WeatherForecast;
             Date = o.Date;
             TemperatureC = o.TemperatureC;
             Summary = o.Summary;
