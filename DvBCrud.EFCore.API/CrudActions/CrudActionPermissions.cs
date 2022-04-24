@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace DvBCrud.EFCore.API.CrudActions
 {
@@ -9,6 +8,7 @@ namespace DvBCrud.EFCore.API.CrudActions
 
         public CrudActionPermissions()
         {
+            _allowedActions = null;
         }
 
         public CrudActionPermissions(params CrudAction[]? allowedActions)

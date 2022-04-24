@@ -1,9 +1,5 @@
-﻿using DvBCrud.EFCore.Mocks.Entities;
-using FakeItEasy;
-using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using FluentAssertions;
+using DvBCrud.EFCore.Mocks.Core.Entities;
 using Xunit;
 
 namespace DvBCrud.EFCore.Tests.Entities
@@ -16,7 +12,7 @@ namespace DvBCrud.EFCore.Tests.Entities
             // Arrange
             var original = new AnyEntity
             {
-                Id = 1,
+                Id = "1",
                 AnyString = "AnyString"
             };
             var newEntity = new AnyEntity
@@ -38,12 +34,12 @@ namespace DvBCrud.EFCore.Tests.Entities
             // Arrange
             var original = new AnyEntity
             {
-                Id = 1,
+                Id = "1",
                 AnyString = "AnyString"
             };
             var newEntity = new AnyEntity
             {
-                Id = 2,
+                Id = "2",
                 AnyString = "AnyOtherString"
             };
 

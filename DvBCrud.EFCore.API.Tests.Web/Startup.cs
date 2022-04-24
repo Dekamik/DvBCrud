@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using DvBCrud.EFCore.API.Tests.Web.Weather;
+using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
+using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
+using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +29,9 @@ namespace DvBCrud.EFCore.API.Tests.Web
                 options.UseInMemoryDatabase(databaseName: "WebDB");
             });
 
-            services.AddTransient<IWeatherForecastRepository, WeatherForecastRepository>();
+            services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
+            services.AddScoped<IWeatherForecastConverter, WeatherForecastConverter>();
+            services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
             services.AddControllers();
         }

@@ -17,13 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.API", "DvBCr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.API.Tests", "DvBCrud.EFCore.API.Tests\DvBCrud.EFCore.API.Tests.csproj", "{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.API.Mocks", "DvBCrud.EFCore.API.Mocks\DvBCrud.EFCore.API.Mocks.csproj", "{CD23ADB5-6755-4682-8EC7-B7D71C591518}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.Mocks", "DvBCrud.EFCore.Mocks\DvBCrud.EFCore.Mocks.csproj", "{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore.API.Tests.Web", "DvBCrud.EFCore.API.Tests.Web\DvBCrud.EFCore.API.Tests.Web.csproj", "{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore.Services", "DvBCrud.EFCore.Services\DvBCrud.EFCore.Services.csproj", "{D329D113-26FE-46A9-8892-AF33C560A302}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore.Services.Tests", "DvBCrud.EFCore.Services.Tests\DvBCrud.EFCore.Services.Tests.csproj", "{09AF4927-C20C-4668-8CD3-0D07264F52DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,6 @@ Global
 		{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD23ADB5-6755-4682-8EC7-B7D71C591518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD23ADB5-6755-4682-8EC7-B7D71C591518}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD23ADB5-6755-4682-8EC7-B7D71C591518}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD23ADB5-6755-4682-8EC7-B7D71C591518}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{D329D113-26FE-46A9-8892-AF33C560A302}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D329D113-26FE-46A9-8892-AF33C560A302}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D329D113-26FE-46A9-8892-AF33C560A302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09AF4927-C20C-4668-8CD3-0D07264F52DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09AF4927-C20C-4668-8CD3-0D07264F52DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09AF4927-C20C-4668-8CD3-0D07264F52DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09AF4927-C20C-4668-8CD3-0D07264F52DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

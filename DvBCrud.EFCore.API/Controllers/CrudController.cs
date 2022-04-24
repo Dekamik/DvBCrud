@@ -1,113 +1,104 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DvBCrud.EFCore.API.CrudActions;
-using DvBCrud.EFCore.Entities;
-using DvBCrud.EFCore.Repositories;
+using DvBCrud.EFCore.Services;
+using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.EFCore.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public abstract class CrudController<TEntity, TId, TRepository> : ControllerBase
-        where TEntity : BaseEntity<TId>
-        where TRepository : IRepository<TEntity, TId>
+    public abstract class CrudController<TId, TModel, TService> : ControllerBase
+        where TModel : BaseModel
+        where TService : IService<TId, TModel>
     {
-        protected readonly TRepository Repository;
+        protected readonly TService Service;
         protected readonly CrudActionPermissions CrudActions;
 
-        public CrudController(TRepository repository)
+        public CrudController(TService service)
         {
-            Repository = repository;
+            Service = service;
             CrudActions = new CrudActionPermissions();
         }
 
-        public CrudController(TRepository repository, params CrudAction[]? allowedActions)
+        public CrudController(TService service, params CrudAction[]? allowedActions)
         {
-            Repository = repository;
+            Service = service;
             CrudActions = new CrudActionPermissions(allowedActions);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] TEntity entity)
+        public IActionResult Create([FromBody] TModel model)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Create))
             {
-                var message = $"Create forbidden on {typeof(TEntity).Name}";
-                return Forbidden(message);
+                return Forbidden($"Create forbidden on {typeof(TModel)}");
             }
 
-            // Id must NOT be predefined
-            if (entity.Id != null && !entity.Id.Equals(default(TId)))
+            try
             {
-                return BadRequest($"{typeof(TEntity).Name}.Id must NOT be predefined.");
+                Service.Create(model);
+                return Ok();
             }
-
-            Repository.Create(entity);
-            Repository.SaveChanges();
-
-            return Ok();
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpGet("{id}")]
-        public ActionResult<TEntity> Read(TId id)
+        public ActionResult<TModel> Read(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
             {
-                var message = $"Read forbidden on {typeof(TEntity).Name}";
-                return Forbidden(message);
+                return Forbidden($"Read forbidden on {typeof(TModel)}");
             }
 
-            var entity = Repository.Get(id);
+            var entity = Service.Get(id);
 
             if (entity == null)
             {
-                var message = $"{typeof(TEntity).Name} {id} not found.";
-                return NotFound(message);
+                return NotFound($"{typeof(TModel)} {id} not found.");
             }
 
             return Ok(entity);
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<TEntity>> ReadAll()
+        public ActionResult<IEnumerable<TModel>> ReadAll()
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
             {
-                var message = $"Read forbidden on {typeof(TEntity).Name}";
-                return Forbidden(message);
+                return Forbidden($"Read forbidden on {typeof(TModel)}");
             }
 
-            var entities = Repository.GetAll();
+            var entities = Service.GetAll();
 
             return Ok(entities);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(TId id, [FromBody] TEntity entity)
+        public IActionResult Update(TId id, [FromBody] TModel model)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Update))
             {
-                var message = $"Update forbidden on {typeof(TEntity).Name}";
-                return Forbidden(message);
-            }
-
-            if (entity.Id == null || entity.Id.Equals(default(TId)))
-            {
-                return BadRequest($"{nameof(id)} must be defined.");
+                return Forbidden($"Update forbidden on {typeof(TModel)}");
             }
 
             try
             {
-                Repository.Update(id, entity);
+                Service.Update(id, model);
+                return Ok();
             }
             catch (KeyNotFoundException)
             {
-                return NotFound($"{typeof(TEntity).Name} {entity.Id} not found.");
+                return NotFound($"{typeof(TModel)} {id} not found.");
             }
-
-            Repository.SaveChanges();
-
-            return Ok();
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -115,23 +106,22 @@ namespace DvBCrud.EFCore.API.Controllers
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Delete))
             {
-                var message = $"Delete forbidden on {typeof(TEntity).Name}";
-                return Forbidden(message);
+                return Forbidden($"Delete forbidden on {typeof(TModel)}");
             }
 
             try
             {
-                Repository.Delete(id);
+                Service.Delete(id);
+                return Ok();
             }
             catch (KeyNotFoundException)
             {
-                var message = $"{typeof(TEntity).Name} {id} not found.";
-                return NotFound(message);
+                return NotFound($"{typeof(TModel)} {id} not found.");
             }
-            
-            Repository.SaveChanges();
-
-            return Ok();
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex);
+            }
         }
 
         protected ObjectResult Forbidden(string message) => StatusCode(403, message);

@@ -12,7 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DvBCrud.EFCore.API\DvBCrud.EFCore.API.csproj" />
+    <ProjectReference Include="..\DvBCrud.EFCore.Services\DvBCrud.EFCore.Services.csproj" />
     <ProjectReference Include="..\DvBCrud.EFCore\DvBCrud.EFCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Core" />
   </ItemGroup>
 
 </Project>
