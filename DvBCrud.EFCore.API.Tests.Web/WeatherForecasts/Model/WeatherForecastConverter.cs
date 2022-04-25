@@ -1,8 +1,10 @@
-﻿using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
+﻿using System.Diagnostics.CodeAnalysis;
+using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.EFCore.Services.Models;
 
 namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
 
+[ExcludeFromCodeCoverage]
 public class WeatherForecastConverter : Converter<WeatherForecast, WeatherForecastModel>, IWeatherForecastConverter
 {
     public override WeatherForecastModel ToModel(WeatherForecast entity) =>
