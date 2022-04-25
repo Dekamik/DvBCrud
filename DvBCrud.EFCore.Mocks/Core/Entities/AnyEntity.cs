@@ -3,9 +3,8 @@ using DvBCrud.EFCore.Entities;
 
 namespace DvBCrud.EFCore.Mocks.Core.Entities
 {
-    // Using string type for Id to test nullable cases
     [ExcludeFromCodeCoverage]
-    public class AnyEntity : BaseEntity<string>
+    public class AnyEntity : BaseEntity<string> // Using string type for Id to test nullable cases
     {
         public string AnyString { get; set; }
 

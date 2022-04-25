@@ -30,7 +30,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TModel entity)
+        public virtual async Task<IActionResult> Create([FromBody] TModel entity)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Create))
             {
@@ -49,7 +49,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TModel>> Read(TId id)
+        public virtual async Task<ActionResult<TModel>> Read(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
             {
@@ -67,7 +67,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TModel>>> ReadAll()
+        public virtual async Task<ActionResult<IEnumerable<TModel>>> ReadAll()
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
             {
@@ -80,7 +80,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(TId id, [FromBody] TModel entity)
+        public virtual async Task<IActionResult> Update(TId id, [FromBody] TModel entity)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Update))
             {
@@ -103,7 +103,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(TId id)
+        public virtual async Task<IActionResult> Delete(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Delete))
             {

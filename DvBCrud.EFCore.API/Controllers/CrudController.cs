@@ -29,7 +29,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] TModel model)
+        public virtual IActionResult Create([FromBody] TModel model)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Create))
             {
@@ -48,7 +48,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<TModel> Read(TId id)
+        public virtual ActionResult<TModel> Read(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
             {
@@ -66,7 +66,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<TModel>> ReadAll()
+        public virtual ActionResult<IEnumerable<TModel>> ReadAll()
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
             {
@@ -79,7 +79,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(TId id, [FromBody] TModel model)
+        public virtual IActionResult Update(TId id, [FromBody] TModel model)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Update))
             {
@@ -102,7 +102,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(TId id)
+        public virtual IActionResult Delete(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Delete))
             {

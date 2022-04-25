@@ -19,21 +19,21 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         Repository = repository;
     }
 
-    public IEnumerable<TModel> GetAll() => Repository.GetAll().Select(Converter.ToModel);
+    public virtual IEnumerable<TModel> GetAll() => Repository.GetAll().Select(Converter.ToModel);
 
-    public TModel? Get(TId id)
+    public virtual TModel? Get(TId id)
     {
         var entity = Repository.Get(id);
         return entity == null ? null : Converter.ToModel(entity);
     }
 
-    public async Task<TModel?> GetAsync(TId id)
+    public virtual async Task<TModel?> GetAsync(TId id)
     {
         var entity = await Repository.GetAsync(id);
         return entity == null ? null : Converter.ToModel(entity);
     }
 
-    public void Create(TModel model)
+    public virtual void Create(TModel model)
     {
         if (model == null)
             throw new ArgumentNullException(nameof(model));
@@ -42,7 +42,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         Repository.SaveChanges();
     }
 
-    public Task CreateAsync(TModel model)
+    public virtual Task CreateAsync(TModel model)
     {
         if (model == null)
             throw new ArgumentNullException(nameof(model));
@@ -51,7 +51,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         return Repository.SaveChangesAsync();
     }
 
-    public void Update(TId id, TModel model)
+    public virtual void Update(TId id, TModel model)
     {
         if (id == null)
             throw new ArgumentNullException(nameof(id));
@@ -62,7 +62,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         Repository.SaveChanges();
     }
     
-    public async Task UpdateAsync(TId id, TModel model)
+    public virtual async Task UpdateAsync(TId id, TModel model)
     {
         if (id == null)
             throw new ArgumentNullException(nameof(id));
@@ -73,7 +73,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         await Repository.SaveChangesAsync();
     }
 
-    public void Delete(TId id)
+    public virtual void Delete(TId id)
     {
         if (id == null)
             throw new ArgumentNullException(nameof(id));
@@ -82,7 +82,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         Repository.SaveChanges();
     }
     
-    public async Task DeleteAsync(TId id)
+    public virtual async Task DeleteAsync(TId id)
     {
         if (id == null)
             throw new ArgumentNullException(nameof(id));
