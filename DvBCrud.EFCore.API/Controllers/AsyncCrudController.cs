@@ -112,7 +112,7 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                await Task.Run(() => Service.Delete(id));
+                await Service.DeleteAsync(id);
                 return Ok();
             }
             catch (KeyNotFoundException)
