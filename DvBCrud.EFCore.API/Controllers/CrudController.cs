@@ -55,14 +55,14 @@ namespace DvBCrud.EFCore.API.Controllers
                 return Forbidden($"Read forbidden on {typeof(TModel)}");
             }
 
-            var entity = Service.Get(id);
+            var model = Service.Get(id);
 
-            if (entity == null)
+            if (model == null)
             {
                 return NotFound($"{typeof(TModel)} {id} not found.");
             }
 
-            return Ok(entity);
+            return Ok(model);
         }
 
         [HttpGet]
