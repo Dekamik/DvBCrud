@@ -50,19 +50,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '6.0.x'
-    
-    - name: Build
-      run: dotnet build DvBCrud.EFCore.Services/DvBCrud.EFCore.Services.csproj
-    
-    - name: Pack
-      run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore.Services/DvBCrud.EFCore.Services.csproj
-    
-    - name: Publish
-      run: dotnet nuget push DvBCrud.EFCore.Services/bin/Release/DvBCrud.EFCore.Services.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+      
+      - name: Build
+        run: dotnet build DvBCrud.EFCore.Services/DvBCrud.EFCore.Services.csproj
+      
+      - name: Pack
+        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore.Services/DvBCrud.EFCore.Services.csproj
+      
+      - name: Publish
+        run: dotnet nuget push DvBCrud.EFCore.Services/bin/Release/DvBCrud.EFCore.Services.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
   
   release-api:
     runs-on: ubuntu-latest
