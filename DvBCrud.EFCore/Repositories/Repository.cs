@@ -20,7 +20,7 @@ namespace DvBCrud.EFCore.Repositories
             Context = context;
         }
 
-        public virtual IEnumerable<TEntity> GetAll()
+        public virtual IQueryable<TEntity> GetAll()
         {
             return Set;
         }

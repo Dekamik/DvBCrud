@@ -39,7 +39,7 @@ public class ServiceTests
                 Id = "2",
                 AnyString = "Any2"
             }
-        };
+        }.AsQueryable();
 
         var models = new[]
         {
