@@ -1,5 +1,6 @@
 ﻿using DvBCrud.EFCore.Entities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DvBCrud.EFCore.Repositories
@@ -16,7 +17,7 @@ namespace DvBCrud.EFCore.Repositories
         /// Gets all entities
         /// </summary>
         /// <returns>An <see cref="IQueryable"/> containing all <typeparamref name="TEntity"/> instances</returns>
-        IEnumerable<TEntity> GetAll();
+        IQueryable<TEntity> GetAll();
 
         /// <summary>
         /// Finds a single <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/>
