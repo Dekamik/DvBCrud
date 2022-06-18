@@ -21,66 +21,30 @@ jobs:
         
       - name: Test
         run: dotnet test --no-restore --verbosity normal
-
-  release-core:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-
-      - name: Build
-        run: dotnet build DvBCrud.EFCore/DvBCrud.EFCore.csproj
-      
-      - name: Pack
-        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore/DvBCrud.EFCore.csproj
-      
-      - name: Publish
-        run: dotnet nuget push DvBCrud.EFCore/bin/Release/DvBCrud.EFCore.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
   
-  release-service:
+  release:
+    strategy:
+      matrix:
+        project:
+          - DvBCrud.EFCore
+          - DvBCrud.EFCore.Services
+          - DvBCrud.EFCore.API
     runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-      
-      - name: Build
-        run: dotnet build DvBCrud.EFCore.Services/DvBCrud.EFCore.Services.csproj
-      
-      - name: Pack
-        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore.Services/DvBCrud.EFCore.Services.csproj
-      
-      - name: Publish
-        run: dotnet nuget push DvBCrud.EFCore.Services/bin/Release/DvBCrud.EFCore.Services.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
   
-  release-api:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
 
       - name: Build
-        run: dotnet build DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
+        run: dotnet build ${{ matrix.project }}/${{ matrix.project }}.csproj
 
       - name: Pack
-        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" DvBCrud.EFCore.API/DvBCrud.EFCore.API.csproj
+        run: dotnet pack -c Release -p:PackageVersion="${{ github.event.release.tag_name }}" ${{ matrix.project }}/${{ matrix.project }}.csproj
 
       - name: Publish
-        run: dotnet nuget push DvBCrud.EFCore.API/bin/Release/DvBCrud.EFCore.API.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ${{ matrix.project }}/bin/Release/${{ matrix.project }}.*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
