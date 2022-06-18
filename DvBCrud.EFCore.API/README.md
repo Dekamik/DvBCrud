@@ -7,11 +7,12 @@ Library for rapidly developing CRUD API-endpoints for database entities.
 - [How it works](#How-it-works)
 - [Getting started](#Getting-started)
     * [1. Create entity and repository](#1.-Create-entity-and-repository)
-    * [2. Create a CRUDController](#2.-Create-a-CRUDController)
-    * [3. Use it](#3.-Use-it)
+    * [2. Create service, model and converter](#2.-Create-service,-model-and-converter)
+    * [3. Create a CRUDController](#3.-Create-a-CRUDController)
+    * [4. Use it](#4.-Use-it)
 - [Restricting actions](#Restricting-actions)
-    * [Read-only endpoint](#Read-only-endpoint)
-    * [Non-deleteable endpoint](#Non-deleteable-endpoint)
+    * [Read-only endpoint](#read-only-endpoint)
+    * [Non-deletable endpoint](#non-deletable-endpoint)
 
 ## How it works
 
@@ -33,7 +34,11 @@ Both controller types implement the following actions:
 
 Follow [this guide](../DvBCrud.EFCore) to create your entities and your repository.
 
-### 2. Create a CRUDController
+### 2. Create service, model and converter
+
+Follow [this guide](../DvBCrud.EFCore.Services) to create your services, models and converters
+
+### 3. Create a CRUDController
 
 Create the CRUDController for the entity and its repository
 
@@ -47,7 +52,7 @@ public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyD
 }
 ```
 
-### 3. Use it
+### 4. Use it
 
 Inject the controller in `Startup.cs` and you're good to go. The controller is now up and running on your application.
 
@@ -72,7 +77,7 @@ public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyD
 }
 ```
 
-### Non-deleteable endpoint
+### Non-deletable endpoint
 
 `AnyController.cs`
 ```cs
