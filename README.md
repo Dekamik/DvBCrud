@@ -1,5 +1,5 @@
 # DvBCrud.EFCore
-[![Build Status](https://travis-ci.com/Dekamik/DvBCrud.EFCore.svg?branch=master)](https://travis-ci.com/Dekamik/DvBCrud.EFCore)
+![Build Status](https://github.com/Dekamik/DvBCrud.EFCore/actions/workflows/release/badge.svg)
 
 EFCore implementation of DvBCrud.
 
