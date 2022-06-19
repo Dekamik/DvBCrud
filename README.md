@@ -1,4 +1,5 @@
 # DvBCrud.EFCore
+![Test Status](https://github.com/Dekamik/DvBCrud.EFCore/actions/workflows/test.yml/badge.svg)
 ![Build Status](https://github.com/Dekamik/DvBCrud.EFCore/actions/workflows/release.yml/badge.svg)
 
 EFCore implementation of DvBCrud.
