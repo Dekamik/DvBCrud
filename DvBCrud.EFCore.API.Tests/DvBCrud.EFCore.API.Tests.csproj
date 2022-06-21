@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DvBCrud.EFCore.API.Mocks\DvBCrud.EFCore.API.Mocks.csproj" />
     <ProjectReference Include="..\DvBCrud.EFCore.Mocks\DvBCrud.EFCore.Mocks.csproj" />
   </ItemGroup>
 
