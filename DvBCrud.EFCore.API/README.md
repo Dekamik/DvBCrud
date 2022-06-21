@@ -71,7 +71,7 @@ Here are some examples:
 ```cs
 public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyService anyService) : base(repository, CRUDAction.Read)
+    public AnyController(IAnyService anyService) : base(anyService, CRUDAction.Read)
     {
     }
 }
@@ -83,7 +83,7 @@ public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyCon
 ```cs
 public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyService anyService) : base(repository, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
+    public AnyController(IAnyService anyService) : base(anyService, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
     {
     }
 }
