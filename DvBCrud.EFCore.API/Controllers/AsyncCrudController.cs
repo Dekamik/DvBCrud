@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using DvBCrud.EFCore.API.CrudActions;
+using DvBCrud.EFCore.API.Filtering;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -15,21 +17,22 @@ namespace DvBCrud.EFCore.API.Controllers
         where TService : IService<TId, TModel>
     {
         protected readonly TService Service;
-        protected readonly CrudActionPermissions CrudActions;
+        protected readonly CrudAction[]? CrudActions;
 
         public AsyncCrudController(TService service)
         {
             Service = service;
-            CrudActions = new CrudActionPermissions();
+            CrudActions = GetType().GetCustomAttribute<CrudActionAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
         }
 
         public AsyncCrudController(TService service, params CrudAction[]? allowedActions)
         {
             Service = service;
-            CrudActions = new CrudActionPermissions(allowedActions);
+            CrudActions = allowedActions;
         }
 
         [HttpPost]
+        [SwaggerDocsFilter(CrudAction.Create)]
         public virtual async Task<IActionResult> Create([FromBody] TModel entity)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Create))
@@ -49,6 +52,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [SwaggerDocsFilter(CrudAction.Read)]
         public virtual async Task<ActionResult<TModel>> Read(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
@@ -67,6 +71,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerDocsFilter(CrudAction.Read)]
         public virtual async Task<ActionResult<IEnumerable<TModel>>> ReadAll()
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
@@ -80,6 +85,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [SwaggerDocsFilter(CrudAction.Update)]
         public virtual async Task<IActionResult> Update(TId id, [FromBody] TModel entity)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Update))
@@ -103,6 +109,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerDocsFilter(CrudAction.Delete)]
         public virtual async Task<IActionResult> Delete(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Delete))

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DvBCrud.EFCore.API.CrudActions
 {
@@ -15,7 +16,5 @@ namespace DvBCrud.EFCore.API.CrudActions
         {
             _allowedActions = allowedActions;
         }
-
-        public bool IsActionAllowed(CrudAction action) => _allowedActions?.Contains(action) ?? true;
     }
 }

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using DvBCrud.EFCore.API.Filtering;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Service;
@@ -35,7 +36,10 @@ namespace DvBCrud.EFCore.API.Tests.Web
 
             services.AddControllers();
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.DocumentFilter<SwaggerDocsFilter>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

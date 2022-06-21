@@ -33,7 +33,7 @@ When you've installed the library, below is an example for defining a `Repositor
 Create the entity by defining its Id type (`int`).
 
 `AnyEntity.cs`
-```cs
+```csharp
 public class AnyEntity : BaseEntity<int>
 {
     public string AnyString { get; set; }
@@ -49,7 +49,7 @@ public class AnyEntity : BaseEntity<int>
 ### 2. Add it to your DbContext
 
 `AnyDbContext.cs`
-```cs
+```csharp
 public class AnyDbContext : DbContext
 {
     public AnyDbContext(DbContextOptions options) : base(options)
@@ -66,14 +66,14 @@ public class AnyDbContext : DbContext
 Create the repository by defining its entity type (`AnyEntity`), the entity's Id type (`int`) and the DbContext type (`AnyDbContext`).
 
 `IAnyRepository.cs`
-```cs
+```csharp
 public interface IAnyRepository : IRepository<AnyEntity, int>
 {
 }
 ```
 
 `AnyRepository.cs`
-```cs
+```csharp
 public class AnyRepository : Repository<AnyEntity, int, AnyDbContext>, IAnyRepository
 {
     public AnyRepository(AnyDbContext dbContext, ILogger logger) : base(dbContext, logger)
@@ -88,7 +88,7 @@ public class AnyRepository : Repository<AnyEntity, int, AnyDbContext>, IAnyRepos
 After you've injected a new AnyRepository into your application's `Startup.cs`, you can use it like so:
 
 `AnyService.cs`
-```cs
+```csharp
 public class AnyService
 {
     private readonly IAnyRepository anyRepository;
