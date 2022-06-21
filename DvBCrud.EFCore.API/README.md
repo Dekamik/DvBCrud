@@ -69,9 +69,9 @@ Here are some examples:
 
 `AnyController.cs`
 ```cs
-public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
+public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Read)
+    public AnyController(IAnyService anyService) : base(repository, CRUDAction.Read)
     {
     }
 }
@@ -81,9 +81,9 @@ public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyD
 
 `AnyController.cs`
 ```cs
-public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
+public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyRepository repository, ILogger logger) : base(repository, logger, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
+    public AnyController(IAnyService anyService) : base(repository, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
     {
     }
 }
