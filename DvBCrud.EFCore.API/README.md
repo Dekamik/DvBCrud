@@ -44,9 +44,9 @@ Create the CRUDController for the entity and its repository
 
 `AnyController.cs`
 ```cs
-public class AnyController : CRUDController<AnyEntity, int, IAnyRepository, AnyDbContext>, IAnyController
+public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyRepository anyRepository, ILogger logger) : base(anyRepository, logger)
+    public AnyController(IAnyService anyService) : base(anyService)
     {
     }
 }
