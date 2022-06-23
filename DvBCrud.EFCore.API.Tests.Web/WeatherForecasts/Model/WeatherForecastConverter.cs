@@ -25,7 +25,9 @@ public class WeatherForecastConverter : Converter<WeatherForecast, WeatherForeca
 
     public override WeatherForecast ToEntity(WeatherForecastModel model)
     {
-        var weatherForecast = _repository.Get(model.Id) ?? new WeatherForecast();
+        var weatherForecast = model.Id != default ? 
+            _repository.Get(model.Id) ?? new WeatherForecast() : 
+            new WeatherForecast();
 
         weatherForecast.Date = model.Date;
         weatherForecast.Summary = model.Summary;

@@ -17,6 +17,7 @@ namespace DvBCrud.EFCore.Repositories
         /// Gets all entities
         /// </summary>
         /// <returns>An <see cref="IQueryable"/> containing all <typeparamref name="TEntity"/> instances</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
         IQueryable<TEntity> GetAll();
 
         /// <summary>
@@ -24,6 +25,7 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TEntity"/></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
         TEntity? Get(TId id);
 
         /// <summary>
@@ -31,12 +33,14 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TEntity"/></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
         Task<TEntity?> GetAsync(TId id);
 
         /// <summary>
         /// Creates the specified <paramref name="entity"/> and tracks it
         /// </summary>
         /// <param name="entity">The entity to create</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
         void Create(TEntity entity);
 
         /// <summary>
@@ -44,6 +48,9 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="id">The Id of entity to update</param>
         /// <param name="entity">New entity data</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <typeparamref name="TEntity"/> with <paramref name="id"/> not found</exception>"
         void Update(TId id, TEntity entity);
 
         /// <summary>
@@ -51,18 +58,25 @@ namespace DvBCrud.EFCore.Repositories
         /// </summary>
         /// <param name="id">The Id of entity to update</param>
         /// <param name="entity">New entity data</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <typeparamref name="TEntity"/> with <paramref name="id"/> not found</exception>"
         Task UpdateAsync(TId id, TEntity entity);
 
         /// <summary>
         /// Finds and removes the <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/>
         /// </summary>
         /// <param name="id">Id of <typeparamref name="TEntity"/> to remove</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <typeparamref name="TEntity"/> with <paramref name="id"/> not found</exception>"
         void Delete(TId id);
 
         /// <summary>
         /// Finds and removes the <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/> asynchronously
         /// </summary>
         /// <param name="id">Id of <typeparamref name="TEntity"/> to remove</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <typeparamref name="TEntity"/> with <paramref name="id"/> not found</exception>"
         Task DeleteAsync(TId id);
 
         /// <summary>
