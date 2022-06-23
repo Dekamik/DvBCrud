@@ -7,6 +7,13 @@ namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
 [ExcludeFromCodeCoverage]
 public class WeatherForecastConverter : Converter<WeatherForecast, WeatherForecastModel>, IWeatherForecastConverter
 {
+    private readonly IWeatherForecastRepository _repository;
+    
+    public WeatherForecastConverter(IWeatherForecastRepository repository)
+    {
+        _repository = repository;
+    }
+    
     public override WeatherForecastModel ToModel(WeatherForecast entity) =>
         new()
         {
@@ -16,12 +23,14 @@ public class WeatherForecastConverter : Converter<WeatherForecast, WeatherForeca
             TemperatureC = entity.TemperatureC
         };
 
-    public override WeatherForecast ToEntity(WeatherForecastModel model) =>
-        new()
-        {
-            Id = model.Id,
-            Date = model.Date,
-            Summary = model.Summary,
-            TemperatureC = model.TemperatureC
-        };
+    public override WeatherForecast ToEntity(WeatherForecastModel model)
+    {
+        var weatherForecast = _repository.Get(model.Id) ?? new WeatherForecast();
+
+        weatherForecast.Date = model.Date;
+        weatherForecast.Summary = model.Summary;
+        weatherForecast.TemperatureC = model.TemperatureC;
+        
+        return weatherForecast;
+    }
 }
