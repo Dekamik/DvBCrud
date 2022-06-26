@@ -21,7 +21,7 @@ namespace DvBCrud.EFCore.API.Controllers
         public CrudController(TService service)
         {
             Service = service;
-            CrudActions = GetType().GetCustomAttribute<CrudActionAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
+            CrudActions = GetType().GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
         }
 
         [Obsolete("CrudAction constructor is deprecated and will be removed in a future release. Use CrudActionAttribute instead")]

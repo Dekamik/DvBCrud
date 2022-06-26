@@ -14,7 +14,7 @@ public class SwaggerDocsFilter : IDocumentFilter
         {
             var actionDescriptor = (ControllerActionDescriptor)description.ActionDescriptor;
             var action = actionDescriptor.MethodInfo.GetCustomAttribute<SwaggerDocsFilterAttribute>()?.HideIfNotAllowed;
-            var actionsAttribute = actionDescriptor.ControllerTypeInfo.GetCustomAttribute<CrudActionAttribute>();
+            var actionsAttribute = actionDescriptor.ControllerTypeInfo.GetCustomAttribute<AllowedActionsAttribute>();
             
             if (action == null || actionsAttribute == null)
                 continue;

@@ -22,7 +22,7 @@ namespace DvBCrud.EFCore.API.Controllers
         public AsyncCrudController(TService service)
         {
             Service = service;
-            CrudActions = GetType().GetCustomAttribute<CrudActionAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
+            CrudActions = GetType().GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
         }
 
         public AsyncCrudController(TService service, params CrudAction[]? allowedActions)

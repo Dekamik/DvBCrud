@@ -60,10 +60,10 @@ Inject the controller in `Startup.cs` and you're good to go. The controller is n
 
 ## Restricting actions
 
-You can restrict which actions are permitted calling the overloaded constructor when defining your controllers.
+You can restrict which actions are permitted by adding the CrudActionAttribute on the class.
 When a forbidden action is requested, the endpoint will return a 403 FORBIDDEN response.
 
-If no actions are provided to the constructor, the controller will default to allow all actions.
+If the attribute is not defined, the controller will default to allow all actions.
 
 Here are some examples:
 
@@ -71,9 +71,10 @@ Here are some examples:
 
 `AnyController.cs`
 ```csharp
+[AllowedActions(CRUDAction.Read)]
 public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyService anyService) : base(anyService, CRUDAction.Read)
+    public AnyController(IAnyService anyService) : base(anyService)
     {
     }
 }
@@ -83,9 +84,10 @@ public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyCon
 
 `AnyController.cs`
 ```csharp
+[AllowedActions(CRUDAction.Create CRUDAction.Read, CRUDAction.Update)]
 public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyService anyService) : base(anyService, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
+    public AnyController(IAnyService anyService) : base(anyService)
     {
     }
 }
