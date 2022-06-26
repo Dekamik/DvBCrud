@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 
 namespace DvBCrud.EFCore.Mocks.Services.Model;

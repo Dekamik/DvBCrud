@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using DvBCrud.EFCore.API.CrudActions;
+using DvBCrud.EFCore.API.Swagger;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,21 +16,23 @@ namespace DvBCrud.EFCore.API.Controllers
         where TService : IService<TId, TModel>
     {
         protected readonly TService Service;
-        protected readonly CrudActionPermissions CrudActions;
+        protected readonly CrudAction[]? CrudActions;
 
         public CrudController(TService service)
         {
             Service = service;
-            CrudActions = new CrudActionPermissions();
+            CrudActions = GetType().GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
         }
 
+        [Obsolete("CrudAction constructor is deprecated and will be removed in a future release. Use AllowedActionsAttribute instead")]
         public CrudController(TService service, params CrudAction[]? allowedActions)
         {
             Service = service;
-            CrudActions = new CrudActionPermissions(allowedActions);
+            CrudActions = allowedActions;
         }
 
         [HttpPost]
+        [SwaggerDocsFilter(CrudAction.Create)]
         public virtual IActionResult Create([FromBody] TModel model)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Create))
@@ -48,6 +52,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [SwaggerDocsFilter(CrudAction.Read)]
         public virtual ActionResult<TModel> Read(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
@@ -66,6 +71,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerDocsFilter(CrudAction.Read)]
         public virtual ActionResult<IEnumerable<TModel>> ReadAll()
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
@@ -79,6 +85,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [SwaggerDocsFilter(CrudAction.Update)]
         public virtual IActionResult Update(TId id, [FromBody] TModel model)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Update))
@@ -102,6 +109,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SwaggerDocsFilter(CrudAction.Delete)]
         public virtual IActionResult Delete(TId id)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Delete))

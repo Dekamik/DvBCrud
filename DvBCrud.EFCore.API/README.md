@@ -13,6 +13,8 @@ Library for rapidly developing CRUD API-endpoints for database entities.
 - [Restricting actions](#Restricting-actions)
     * [Read-only endpoint](#read-only-endpoint)
     * [Non-deletable endpoint](#non-deletable-endpoint)
+    * [Hide restricted actions in Swagger Docs](#hide-restricted-actions-in-swagger-docs)
+- [API Example](#api-example)
 
 ## How it works
 
@@ -43,7 +45,7 @@ Follow [this guide](../DvBCrud.EFCore.Services) to create your services, models 
 Create the CRUDController for the entity and its repository
 
 `AnyController.cs`
-```cs
+```csharp
 public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
     public AnyController(IAnyService anyService) : base(anyService)
@@ -58,20 +60,21 @@ Inject the controller in `Startup.cs` and you're good to go. The controller is n
 
 ## Restricting actions
 
-You can restrict which actions are permitted calling the overloaded constructor when defining your controllers.
+You can restrict which actions are permitted by adding the CrudActionAttribute on the class.
 When a forbidden action is requested, the endpoint will return a 403 FORBIDDEN response.
 
-If no actions are provided to the constructor, the controller will default to allow all actions.
+If the attribute is not defined, the controller will default to allow all actions.
 
 Here are some examples:
 
 ### Read-only endpoint
 
 `AnyController.cs`
-```cs
+```csharp
+[AllowedActions(CRUDAction.Read)]
 public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyService anyService) : base(anyService, CRUDAction.Read)
+    public AnyController(IAnyService anyService) : base(anyService)
     {
     }
 }
@@ -80,11 +83,28 @@ public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyCon
 ### Non-deletable endpoint
 
 `AnyController.cs`
-```cs
+```csharp
+[AllowedActions(CRUDAction.Create CRUDAction.Read, CRUDAction.Update)]
 public class AnyController : CRUDController<int, AnyModel, IAnyService>, IAnyController
 {
-    public AnyController(IAnyService anyService) : base(anyService, CRUDAction.Create CRUDAction.Read, CRUDAction.Update)
+    public AnyController(IAnyService anyService) : base(anyService)
     {
     }
 }
 ```
+
+### Hide restricted actions in Swagger Docs
+
+To hide the restricted actions in Swagger UI, you need to add the `SwaggerDocsFilter` when declaring Swagger in Program.cs like so:
+
+```csharp
+[...]
+services.AddSwaggerGen(c => {
+    c.DocumentFilter<SwaggerDocsFilter>();
+}
+[...]
+```
+
+## API Example
+
+You can find a fully-implemented working API example in the [DvBCrud.EFCore.API.Tests.Web](../DvBCrud.EFCore.API.Tests.Web) project.
