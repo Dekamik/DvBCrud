@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using DvBCrud.EFCore.API.CrudActions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
@@ -6,6 +7,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace DvBCrud.EFCore.API.Swagger;
 
+[ExcludeFromCodeCoverage]
 public class SwaggerDocsFilter : IDocumentFilter
 {
     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
@@ -14,20 +16,20 @@ public class SwaggerDocsFilter : IDocumentFilter
         {
             var actionDescriptor = (ControllerActionDescriptor)description.ActionDescriptor;
             var action = actionDescriptor.MethodInfo.GetCustomAttribute<SwaggerDocsFilterAttribute>()?.HideIfNotAllowed;
-            var controllerName = actionDescriptor.ControllerName;
-            var actionsAttribute = actionDescriptor.ControllerTypeInfo.GetCustomAttribute<AllowedActionsAttribute>();
+            var allowedActionsAttribute = actionDescriptor.ControllerTypeInfo.GetCustomAttribute<AllowedActionsAttribute>();
             
-            if (action == null || actionsAttribute == null)
+            if (action == null || allowedActionsAttribute == null)
                 continue;
 
-            if (actionsAttribute.AllowedActions.IsActionAllowed(action.Value)) 
+            if (allowedActionsAttribute.AllowedActions.IsActionAllowed(action.Value)) 
                 continue;
             
             var method = description.HttpMethod!.ToLower();
+            var controllerName = actionDescriptor.ControllerName.ToLower();
 
             foreach (var path in swaggerDoc.Paths)
             {
-                if (!path.Key.ToLower().Contains(controllerName.ToLower()))
+                if (!path.Key.ToLower().Contains(controllerName))
                     continue;
                 
                 foreach (var operation in path.Value.Operations.Keys)
