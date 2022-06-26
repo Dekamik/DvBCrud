@@ -1,7 +1,7 @@
 ﻿using System;
 using DvBCrud.EFCore.API.CrudActions;
 
-namespace DvBCrud.EFCore.API.Filtering;
+namespace DvBCrud.EFCore.API.Swagger;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class SwaggerDocsFilterAttribute : Attribute

@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using DvBCrud.EFCore.API.Filtering;
+using DvBCrud.EFCore.API.Swagger;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Service;

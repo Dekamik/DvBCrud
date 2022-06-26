@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using DvBCrud.EFCore.API.CrudActions;
-using DvBCrud.EFCore.API.Filtering;
+using DvBCrud.EFCore.API.Swagger;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
