@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace DvBCrud.EFCore.API.CrudActions
+﻿namespace DvBCrud.EFCore.API.CrudActions
 {
     public class CrudActionPermissions
     {

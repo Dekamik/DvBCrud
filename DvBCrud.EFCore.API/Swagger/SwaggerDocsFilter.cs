@@ -14,6 +14,7 @@ public class SwaggerDocsFilter : IDocumentFilter
         {
             var actionDescriptor = (ControllerActionDescriptor)description.ActionDescriptor;
             var action = actionDescriptor.MethodInfo.GetCustomAttribute<SwaggerDocsFilterAttribute>()?.HideIfNotAllowed;
+            var controllerName = actionDescriptor.ControllerName;
             var actionsAttribute = actionDescriptor.ControllerTypeInfo.GetCustomAttribute<AllowedActionsAttribute>();
             
             if (action == null || actionsAttribute == null)
@@ -26,6 +27,9 @@ public class SwaggerDocsFilter : IDocumentFilter
 
             foreach (var path in swaggerDoc.Paths)
             {
+                if (!path.Key.ToLower().Contains(controllerName.ToLower()))
+                    continue;
+                
                 foreach (var operation in path.Value.Operations.Keys)
                 {
                     switch (operation)
