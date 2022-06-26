@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using DvBCrud.EFCore.API.CrudActions;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -24,12 +25,12 @@ public class SwaggerDocsFilter : IDocumentFilter
             if (allowedActionsAttribute.AllowedActions.IsActionAllowed(action.Value)) 
                 continue;
             
-            var method = description.HttpMethod!.ToLower();
-            var controllerName = actionDescriptor.ControllerName.ToLower();
+            var method = description.HttpMethod;
+            var controllerName = actionDescriptor.ControllerName;
 
             foreach (var path in swaggerDoc.Paths)
             {
-                if (!path.Key.ToLower().Contains(controllerName))
+                if (!IsGeneratedEndpoint(controllerName, path.Key))
                     continue;
                 
                 foreach (var operation in path.Value.Operations.Keys)
@@ -37,22 +38,22 @@ public class SwaggerDocsFilter : IDocumentFilter
                     switch (operation)
                     {
                         case OperationType.Get:
-                            if (method == "get")
+                            if (method == "GET")
                                 path.Value.Operations.Remove(operation);
                             break;
                         
                         case OperationType.Post:
-                            if (method == "post")
+                            if (method == "POST")
                                 path.Value.Operations.Remove(operation);
                             break;
                         
                         case OperationType.Put:
-                            if (method == "put")
+                            if (method == "PUT")
                                 path.Value.Operations.Remove(operation);
                             break;
                         
                         case OperationType.Delete:
-                            if (method == "delete")
+                            if (method == "DELETE")
                                 path.Value.Operations.Remove(operation);
                             break;
 
@@ -67,4 +68,7 @@ public class SwaggerDocsFilter : IDocumentFilter
             }
         }
     }
+
+    private static bool IsGeneratedEndpoint(string controllerName, string path) =>
+        path == "/" + controllerName || path == "/" + controllerName + "/{id}";
 }
