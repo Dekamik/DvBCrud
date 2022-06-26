@@ -11,7 +11,7 @@ namespace DvBCrud.EFCore.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public TId Id { get; set; }
+        public TId Id { get; set; } = default!;
 
         /// <summary>
         /// Copy other entity's values to this entity
