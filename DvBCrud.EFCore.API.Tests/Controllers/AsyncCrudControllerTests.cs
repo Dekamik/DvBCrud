@@ -54,7 +54,7 @@ public class AsyncCrudControllerTests
         var result = await controller.Create(model) as ObjectResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.Forbidden);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.MethodNotAllowed);
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public class AsyncCrudControllerTests
         var result = (await controller.Read("1")).Result as ObjectResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.Forbidden);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.MethodNotAllowed);
     }
     
     [Fact]
@@ -168,7 +168,7 @@ public class AsyncCrudControllerTests
         var result = (await controller.ReadAll()).Result as ObjectResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.Forbidden);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.MethodNotAllowed);
     }
 
     [Fact]
@@ -205,7 +205,7 @@ public class AsyncCrudControllerTests
         var result = await controller.Update(id, model) as ObjectResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.Forbidden);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.MethodNotAllowed);
     }
 
     [Fact]
@@ -265,7 +265,7 @@ public class AsyncCrudControllerTests
         var result = await controller.Delete(id) as ObjectResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.Forbidden);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.MethodNotAllowed);
     }
 
     [Fact]
