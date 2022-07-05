@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
 using System.Reflection;
+using DvBCrud.Common.Api.Controllers;
 using DvBCrud.Common.Api.CrudActions;
 using DvBCrud.Common.Api.Swagger;
 using DvBCrud.EFCore.Services;
@@ -12,7 +14,7 @@ namespace DvBCrud.EFCore.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public abstract class CrudController<TId, TModel, TService> : ControllerBase
+    public abstract class CrudController<TId, TModel, TService> : CrudControllerBase<TModel>
         where TModel : BaseModel
         where TService : IService<TId, TModel>
     {
@@ -39,7 +41,7 @@ namespace DvBCrud.EFCore.API.Controllers
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Create))
             {
-                return Forbidden($"Create forbidden on {typeof(TModel)}");
+                return NotAllowed(HttpMethod.Post.Method);
             }
 
             try
@@ -59,7 +61,7 @@ namespace DvBCrud.EFCore.API.Controllers
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
             {
-                return Forbidden($"Read forbidden on {typeof(TModel)}");
+                return NotAllowed(HttpMethod.Get.Method);
             }
 
             var model = Service.Get(id);
@@ -78,7 +80,7 @@ namespace DvBCrud.EFCore.API.Controllers
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Read))
             {
-                return Forbidden($"Read forbidden on {typeof(TModel)}");
+                return NotAllowed(HttpMethod.Get.Method);
             }
 
             var entities = Service.GetAll();
@@ -92,7 +94,7 @@ namespace DvBCrud.EFCore.API.Controllers
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Update))
             {
-                return Forbidden($"Update forbidden on {typeof(TModel)}");
+                return NotAllowed(HttpMethod.Put.Method);
             }
 
             try
@@ -116,7 +118,7 @@ namespace DvBCrud.EFCore.API.Controllers
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Delete))
             {
-                return Forbidden($"Delete forbidden on {typeof(TModel)}");
+                return NotAllowed(HttpMethod.Delete.Method);
             }
 
             try
@@ -133,7 +135,5 @@ namespace DvBCrud.EFCore.API.Controllers
                 return BadRequest(ex);
             }
         }
-
-        protected ObjectResult Forbidden(string message) => StatusCode(403, message);
     }
 }
