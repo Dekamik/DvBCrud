@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Threading.Tasks;
-using DvBCrud.EFCore.API.CrudActions;
-using DvBCrud.EFCore.API.Swagger;
+using DvBCrud.Common.Api.CrudActions;
+using DvBCrud.Common.Api.Swagger;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,7 @@ namespace DvBCrud.EFCore.API.Controllers
             CrudActions = GetType().GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("CrudAction constructor is deprecated and will be removed in a future release. Use AllowedActionsAttribute instead")]
         public AsyncCrudController(TService service, params CrudAction[]? allowedActions)
         {
