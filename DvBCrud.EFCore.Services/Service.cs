@@ -33,22 +33,26 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         return entity == null ? null : Converter.ToModel(entity);
     }
 
-    public virtual void Create(TModel model)
+    public virtual TId Create(TModel model)
     {
         if (model == null)
             throw new ArgumentNullException(nameof(model));
 
-        Repository.Create(Converter.ToEntity(model));
+        var entity = Converter.ToEntity(model);
+        Repository.Create(entity);
         Repository.SaveChanges();
+        return entity.Id;
     }
 
-    public virtual Task CreateAsync(TModel model)
+    public virtual async Task<TId> CreateAsync(TModel model)
     {
         if (model == null)
             throw new ArgumentNullException(nameof(model));
 
-        Repository.Create(Converter.ToEntity(model));
-        return Repository.SaveChangesAsync();
+        var entity = Converter.ToEntity(model);
+        Repository.Create(entity);
+        await Repository.SaveChangesAsync();
+        return entity.Id;
     }
 
     public virtual void Update(TId id, TModel model)

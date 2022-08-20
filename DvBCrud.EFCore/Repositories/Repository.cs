@@ -65,7 +65,7 @@ namespace DvBCrud.EFCore.Repositories
 
             if (existingEntity == null)
             {
-                var message = $"{nameof(TEntity)} {id} not found";
+                var message = $"{typeof(TEntity).Name} {id} not found";
                 throw new KeyNotFoundException(message);
             }
 
@@ -85,7 +85,7 @@ namespace DvBCrud.EFCore.Repositories
 
             if (existingEntity == null)
             {
-                var message = $"{nameof(TEntity)} {id} not found";
+                var message = $"{typeof(TEntity).Name} {id} not found";
                 throw new KeyNotFoundException(message);
             }
 
@@ -102,7 +102,7 @@ namespace DvBCrud.EFCore.Repositories
 
             if (entity == null)
             {
-                var message = $"{nameof(TEntity)} {id} not found";
+                var message = $"{typeof(TEntity).Name} {id} not found";
                 throw new KeyNotFoundException(message);
             }
 
@@ -119,7 +119,7 @@ namespace DvBCrud.EFCore.Repositories
 
             if (entity == null)
             {
-                var message = $"Couldn't find {nameof(TEntity)} with Id {id} for deletion";
+                var message = $"Couldn't find {typeof(TEntity).Name} with Id {id} for deletion";
                 throw new KeyNotFoundException(message);
             }
 
