@@ -41,7 +41,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 var id = Service.Create(model);
-                var url = UrlHelper.GetUrl(Request, id);
+                var url = UrlHelper.GetResourceUrl(Request, id);
                 return Created(url, null);
             }
             catch (ArgumentNullException ex)

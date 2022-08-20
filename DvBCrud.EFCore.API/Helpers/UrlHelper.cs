@@ -6,7 +6,7 @@ namespace DvBCrud.EFCore.API.Helpers;
 
 public static class UrlHelper
 {
-    public static Uri GetUrl<TId>(HttpRequest request, TId id)
+    public static Uri GetResourceUrl<TId>(HttpRequest request, TId id)
     {
         return new Uri($"{request.GetDisplayUrl()}/{id}");
     }
