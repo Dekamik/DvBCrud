@@ -34,14 +34,14 @@ public class CrudControllerTests
     }
     
     [Fact]
-    public void Create_AnyModel_ReturnsOk()
+    public void Create_AnyModel_ReturnsCreated()
     {
         var model = new AnyModel();
 
-        var result = _controller.Create(model) as OkResult;
+        var result = _controller.Create(model) as CreatedResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.Created);
     }
 
     [Fact]
@@ -183,15 +183,15 @@ public class CrudControllerTests
     }
     
     [Fact]
-    public void Update_ExistingId_ReturnsOk()
+    public void Update_ExistingId_ReturnsNoContent()
     {
         const string id = "1";
         var model = new AnyModel();
 
-        var result = _controller.Update(id, model) as OkResult;
+        var result = _controller.Update(id, model) as NoContentResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
     }
 
     [Fact]
@@ -234,14 +234,14 @@ public class CrudControllerTests
     }
 
     [Fact]
-    public void Delete_ExistingId_ReturnsOk()
+    public void Delete_ExistingId_ReturnsNoContent()
     {
         const string id = "1";
 
-        var result = _controller.Delete(id) as OkResult;
+        var result = _controller.Delete(id) as NoContentResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
     }
     
     [Fact]
