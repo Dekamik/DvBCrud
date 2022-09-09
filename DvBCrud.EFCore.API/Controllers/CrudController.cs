@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using DvBCrud.Common.Api.Controllers;
 using DvBCrud.Common.Api.CrudActions;
 using DvBCrud.Common.Api.Swagger;
+using DvBCrud.EFCore.API.Helpers;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [SwaggerDocsFilter(CrudAction.Create)]
         public virtual IActionResult Create([FromBody] TModel model)
         {
@@ -38,8 +40,9 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                Service.Create(model);
-                return Ok();
+                var id = Service.Create(model);
+                var url = UrlHelper.GetResourceUrl(Request, id);
+                return Created(url, model);
             }
             catch (ArgumentNullException ex)
             {
@@ -92,7 +95,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 Service.Update(id, model);
-                return Ok();
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
@@ -116,7 +119,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 Service.Delete(id);
-                return Ok();
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using DvBCrud.Common.Api.Controllers;
 using DvBCrud.Common.Api.CrudActions;
 using DvBCrud.Common.Api.Swagger;
+using DvBCrud.EFCore.API.Helpers;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +31,9 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [SwaggerDocsFilter(CrudAction.Create)]
-        public virtual async Task<IActionResult> Create([FromBody] TModel entity)
+        public virtual async Task<IActionResult> Create([FromBody] TModel model)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Create))
             {
@@ -39,8 +42,9 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                await Service.CreateAsync(entity);
-                return Ok();
+                var id = await Service.CreateAsync(model);
+                var url = UrlHelper.GetResourceUrl(Request, id);
+                return Created(url, null);
             }
             catch (ArgumentNullException ex)
             {
@@ -83,7 +87,7 @@ namespace DvBCrud.EFCore.API.Controllers
 
         [HttpPut("{id}")]
         [SwaggerDocsFilter(CrudAction.Update)]
-        public virtual async Task<IActionResult> Update(TId id, [FromBody] TModel entity)
+        public virtual async Task<IActionResult> Update(TId id, [FromBody] TModel model)
         {
             if (!CrudActions.IsActionAllowed(CrudAction.Update))
             {
@@ -92,8 +96,8 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                await Service.UpdateAsync(id, entity);
-                return Ok();
+                await Service.UpdateAsync(id, model);
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
@@ -117,7 +121,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 await Service.DeleteAsync(id);
-                return Ok();
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
