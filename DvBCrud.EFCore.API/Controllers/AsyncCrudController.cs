@@ -105,7 +105,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 await Service.UpdateAsync(id, model);
-                return Ok();
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
@@ -129,7 +129,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 await Service.DeleteAsync(id);
-                return Ok();
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {

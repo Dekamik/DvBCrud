@@ -42,7 +42,7 @@ namespace DvBCrud.EFCore.API.Controllers
             {
                 var id = Service.Create(model);
                 var url = UrlHelper.GetResourceUrl(Request, id);
-                return Created(url, null);
+                return Created(url, model);
             }
             catch (ArgumentNullException ex)
             {
@@ -95,7 +95,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 Service.Update(id, model);
-                return Ok();
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
@@ -119,7 +119,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 Service.Delete(id);
-                return Ok();
+                return NoContent();
             }
             catch (KeyNotFoundException)
             {
