@@ -9,18 +9,21 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
+using IUrlHelper = DvBCrud.EFCore.API.Helpers.IUrlHelper;
 
 namespace DvBCrud.EFCore.API.Tests.Controllers;
 
 public class AsyncCrudControllerTests
 {
     private readonly IAnyService _service;
+    private readonly IUrlHelper _urlHelper;
     private readonly AnyAsyncCrudController _controller;
-    
+
     public AsyncCrudControllerTests()
     {
         _service = A.Fake<IAnyService>();
-        _controller = new AnyAsyncCrudController(_service);
+        _urlHelper = A.Fake<IUrlHelper>();
+        _controller = new AnyAsyncCrudController(_service, _urlHelper);
     }
 
     [Fact]
@@ -35,21 +38,21 @@ public class AsyncCrudControllerTests
     }
     
     [Fact]
-    public async Task Create_AnyModel_ReturnsOk()
+    public async Task Create_AnyModel_ReturnsCreated()
     {
         var model = new AnyModel();
 
-        var result = await _controller.Create(model) as OkResult;
+        var result = await _controller.Create(model) as CreatedResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.Created);
     }
 
     [Fact]
     public async Task Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>(), A.Fake<IUrlHelper>());
 
         var result = await controller.Create(model) as ObjectResult;
 
@@ -116,7 +119,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task Read_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyAsyncCreateUpdateController(_service);
+        var controller = new AnyAsyncCreateUpdateController(_service, _urlHelper);
 
         var result = (await controller.Read("1")).Result as ObjectResult;
 
@@ -163,7 +166,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyAsyncCreateUpdateController(_service);
+        var controller = new AnyAsyncCreateUpdateController(_service, _urlHelper);
 
         var result = (await controller.ReadAll()).Result as ObjectResult;
 
@@ -184,15 +187,15 @@ public class AsyncCrudControllerTests
     }
     
     [Fact]
-    public async Task Update_ExistingId_ReturnsOk()
+    public async Task Update_ExistingId_ReturnsNoContent()
     {
         const string id = "1";
         var model = new AnyModel();
 
-        var result = await _controller.Update(id, model) as OkResult;
+        var result = await _controller.Update(id, model) as NoContentResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
     }
 
     [Fact]
@@ -200,7 +203,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>(), A.Fake<IUrlHelper>());
 
         var result = await controller.Update(id, model) as ObjectResult;
 
@@ -235,14 +238,14 @@ public class AsyncCrudControllerTests
     }
 
     [Fact]
-    public async Task Delete_ExistingId_ReturnsOk()
+    public async Task Delete_ExistingId_ReturnsNoContent()
     {
         const string id = "1";
 
-        var result = await _controller.Delete(id) as OkResult;
+        var result = await _controller.Delete(id) as NoContentResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
     }
     
     [Fact]
@@ -260,7 +263,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>(), A.Fake<IUrlHelper>());
 
         var result = await controller.Delete(id) as ObjectResult;
 

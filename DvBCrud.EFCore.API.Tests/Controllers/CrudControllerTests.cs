@@ -8,18 +8,21 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
+using IUrlHelper = DvBCrud.EFCore.API.Helpers.IUrlHelper;
 
 namespace DvBCrud.EFCore.API.Tests.Controllers;
 
 public class CrudControllerTests
 {
     private readonly IAnyService _service;
+    private readonly IUrlHelper _urlHelper;
     private readonly AnyCrudController _controller;
     
     public CrudControllerTests()
     {
         _service = A.Fake<IAnyService>();
-        _controller = new AnyCrudController(_service);
+        _urlHelper = A.Fake<IUrlHelper>();
+        _controller = new AnyCrudController(_service, _urlHelper);
     }
 
     [Fact]
@@ -34,21 +37,21 @@ public class CrudControllerTests
     }
     
     [Fact]
-    public void Create_AnyModel_ReturnsOk()
+    public void Create_AnyModel_ReturnsCreated()
     {
         var model = new AnyModel();
 
-        var result = _controller.Create(model) as OkResult;
+        var result = _controller.Create(model) as CreatedResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.Created);
     }
 
     [Fact]
     public void Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyService>(), A.Fake<Helpers.IUrlHelper>());
 
         var result = controller.Create(model) as ObjectResult;
 
@@ -115,7 +118,7 @@ public class CrudControllerTests
     [Fact]
     public void Read_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyCreateUpdateController(_service);
+        var controller = new AnyCreateUpdateController(_service, _urlHelper);
 
         var result = controller.Read("1").Result as ObjectResult;
 
@@ -162,7 +165,7 @@ public class CrudControllerTests
     [Fact]
     public void ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyCreateUpdateController(_service);
+        var controller = new AnyCreateUpdateController(_service, _urlHelper);
 
         var result = controller.ReadAll().Result as ObjectResult;
 
@@ -183,15 +186,15 @@ public class CrudControllerTests
     }
     
     [Fact]
-    public void Update_ExistingId_ReturnsOk()
+    public void Update_ExistingId_ReturnsNoContent()
     {
         const string id = "1";
         var model = new AnyModel();
 
-        var result = _controller.Update(id, model) as OkResult;
+        var result = _controller.Update(id, model) as NoContentResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
     }
 
     [Fact]
@@ -199,7 +202,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyService>(), A.Fake<IUrlHelper>());
 
         var result = controller.Update(id, model) as ObjectResult;
 
@@ -234,14 +237,14 @@ public class CrudControllerTests
     }
 
     [Fact]
-    public void Delete_ExistingId_ReturnsOk()
+    public void Delete_ExistingId_ReturnsNoContent()
     {
         const string id = "1";
 
-        var result = _controller.Delete(id) as OkResult;
+        var result = _controller.Delete(id) as NoContentResult;
 
         result.Should().NotBeNull();
-        result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
+        result!.StatusCode.Should().Be((int)HttpStatusCode.NoContent);
     }
     
     [Fact]
@@ -259,7 +262,7 @@ public class CrudControllerTests
     public void Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyService>(), A.Fake<IUrlHelper>());
 
         var result = controller.Delete(id) as ObjectResult;
 
