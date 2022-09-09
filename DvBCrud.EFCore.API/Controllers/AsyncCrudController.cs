@@ -30,14 +30,6 @@ namespace DvBCrud.EFCore.API.Controllers
             CrudActions = GetType().GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
         }
 
-        [ExcludeFromCodeCoverage]
-        [Obsolete("CrudAction constructor is deprecated and will be removed in a future release. Use AllowedActionsAttribute instead")]
-        public AsyncCrudController(TService service, params CrudAction[]? allowedActions)
-        {
-            Service = service;
-            CrudActions = allowedActions;
-        }
-
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [SwaggerDocsFilter(CrudAction.Create)]
