@@ -36,10 +36,7 @@ namespace DvBCrud.EFCore.API.Tests.Web
 
             services.AddControllers();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.DocumentFilter<SwaggerDocsFilter>();
-            });
+            services.AddCrudSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,8 +50,6 @@ namespace DvBCrud.EFCore.API.Tests.Web
             }
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
