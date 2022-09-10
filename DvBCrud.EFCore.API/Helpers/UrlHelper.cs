@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Http.Extensions;
 
 namespace DvBCrud.EFCore.API.Helpers;
 
-public class UrlHelper : IUrlHelper
+public static class UrlHelper
 {
-    public Uri GetResourceUrl<TId>(HttpRequest request, TId id)
+    public static Uri GetResourceUrl<TId>(HttpRequest request, TId id)
     {
         return new Uri($"{request?.GetDisplayUrl() ?? "http://localhost"}/{id}");
     }
