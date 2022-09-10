@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -12,7 +11,6 @@ using DvBCrud.EFCore.API.Helpers;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
-using IUrlHelper = DvBCrud.EFCore.API.Helpers.IUrlHelper;
 
 namespace DvBCrud.EFCore.API.Controllers
 {
@@ -24,11 +22,9 @@ namespace DvBCrud.EFCore.API.Controllers
     {
         protected readonly TService Service;
         protected readonly CrudAction[]? CrudActions;
-        protected readonly IUrlHelper UrlHelper;
 
-        public AsyncCrudController(TService service, IUrlHelper urlHelper)
+        public AsyncCrudController(TService service)
         {
-            UrlHelper = urlHelper;
             Service = service;
             CrudActions = GetType().GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
         }

@@ -9,21 +9,18 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
-using IUrlHelper = DvBCrud.EFCore.API.Helpers.IUrlHelper;
 
 namespace DvBCrud.EFCore.API.Tests.Controllers;
 
 public class AsyncCrudControllerTests
 {
     private readonly IAnyService _service;
-    private readonly IUrlHelper _urlHelper;
     private readonly AnyAsyncCrudController _controller;
-
+    
     public AsyncCrudControllerTests()
     {
         _service = A.Fake<IAnyService>();
-        _urlHelper = A.Fake<IUrlHelper>();
-        _controller = new AnyAsyncCrudController(_service, _urlHelper);
+        _controller = new AnyAsyncCrudController(_service);
     }
 
     [Fact]
@@ -52,7 +49,7 @@ public class AsyncCrudControllerTests
     public async Task Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>(), A.Fake<IUrlHelper>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
 
         var result = await controller.Create(model) as ObjectResult;
 
@@ -119,7 +116,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task Read_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyAsyncCreateUpdateController(_service, _urlHelper);
+        var controller = new AnyAsyncCreateUpdateController(_service);
 
         var result = (await controller.Read("1")).Result as ObjectResult;
 
@@ -166,7 +163,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyAsyncCreateUpdateController(_service, _urlHelper);
+        var controller = new AnyAsyncCreateUpdateController(_service);
 
         var result = (await controller.ReadAll()).Result as ObjectResult;
 
@@ -203,7 +200,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>(), A.Fake<IUrlHelper>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
 
         var result = await controller.Update(id, model) as ObjectResult;
 
@@ -263,7 +260,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>(), A.Fake<IUrlHelper>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
 
         var result = await controller.Delete(id) as ObjectResult;
 

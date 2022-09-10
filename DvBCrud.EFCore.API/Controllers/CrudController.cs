@@ -6,10 +6,10 @@ using System.Reflection;
 using DvBCrud.Common.Api.Controllers;
 using DvBCrud.Common.Api.CrudActions;
 using DvBCrud.Common.Api.Swagger;
+using DvBCrud.EFCore.API.Helpers;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
-using IUrlHelper = DvBCrud.EFCore.API.Helpers.IUrlHelper;
 
 namespace DvBCrud.EFCore.API.Controllers
 {
@@ -21,11 +21,9 @@ namespace DvBCrud.EFCore.API.Controllers
     {
         protected readonly TService Service;
         protected readonly CrudAction[]? CrudActions;
-        protected readonly IUrlHelper UrlHelper;
 
-        public CrudController(TService service, IUrlHelper urlHelper)
+        public CrudController(TService service)
         {
-            UrlHelper = urlHelper;
             Service = service;
             CrudActions = GetType().GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
         }
