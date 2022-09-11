@@ -30,6 +30,7 @@ namespace DvBCrud.EFCore.API.Controllers
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [SwaggerDocsFilter(CrudAction.Create)]
         public virtual IActionResult Create([FromBody] TModel model)
         {
@@ -51,6 +52,8 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [SwaggerDocsFilter(CrudAction.Read)]
         public virtual ActionResult<TModel> Read(TId id)
         {
@@ -70,6 +73,8 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [SwaggerDocsFilter(CrudAction.Read)]
         public virtual ActionResult<IEnumerable<TModel>> ReadAll()
         {
@@ -84,6 +89,9 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [SwaggerDocsFilter(CrudAction.Update)]
         public virtual IActionResult Update(TId id, [FromBody] TModel model)
         {
@@ -108,6 +116,9 @@ namespace DvBCrud.EFCore.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [SwaggerDocsFilter(CrudAction.Delete)]
         public virtual IActionResult Delete(TId id)
         {
