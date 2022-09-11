@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using DvBCrud.Common.Api.Controllers;
 using DvBCrud.Common.Api.CrudActions;
 using DvBCrud.Common.Api.Swagger;
-using DvBCrud.EFCore.API.Helpers;
+using DvBCrud.EFCore.API.Extensions;
 using DvBCrud.EFCore.Services;
 using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +25,7 @@ namespace DvBCrud.EFCore.API.Controllers
         public AsyncCrudController(TService service)
         {
             Service = service;
-            CrudActions = GetType().GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? Array.Empty<CrudAction>();
+            CrudActions = GetType().GetCrudActions();
         }
 
         [HttpPost]
@@ -43,7 +42,7 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 var id = await Service.CreateAsync(model);
-                var url = UrlHelper.GetResourceUrl(Request, id);
+                var url = Request.GetResourceUrl(id);
                 return Created(url, null);
             }
             catch (ArgumentNullException ex)
