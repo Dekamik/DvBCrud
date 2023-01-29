@@ -135,5 +135,7 @@ namespace DvBCrud.EFCore.Repositories
         {
             return Context.SaveChangesAsync();
         }
+
+        public virtual bool Exists(TId id) => Set.Any(entity => entity.Id!.Equals(id));
     }
 }
