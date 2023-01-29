@@ -88,5 +88,12 @@ namespace DvBCrud.EFCore.Repositories
         /// Persists modifications to DbContext asynchronously
         /// </summary>
         Task SaveChangesAsync();
+
+        /// <summary>
+        /// Checks whether or not a specific <typeparamref name="TEntity" exists/>
+        /// </summary>
+        /// <param name="id">Id of <typeparamref name="TEntity"/> to check</param>
+        /// <returns>true if exists, otherwise false</returns>
+        bool Exists(TId id);
     }
 }
