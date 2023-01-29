@@ -675,5 +675,25 @@ namespace DvBCrud.EFCore.Tests.Repositories
             // Assert
             _dbContext.AnyEntities.Should().Contain(entity);
         }
+
+        [Fact]
+        public void Exists_EntityExists_ReturnsTrue()
+        {
+            var entity = new AnyEntity
+            {
+                Id = "1",
+                AnyString = "AnyString"
+            };
+            _dbContext.Add(entity);
+            _dbContext.SaveChanges();
+
+            _repository.Exists("1").Should().BeTrue();
+        }
+
+        [Fact]
+        public void Exists_EntityDoesntExist_ReturnsFalse()
+        {
+            _repository.Exists("1").Should().BeFalse();
+        }
     }
 }
