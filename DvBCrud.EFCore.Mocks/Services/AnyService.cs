@@ -7,9 +7,9 @@ using DvBCrud.EFCore.Services;
 namespace DvBCrud.EFCore.Mocks.Services;
 
 [ExcludeFromCodeCoverage]
-public class AnyService : Service<AnyEntity, string, IAnyRepository, AnyModel, AnyConverter>
+public class AnyService : Service<AnyEntity, string, IAnyRepository, AnyModel, IAnyMapper>
 {
-    public AnyService(IAnyRepository repository, AnyConverter converter) : base(repository, converter)
+    public AnyService(IAnyRepository repository, IAnyMapper mapper) : base(repository, mapper)
     {
     }
 }

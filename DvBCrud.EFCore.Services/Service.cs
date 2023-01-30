@@ -1,36 +1,37 @@
-﻿using DvBCrud.EFCore.Entities;
+﻿using DvBCrud.Common.Services.Mapping;
+using DvBCrud.EFCore.Entities;
 using DvBCrud.EFCore.Repositories;
 using DvBCrud.EFCore.Services.Models;
 
 namespace DvBCrud.EFCore.Services;
 
-public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : IService<TId, TModel> 
+public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : IService<TId, TModel> 
     where TEntity : BaseEntity<TId>
     where TRepository : IRepository<TEntity, TId>
     where TModel : BaseModel
-    where TConverter : IConverter<TEntity, TModel>
+    where TMapper : IMapper<TEntity, TModel>
 {
     protected readonly TRepository Repository;
-    protected readonly TConverter Converter;
+    protected readonly TMapper Mapper;
 
-    public Service(TRepository repository, TConverter converter)
+    public Service(TRepository repository, TMapper mapper)
     {
-        Converter = converter;
+        Mapper = mapper;
         Repository = repository;
     }
 
-    public virtual IEnumerable<TModel> GetAll() => Repository.GetAll().Select(Converter.ToModel);
+    public virtual IEnumerable<TModel> GetAll() => Repository.GetAll().Select(Mapper.ToModel);
 
     public virtual TModel? Get(TId id)
     {
         var entity = Repository.Get(id);
-        return entity == null ? null : Converter.ToModel(entity);
+        return entity == null ? null : Mapper.ToModel(entity);
     }
 
     public virtual async Task<TModel?> GetAsync(TId id)
     {
         var entity = await Repository.GetAsync(id);
-        return entity == null ? null : Converter.ToModel(entity);
+        return entity == null ? null : Mapper.ToModel(entity);
     }
 
     public virtual TId Create(TModel model)
@@ -38,7 +39,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         if (model == null)
             throw new ArgumentNullException(nameof(model));
 
-        var entity = Converter.ToEntity(model);
+        var entity = Mapper.ToEntity(model);
         Repository.Create(entity);
         Repository.SaveChanges();
         return entity.Id;
@@ -49,7 +50,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         if (model == null)
             throw new ArgumentNullException(nameof(model));
 
-        var entity = Converter.ToEntity(model);
+        var entity = Mapper.ToEntity(model);
         Repository.Create(entity);
         await Repository.SaveChangesAsync();
         return entity.Id;
@@ -62,7 +63,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         if (model == null)
             throw new ArgumentNullException(nameof(model));
         
-        Repository.Update(id, Converter.ToEntity(model));
+        Repository.Update(id, Mapper.ToEntity(model));
         Repository.SaveChanges();
     }
     
@@ -73,7 +74,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TConverter> : I
         if (model == null)
             throw new ArgumentNullException(nameof(model));
         
-        await Repository.UpdateAsync(id, Converter.ToEntity(model));
+        await Repository.UpdateAsync(id, Mapper.ToEntity(model));
         await Repository.SaveChangesAsync();
     }
 
