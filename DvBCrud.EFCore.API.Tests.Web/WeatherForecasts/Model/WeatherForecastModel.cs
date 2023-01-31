@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using DvBCrud.EFCore.Services.Models;
 
 namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
 
 [ExcludeFromCodeCoverage]
-public class WeatherForecastModel : BaseModel
+public class WeatherForecastModel
 {
     public int Id { get; set; }
     

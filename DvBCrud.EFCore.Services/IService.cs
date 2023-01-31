@@ -1,8 +1,6 @@
-﻿using DvBCrud.EFCore.Services.Models;
+﻿namespace DvBCrud.EFCore.Services;
 
-namespace DvBCrud.EFCore.Services;
-
-public interface IService<TId, TModel> where TModel : BaseModel
+public interface IService<TId, TModel> where TModel : class
 {
     IEnumerable<TModel> GetAll();
     TModel? Get(TId id);
