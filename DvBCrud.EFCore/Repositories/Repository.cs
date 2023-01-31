@@ -12,12 +12,12 @@ namespace DvBCrud.EFCore.Repositories
         where TDbContext : DbContext
     {
         protected readonly TDbContext Context;
-
-        protected DbSet<TEntity> Set => Context.Set<TEntity>();
+        protected readonly DbSet<TEntity> Set;
 
         public Repository(TDbContext context)
         {
             Context = context;
+            Set = Context.Set<TEntity>();
         }
 
         public virtual IQueryable<TEntity> GetAll()
