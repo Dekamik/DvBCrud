@@ -1,20 +1,19 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
-using DvBCrud.EFCore.Services.Models;
 
 namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
 
 [ExcludeFromCodeCoverage]
-public class WeatherForecastConverter : Converter<WeatherForecast, WeatherForecastModel>, IWeatherForecastConverter
+public class WeatherForecastMapper : IWeatherForecastMapper
 {
     private readonly IWeatherForecastRepository _repository;
     
-    public WeatherForecastConverter(IWeatherForecastRepository repository)
+    public WeatherForecastMapper(IWeatherForecastRepository repository)
     {
         _repository = repository;
     }
     
-    public override WeatherForecastModel ToModel(WeatherForecast entity) =>
+    public WeatherForecastModel ToModel(WeatherForecast entity) =>
         new()
         {
             Id = entity.Id,
@@ -23,7 +22,7 @@ public class WeatherForecastConverter : Converter<WeatherForecast, WeatherForeca
             TemperatureC = entity.TemperatureC
         };
 
-    public override WeatherForecast ToEntity(WeatherForecastModel model)
+    public WeatherForecast ToEntity(WeatherForecastModel model)
     {
         var weatherForecast = model.Id != default ? 
             _repository.Get(model.Id) ?? new WeatherForecast() : 

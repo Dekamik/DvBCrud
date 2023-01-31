@@ -13,15 +13,15 @@ namespace DvBCrud.EFCore.Services.Tests;
 
 public class ServiceTests
 {
-    private readonly AnyConverter _converter;
+    private readonly IAnyMapper _mapper;
     private readonly IAnyRepository _repository;
     private readonly AnyService _service;
 
     public ServiceTests()
     {
-        _converter = A.Fake<AnyConverter>();
+        _mapper = A.Fake<IAnyMapper>();
         _repository = A.Fake<IAnyRepository>();
-        _service = new AnyService(_repository, _converter);
+        _service = new AnyService(_repository, _mapper);
     }
 
     [Fact]
@@ -57,9 +57,9 @@ public class ServiceTests
 
         A.CallTo(() => _repository.GetAll())
             .Returns(entities);
-        A.CallTo(() => _converter.ToModel(entities.First()))
+        A.CallTo(() => _mapper.ToModel(entities.First()))
             .Returns(models.First());
-        A.CallTo(() => _converter.ToModel(entities.Last()))
+        A.CallTo(() => _mapper.ToModel(entities.Last()))
             .Returns(models.Last());
 
         var actual = _service.GetAll();
@@ -76,7 +76,7 @@ public class ServiceTests
 
         A.CallTo(() => _repository.Get(id))
             .Returns(entity);
-        A.CallTo(() => _converter.ToModel(entity))
+        A.CallTo(() => _mapper.ToModel(entity))
             .Returns(expected);
 
         var actual = _service.Get(id);
@@ -93,7 +93,7 @@ public class ServiceTests
         
         A.CallTo(() => _repository.GetAsync(id))
             .Returns(Task.FromResult((AnyEntity?)entity));
-        A.CallTo(() => _converter.ToModel(entity))
+        A.CallTo(() => _mapper.ToModel(entity))
             .Returns(expected);
         
         var actual = await _service.GetAsync(id);
@@ -107,7 +107,7 @@ public class ServiceTests
         var model = new AnyModel();
         var entity = new AnyEntity();
 
-        A.CallTo(() => _converter.ToEntity(model))
+        A.CallTo(() => _mapper.ToEntity(model))
             .Returns(entity);
         
         _service.Create(model);
@@ -131,7 +131,7 @@ public class ServiceTests
         var model = new AnyModel();
         var entity = new AnyEntity();
 
-        A.CallTo(() => _converter.ToEntity(model))
+        A.CallTo(() => _mapper.ToEntity(model))
             .Returns(entity);
         
         await _service.CreateAsync(model);
@@ -156,7 +156,7 @@ public class ServiceTests
         var model = new AnyModel();
         var entity = new AnyEntity();
 
-        A.CallTo(() => _converter.ToEntity(model))
+        A.CallTo(() => _mapper.ToEntity(model))
             .Returns(entity);
         
         _service.Update(id, model);
@@ -188,7 +188,7 @@ public class ServiceTests
         var model = new AnyModel();
         var entity = new AnyEntity();
 
-        A.CallTo(() => _converter.ToEntity(model))
+        A.CallTo(() => _mapper.ToEntity(model))
             .Returns(entity);
         
         await _service.UpdateAsync(id, model);

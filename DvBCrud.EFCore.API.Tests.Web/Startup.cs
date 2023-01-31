@@ -31,7 +31,7 @@ namespace DvBCrud.EFCore.API.Tests.Web
             });
 
             services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
-            services.AddScoped<IWeatherForecastConverter, WeatherForecastConverter>();
+            services.AddScoped<IWeatherForecastMapper, WeatherForecastMapper>();
             services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
             services.AddControllers();

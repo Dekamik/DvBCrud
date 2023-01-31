@@ -6,9 +6,9 @@ using DvBCrud.EFCore.Services;
 namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Service;
 
 [ExcludeFromCodeCoverage]
-public class WeatherForecastService : Service<WeatherForecast, int, IWeatherForecastRepository, WeatherForecastModel, IWeatherForecastConverter>, IWeatherForecastService
+public class WeatherForecastService : Service<WeatherForecast, int, IWeatherForecastRepository, WeatherForecastModel, IWeatherForecastMapper>, IWeatherForecastService
 {
-    public WeatherForecastService(IWeatherForecastRepository repository, IWeatherForecastConverter converter) : base(repository, converter)
+    public WeatherForecastService(IWeatherForecastRepository repository, IWeatherForecastMapper mapper) : base(repository, mapper)
     {
     }
 }
