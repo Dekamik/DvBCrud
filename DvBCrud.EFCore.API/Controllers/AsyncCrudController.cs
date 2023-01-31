@@ -8,7 +8,6 @@ using DvBCrud.Common.Api.CrudActions;
 using DvBCrud.Common.Api.Swagger;
 using DvBCrud.EFCore.API.Extensions;
 using DvBCrud.EFCore.Services;
-using DvBCrud.EFCore.Services.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.EFCore.API.Controllers
@@ -16,7 +15,7 @@ namespace DvBCrud.EFCore.API.Controllers
     [ApiController]
     [Route("[controller]")]
     public abstract class AsyncCrudController<TId, TModel, TService> : CrudControllerBase<TModel>
-        where TModel : BaseModel
+        where TModel : class
         where TService : IService<TId, TModel>
     {
         protected readonly TService Service;

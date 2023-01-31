@@ -1,14 +1,13 @@
 ﻿using DvBCrud.Common.Services.Mapping;
 using DvBCrud.EFCore.Entities;
 using DvBCrud.EFCore.Repositories;
-using DvBCrud.EFCore.Services.Models;
 
 namespace DvBCrud.EFCore.Services;
 
 public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : IService<TId, TModel> 
     where TEntity : BaseEntity<TId>
     where TRepository : IRepository<TEntity, TId>
-    where TModel : BaseModel
+    where TModel : class
     where TMapper : IMapper<TEntity, TModel>
 {
     protected readonly TRepository Repository;
