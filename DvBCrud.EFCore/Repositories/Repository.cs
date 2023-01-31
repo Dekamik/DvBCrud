@@ -22,7 +22,7 @@ namespace DvBCrud.EFCore.Repositories
 
         public virtual IQueryable<TEntity> GetAll()
         {
-            return Set;
+            return Set.AsNoTracking();
         }
 
         /// <inheritdoc/>
@@ -31,7 +31,7 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            return Set.FirstOrDefault(e => e.Id != null && e.Id.Equals(id));
+            return Set.AsNoTracking().FirstOrDefault(e => e.Id != null && e.Id.Equals(id));
         }
 
         /// <inheritdoc/>
@@ -40,7 +40,7 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            return Set.FirstOrDefaultAsync(e => e.Id != null && e.Id.Equals(id));
+            return Set.AsNoTracking().FirstOrDefaultAsync(e => e.Id != null && e.Id.Equals(id));
         }
 
         /// <inheritdoc/>
