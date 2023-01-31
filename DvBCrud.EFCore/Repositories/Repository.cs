@@ -13,7 +13,7 @@ namespace DvBCrud.EFCore.Repositories
     {
         protected readonly TDbContext Context;
 
-        private DbSet<TEntity> Set => Context.Set<TEntity>();
+        protected DbSet<TEntity> Set => Context.Set<TEntity>();
 
         protected IQueryable<TEntity> QueryableWithIncludes { get; init; }
 
