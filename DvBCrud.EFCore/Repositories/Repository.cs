@@ -12,17 +12,20 @@ namespace DvBCrud.EFCore.Repositories
         where TDbContext : DbContext
     {
         protected readonly TDbContext Context;
-        protected DbSet<TEntity> Set { get; init; }
+
+        private DbSet<TEntity> Set => Context.Set<TEntity>();
+
+        protected IQueryable<TEntity> QueryableWithIncludes { get; init; }
 
         public Repository(TDbContext context)
         {
             Context = context;
-            Set = Context.Set<TEntity>();
+            QueryableWithIncludes = Set.AsQueryable();
         }
 
         public virtual IQueryable<TEntity> GetAll()
         {
-            return Set;
+            return QueryableWithIncludes;
         }
 
         /// <inheritdoc/>
@@ -31,7 +34,7 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            return Set.FirstOrDefault(e => e.Id != null && e.Id.Equals(id));
+            return QueryableWithIncludes.FirstOrDefault(e => e.Id != null && e.Id.Equals(id));
         }
 
         /// <inheritdoc/>
@@ -40,7 +43,7 @@ namespace DvBCrud.EFCore.Repositories
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            return Set.FirstOrDefaultAsync(e => e.Id != null && e.Id.Equals(id));
+            return QueryableWithIncludes.FirstOrDefaultAsync(e => e.Id != null && e.Id.Equals(id));
         }
 
         /// <inheritdoc/>
