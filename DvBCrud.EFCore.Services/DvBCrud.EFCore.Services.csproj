@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DvBCrud.Common.Services" Version="2.0.0-rc.1" />
+      <PackageReference Include="DvBCrud.Common.Services" Version="2.0.0" />
     </ItemGroup>
 
 </Project>
