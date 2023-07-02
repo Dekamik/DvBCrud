@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -18,6 +19,7 @@ public static class CrudActionExtensions
         return allowedActions == CrudActions.All || (allowedActions & action) == action;
     }
     
+    [ExcludeFromCodeCoverage]
     public static CrudActions GetCrudActions(this Type type) => 
         type.GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? CrudActions.All;
 }
