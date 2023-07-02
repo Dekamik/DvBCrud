@@ -35,6 +35,7 @@ public abstract class CrudDbContext : DbContext
 
     private void ModifyTimestamps()
     {
+        var utcNow = DateTimeOffset.UtcNow;
         var addedEntries = ChangeTracker
             .Entries()
             .Where(x => x.State == EntityState.Added)
@@ -42,7 +43,6 @@ public abstract class CrudDbContext : DbContext
 
         foreach (var entry in addedEntries)
         {
-            var utcNow = DateTimeOffset.UtcNow;
             if (entry is ICreatedAt addedModel)
             {
                 addedModel.CreatedAt = utcNow;
@@ -62,7 +62,7 @@ public abstract class CrudDbContext : DbContext
         {
             if (entry is IModifiedAt model)
             {
-                model.ModifiedAt = DateTimeOffset.UtcNow;
+                model.ModifiedAt = utcNow;
             }
         }
     }
