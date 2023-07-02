@@ -6,6 +6,6 @@ namespace DvBCrud.EFCore.Mocks.Services.Model;
 public class AnyModel
 {
     // Using string type for Id to test nullable cases
-    public string Id { get; set; }
+    public string Id { get; set; } = "";
     public string? AnyString { get; set; }
 }

@@ -10,6 +10,7 @@ using DvBCrud.EFCore.Mocks.Core.Entities;
 using DvBCrud.EFCore.Mocks.Core.Repositories;
 using DvBCrud.EFCore.Mocks.Services.Model;
 using Xunit;
+#pragma warning disable CS8625
 
 namespace DvBCrud.EFCore.Tests.Repositories
 {
@@ -137,7 +138,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             var actual = await _repository.GetAsync("1");
 
             // Assert
-            actual.AnyString.Should().BeEquivalentTo(expected.First().AnyString);
+            actual!.AnyString.Should().BeEquivalentTo(expected.First().AnyString);
         }
 
         [Fact]

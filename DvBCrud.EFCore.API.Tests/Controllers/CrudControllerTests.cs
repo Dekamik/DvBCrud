@@ -8,6 +8,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
+#pragma warning disable CS8625
 
 namespace DvBCrud.EFCore.API.Tests.Controllers;
 
