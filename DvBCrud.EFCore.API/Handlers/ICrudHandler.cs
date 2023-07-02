@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DvBCrud.EFCore.Services;
+namespace DvBCrud.EFCore.API.Handlers;
 
-public interface IService<TId, TModel> where TModel : class
+public interface ICrudHandler<TId, TModel> where TModel : class
 {
     IEnumerable<TModel> List();
     TModel? Get(TId id);

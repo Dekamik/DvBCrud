@@ -4,8 +4,8 @@ using System.Net;
 using System.Net.Http;
 using DvBCrud.EFCore.API.CrudActions;
 using DvBCrud.EFCore.API.Extensions;
+using DvBCrud.EFCore.API.Handlers;
 using DvBCrud.EFCore.API.Swagger;
-using DvBCrud.EFCore.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.EFCore.API.Controllers
@@ -14,14 +14,14 @@ namespace DvBCrud.EFCore.API.Controllers
     [Route("[controller]")]
     public abstract class CrudController<TId, TModel, TService> : CrudControllerBase<TModel>
         where TModel : class
-        where TService : IService<TId, TModel>
+        where TService : ICrudHandler<TId, TModel>
     {
-        protected readonly TService Service;
+        protected readonly TService CrudHandler;
         protected readonly CrudAction[]? CrudActions;
 
-        public CrudController(TService service)
+        public CrudController(TService crudHandler)
         {
-            Service = service;
+            CrudHandler = crudHandler;
             CrudActions = GetType().GetCrudActions();
         }
 
@@ -38,8 +38,8 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                var id = Service.Create(model);
-                var createdModel = Service.Get(id);
+                var id = CrudHandler.Create(model);
+                var createdModel = CrudHandler.Get(id);
                 return CreatedAtRoute(new { id }, createdModel);
             }
             catch (ArgumentNullException ex)
@@ -59,7 +59,7 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var model = Service.Get(id);
+            var model = CrudHandler.Get(id);
 
             if (model == null)
             {
@@ -80,7 +80,7 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var entities = Service.List();
+            var entities = CrudHandler.List();
 
             return Ok(entities);
         }
@@ -99,7 +99,7 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                Service.Update(id, model);
+                CrudHandler.Update(id, model);
                 return NoContent();
             }
             catch (KeyNotFoundException)
@@ -126,7 +126,7 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                Service.Delete(id);
+                CrudHandler.Delete(id);
                 return NoContent();
             }
             catch (KeyNotFoundException)

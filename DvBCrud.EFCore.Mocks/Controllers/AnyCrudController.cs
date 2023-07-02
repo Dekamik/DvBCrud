@@ -6,9 +6,9 @@ using DvBCrud.EFCore.Mocks.Services.Model;
 namespace DvBCrud.EFCore.Mocks.Controllers
 {
     [ExcludeFromCodeCoverage]
-    public class AnyCrudController : CrudController<string, AnyModel, IAnyService>
+    public class AnyCrudController : CrudController<string, AnyModel, IAnyCrudHandler>
     {
-        public AnyCrudController(IAnyService service) : base(service)
+        public AnyCrudController(IAnyCrudHandler crudHandler) : base(crudHandler)
         {
         }
     }

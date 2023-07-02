@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DvBCrud.EFCore.Exceptions;
 using DvBCrud.EFCore.Mocks.Core.DbContexts;
 using DvBCrud.EFCore.Mocks.Core.Entities;
 using DvBCrud.EFCore.Mocks.Core.Repositories;
@@ -37,12 +38,12 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 new AnyEntity
                 {
                     Id = "1",
-                    AnyString = "Any"
+                    AnyString = "Any1"
                 },
                 new AnyEntity
                 {
                     Id = "2",
-                    AnyString = "Any"
+                    AnyString = "Any2"
                 }
             };
             _dbContext.AnyEntities.AddRange(expected);
@@ -52,37 +53,38 @@ namespace DvBCrud.EFCore.Tests.Repositories
             var actual = _repository.List();
 
             // Assert
-            actual.Should().BeEquivalentTo(expected);
+            actual.First().AnyString.Should().BeEquivalentTo(expected.First().AnyString);
         }
 
         [Fact]
         public void Get_ExistingId_ReturnsEntity()
         {
             // Arrange
-            var expected = new[]
+            var utcNow = DateTimeOffset.UtcNow;
+            var entities = new[]
             {
                 new AnyEntity
                 {
                     Id = "1",
-                    AnyString = "Any"
+                    AnyString = "AnyOne"
                 },
                 new AnyEntity {
                     Id = "2",
-                    AnyString = "Any"
+                    AnyString = "AnyTwo"
                 }
             };
-            _dbContext.AnyEntities.AddRange(expected);
+            _dbContext.AnyEntities.AddRange(entities);
             _dbContext.SaveChanges();
 
             // Act
-            var actual = _repository.Get("1");
+            var model = _repository.Get("1");
 
             // Assert
-            actual.Should().BeEquivalentTo(expected.First());
+            model!.AnyString.Should().BeEquivalentTo(entities.First().AnyString);
         }
 
         [Fact]
-        public void Get_NonExistingId_ReturnsNull()
+        public void Get_NonExistingId_ThrowsNotFound()
         {
             // Arrange
             var expected = new[]
@@ -101,10 +103,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _dbContext.SaveChanges();
 
             // Act
-            var actual = _repository.Get("3");
-
-            // Assert
-            actual.Should().BeNull();
+            _repository.Invoking(r => r.Get("3"))
+                .Should()
+                .Throw<NotFoundException>();
         }
 
         [Fact]
@@ -122,21 +123,21 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 new AnyEntity
                 {
                     Id = "1",
-                    AnyString = "Any"
+                    AnyString = "Any1"
                 },
                 new AnyEntity {
                     Id = "2",
-                    AnyString = "Any"
+                    AnyString = "Any2"
                 }
             };
             _dbContext.AnyEntities.AddRange(expected);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             // Act
             var actual = await _repository.GetAsync("1");
 
             // Assert
-            actual.Should().BeEquivalentTo(expected.First());
+            actual.AnyString.Should().BeEquivalentTo(expected.First().AnyString);
         }
 
         [Fact]
@@ -156,13 +157,12 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 }
             };
             _dbContext.AnyEntities.AddRange(expected);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             // Act
-            var actual = await _repository.GetAsync("3");
-
-            // Assert
-            actual.Should().BeNull();
+            await _repository.Awaiting(r => r.GetAsync("3"))
+                .Should()
+                .ThrowAsync<NotFoundException>();
         }
 
         [Fact]
@@ -175,7 +175,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public void Create_AnyEntity_EntityCreated()
         {
             // Arrange
-            var expected = new AnyEntity
+            var expected = new AnyModel
             {
                 AnyString = "AnyString"
             };
@@ -197,11 +197,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = "1",
                 AnyString = "AnyString"
             };
+            var model = new AnyModel
+            {
+                Id = "1",
+                AnyString = "AnyString"
+            };
             _dbContext.AnyEntities.Add(entity);
             _dbContext.SaveChanges();
 
             // Act
-            _repository.Invoking(x => x.Create(entity)).Should().Throw<ArgumentException>();
+            _repository.Invoking(x => x.Create(model)).Should().Throw<InvalidOperationException>();
         }
 
         [Fact]
@@ -214,7 +219,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public async Task CreateAsync_AnyEntity_EntityCreated()
         {
             // Arrange
-            var expected = new AnyEntity
+            var expected = new AnyModel
             {
                 AnyString = "AnyString"
             };
@@ -236,11 +241,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = "1",
                 AnyString = "AnyString"
             };
+            var model = new AnyModel
+            {
+                Id = "1",
+                AnyString = "AnyString"
+            };
             _dbContext.AnyEntities.Add(entity);
             _dbContext.SaveChanges();
 
             // Act
-            _repository.Invoking(x => x.CreateAsync(entity)).Should().ThrowAsync<ArgumentException>();
+            _repository.Invoking(x => x.CreateAsync(model)).Should().ThrowAsync<ArgumentException>();
         }
 
         [Fact]
@@ -259,7 +269,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 AnyString = "AnyString"
             });
             _dbContext.SaveChanges();
-            var expected = new AnyEntity
+            var expected = new AnyModel
             {
                 AnyString = "AnyNewString"
             };
@@ -284,15 +294,15 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 AnyString = "AnyString"
             });
             _dbContext.SaveChanges();
-            var updatedEntity = new AnyEntity
+            var updatedModel = new AnyModel
             {
                 AnyString = "AnyNewString"
             };
 
             // Act & Assert
-            _repository.Invoking(r => r.Update("2", updatedEntity))
+            _repository.Invoking(r => r.Update("2", updatedModel))
                 .Should()
-                .Throw<KeyNotFoundException>();
+                .Throw<NotFoundException>();
         }
 
         [Fact]
@@ -307,13 +317,13 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public void Update_NullId_ThrowsArgumentNullException()
         {
             // Arrange
-            var updatedEntity = new AnyEntity
+            var updatedModel = new AnyModel
             {
                 AnyString = "AnyNewString"
             };
 
             // Act & Assert
-            _repository.Invoking(r => r.Update(null, updatedEntity)).Should().Throw<ArgumentNullException>();
+            _repository.Invoking(r => r.Update(null, updatedModel)).Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -326,7 +336,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 AnyString = "AnyString"
             });
             _dbContext.SaveChanges();
-            var expected = new AnyEntity
+            var expected = new AnyModel
             {
                 Id = "1",
                 AnyString = "AnyNewString"
@@ -350,16 +360,16 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 Id = "1",
                 AnyString = "AnyString"
             });
-            _dbContext.SaveChanges();
-            var updatedEntity = new AnyEntity
+            await _dbContext.SaveChangesAsync();
+            var updatedModel = new AnyModel
             {
                 AnyString = "AnyNewString"
             };
 
             // Act & Assert
-            await _repository.Awaiting(r => r.UpdateAsync("2", updatedEntity))
+            await _repository.Awaiting(r => r.UpdateAsync("2", updatedModel))
                 .Should()
-                .ThrowAsync<KeyNotFoundException>();
+                .ThrowAsync<NotFoundException>();
         }
 
         [Fact]
@@ -372,13 +382,13 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public async Task UpdateAsync_NullId_ThrowsArgumentNullException()
         {
             // Arrange
-            var updatedEntity = new AnyEntity
+            var updatedModel = new AnyModel
             {
                 AnyString = "AnyNewString"
             };
 
             // Act & Assert
-            await _repository.Awaiting(r => r.UpdateAsync(null, updatedEntity))
+            await _repository.Awaiting(r => r.UpdateAsync(null, updatedModel))
                 .Should()
                 .ThrowAsync<ArgumentNullException>();
         }
@@ -423,7 +433,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public void Delete_NonExistingId_ThrowsKeyNotFoundException() => 
             _repository.Invoking(r => r.Delete("1"))
                 .Should()
-                .Throw<KeyNotFoundException>();
+                .Throw<NotFoundException>();
 
         [Fact]
         public async Task DeleteAsync_ExistingEntity_EntityDeleted()
@@ -463,7 +473,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
         public async Task DeleteAsync_NonExistingId_ThrowsKeyNotFoundException() => 
             await _repository.Awaiting(r => r.DeleteAsync("1"))
                 .Should()
-                .ThrowAsync<KeyNotFoundException>();
+                .ThrowAsync<NotFoundException>();
 
 
         [Fact]

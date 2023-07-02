@@ -11,7 +11,6 @@ namespace DvBCrud.EFCore.Mocks.Core.Repositories
     {
         public AnyRepository(AnyDbContext context, AnyMapper mapper) : base(context, mapper)
         {
-
         }
     }
 }

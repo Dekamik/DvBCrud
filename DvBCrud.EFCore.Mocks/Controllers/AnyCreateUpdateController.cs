@@ -8,9 +8,9 @@ namespace DvBCrud.EFCore.Mocks.Controllers
 {
     [ExcludeFromCodeCoverage]
     [AllowedActions(CrudAction.Create, CrudAction.Update)]
-    public class AnyCreateUpdateController : CrudController<string, AnyModel, IAnyService>
+    public class AnyCreateUpdateController : CrudController<string, AnyModel, IAnyCrudHandler>
     {
-        public AnyCreateUpdateController(IAnyService service) : base(service)
+        public AnyCreateUpdateController(IAnyCrudHandler crudHandler) : base(crudHandler)
         {
         }
     }

@@ -8,9 +8,9 @@ namespace DvBCrud.EFCore.Mocks.Controllers
 {
     [ExcludeFromCodeCoverage]
     [AllowedActions(CrudAction.Read)]
-    public class AnyReadOnlyController : CrudController<string, AnyModel, IAnyService>
+    public class AnyReadOnlyController : CrudController<string, AnyModel, IAnyCrudHandler>
     {
-        public AnyReadOnlyController(IAnyService service) : base(service)
+        public AnyReadOnlyController(IAnyCrudHandler crudHandler) : base(crudHandler)
         {
         }
     }

@@ -6,9 +6,9 @@ using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Service;
 namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts
 {
     [ExcludeFromCodeCoverage]
-    public class WeatherForecastController : CrudController<int, WeatherForecastModel, IWeatherForecastService>
+    public class WeatherForecastController : CrudController<int, WeatherForecastModel, IWeatherForecastCrudHandler>
     {
-        public WeatherForecastController(IWeatherForecastService service) : base(service)
+        public WeatherForecastController(IWeatherForecastCrudHandler crudHandler) : base(crudHandler)
         {
         }
     }

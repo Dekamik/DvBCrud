@@ -13,13 +13,13 @@ namespace DvBCrud.EFCore.API.Tests.Controllers;
 
 public class CrudControllerTests
 {
-    private readonly IAnyService _service;
+    private readonly IAnyCrudHandler _crudHandler;
     private readonly AnyCrudController _controller;
     
     public CrudControllerTests()
     {
-        _service = A.Fake<IAnyService>();
-        _controller = new AnyCrudController(_service);
+        _crudHandler = A.Fake<IAnyCrudHandler>();
+        _controller = new AnyCrudController(_crudHandler);
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class CrudControllerTests
 
         _controller.Create(model);
 
-        A.CallTo(() => _service.Create(model))
+        A.CallTo(() => _crudHandler.Create(model))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -48,7 +48,7 @@ public class CrudControllerTests
     public void Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyCrudHandler>());
 
         var result = controller.Create(model) as ObjectResult;
 
@@ -59,7 +59,7 @@ public class CrudControllerTests
     [Fact]
     public void Create_NullModel_ReturnsBadRequest()
     {
-        A.CallTo(() => _service.Create(null))
+        A.CallTo(() => _crudHandler.Create(null))
             .Throws<ArgumentNullException>();
 
         var result = _controller.Create(null) as ObjectResult;
@@ -74,7 +74,7 @@ public class CrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         
-        A.CallTo(() => _service.Get(id))
+        A.CallTo(() => _crudHandler.Get(id))
             .Returns(model);
 
         var result = _controller.Read(id).Result as OkObjectResult;
@@ -89,7 +89,7 @@ public class CrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         
-        A.CallTo(() => _service.Get(id))
+        A.CallTo(() => _crudHandler.Get(id))
             .Returns(model);
 
         var result = _controller.Read(id).Result as OkObjectResult;
@@ -103,7 +103,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         
-        A.CallTo(() => _service.Get(id))
+        A.CallTo(() => _crudHandler.Get(id))
             .Returns(null);
 
         var result = _controller.Read(id).Result as ObjectResult;
@@ -115,7 +115,7 @@ public class CrudControllerTests
     [Fact]
     public void Read_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyCreateUpdateController(_service);
+        var controller = new AnyCreateUpdateController(_crudHandler);
 
         var result = controller.Read("1").Result as ObjectResult;
 
@@ -132,7 +132,7 @@ public class CrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _service.List())
+        A.CallTo(() => _crudHandler.List())
             .Returns(models);
 
         var result = _controller.ReadAll().Result as OkObjectResult;
@@ -150,7 +150,7 @@ public class CrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _service.List())
+        A.CallTo(() => _crudHandler.List())
             .Returns(models);
 
         var result = _controller.ReadAll().Result as OkObjectResult;
@@ -162,7 +162,7 @@ public class CrudControllerTests
     [Fact]
     public void ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyCreateUpdateController(_service);
+        var controller = new AnyCreateUpdateController(_crudHandler);
 
         var result = controller.ReadAll().Result as ObjectResult;
 
@@ -178,7 +178,7 @@ public class CrudControllerTests
 
         _controller.Update(id, model);
 
-        A.CallTo(() => _service.Update(id, model))
+        A.CallTo(() => _crudHandler.Update(id, model))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -199,7 +199,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyCrudHandler>());
 
         var result = controller.Update(id, model) as ObjectResult;
 
@@ -212,7 +212,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        A.CallTo(() => _service.Update(id, model))
+        A.CallTo(() => _crudHandler.Update(id, model))
             .Throws<KeyNotFoundException>();
 
         var result = _controller.Update(id, model) as ObjectResult;
@@ -224,7 +224,7 @@ public class CrudControllerTests
     [Fact]
     public void Update_NullArguments_ReturnsBadRequest()
     {
-        A.CallTo(() => _service.Update(null, null))
+        A.CallTo(() => _crudHandler.Update(null, null))
             .Throws<ArgumentNullException>();
 
         var result = _controller.Update(null, null) as ObjectResult;
@@ -251,7 +251,7 @@ public class CrudControllerTests
 
         _controller.Delete(id);
 
-        A.CallTo(() => _service.Delete(id))
+        A.CallTo(() => _crudHandler.Delete(id))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -259,7 +259,7 @@ public class CrudControllerTests
     public void Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyCrudHandler>());
 
         var result = controller.Delete(id) as ObjectResult;
 
@@ -271,7 +271,7 @@ public class CrudControllerTests
     public void Delete_NonExistingId_ReturnsNotFound()
     {
         const string id = "1";
-        A.CallTo(() => _service.Delete(id))
+        A.CallTo(() => _crudHandler.Delete(id))
             .Throws<KeyNotFoundException>();
 
         var result = _controller.Delete(id) as ObjectResult;
@@ -284,7 +284,7 @@ public class CrudControllerTests
     public void Delete_NullId_ReturnsBadRequest()
     {
         const string id = "1";
-        A.CallTo(() => _service.Delete(id))
+        A.CallTo(() => _crudHandler.Delete(id))
             .Throws<ArgumentNullException>();
 
         var result = _controller.Delete(id) as ObjectResult;

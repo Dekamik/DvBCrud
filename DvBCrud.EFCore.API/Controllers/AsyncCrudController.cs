@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using DvBCrud.EFCore.API.CrudActions;
 using DvBCrud.EFCore.API.Extensions;
+using DvBCrud.EFCore.API.Handlers;
 using DvBCrud.EFCore.API.Swagger;
-using DvBCrud.EFCore.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.EFCore.API.Controllers
@@ -15,14 +15,14 @@ namespace DvBCrud.EFCore.API.Controllers
     [Route("[controller]")]
     public abstract class AsyncCrudController<TId, TModel, TService> : CrudControllerBase<TModel>
         where TModel : class
-        where TService : IService<TId, TModel>
+        where TService : ICrudHandler<TId, TModel>
     {
-        protected readonly TService Service;
+        protected readonly TService CrudHandler;
         protected readonly CrudAction[]? CrudActions;
 
-        public AsyncCrudController(TService service)
+        public AsyncCrudController(TService crudHandler)
         {
-            Service = service;
+            CrudHandler = crudHandler;
             CrudActions = GetType().GetCrudActions();
         }
 
@@ -39,8 +39,8 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                var id = await Service.CreateAsync(model);
-                var createdModel = await Service.GetAsync(id);
+                var id = await CrudHandler.CreateAsync(model);
+                var createdModel = await CrudHandler.GetAsync(id);
                 return CreatedAtRoute(new { id }, createdModel);
             }
             catch (ArgumentNullException ex)
@@ -60,7 +60,7 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var entity = await Service.GetAsync(id);
+            var entity = await CrudHandler.GetAsync(id);
 
             if (entity == null)
             {
@@ -81,7 +81,7 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var entities = await Task.Run(() => Service.List());
+            var entities = await Task.Run(() => CrudHandler.List());
 
             return Ok(entities);
         }
@@ -100,7 +100,7 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                await Service.UpdateAsync(id, model);
+                await CrudHandler.UpdateAsync(id, model);
                 return NoContent();
             }
             catch (KeyNotFoundException)
@@ -127,7 +127,7 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                await Service.DeleteAsync(id);
+                await CrudHandler.DeleteAsync(id);
                 return NoContent();
             }
             catch (KeyNotFoundException)

@@ -14,13 +14,13 @@ namespace DvBCrud.EFCore.API.Tests.Controllers;
 
 public class AsyncCrudControllerTests
 {
-    private readonly IAnyService _service;
+    private readonly IAnyCrudHandler _crudHandler;
     private readonly AnyAsyncCrudController _controller;
     
     public AsyncCrudControllerTests()
     {
-        _service = A.Fake<IAnyService>();
-        _controller = new AnyAsyncCrudController(_service);
+        _crudHandler = A.Fake<IAnyCrudHandler>();
+        _controller = new AnyAsyncCrudController(_crudHandler);
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class AsyncCrudControllerTests
 
         await _controller.Create(model);
 
-        A.CallTo(() => _service.CreateAsync(model))
+        A.CallTo(() => _crudHandler.CreateAsync(model))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -49,7 +49,7 @@ public class AsyncCrudControllerTests
     public async Task Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyCrudHandler>());
 
         var result = await controller.Create(model) as ObjectResult;
 
@@ -60,7 +60,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task Create_NullModel_ReturnsBadRequest()
     {
-        A.CallTo(() => _service.CreateAsync(null))
+        A.CallTo(() => _crudHandler.CreateAsync(null))
             .Throws<ArgumentNullException>();
 
         var result = await _controller.Create(null) as ObjectResult;
@@ -75,7 +75,7 @@ public class AsyncCrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         
-        A.CallTo(() => _service.GetAsync(id))
+        A.CallTo(() => _crudHandler.GetAsync(id))
             .Returns(Task.FromResult((AnyModel?)model));
 
         var result = (await _controller.Read(id)).Result as OkObjectResult;
@@ -90,7 +90,7 @@ public class AsyncCrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         
-        A.CallTo(() => _service.GetAsync(id))
+        A.CallTo(() => _crudHandler.GetAsync(id))
             .Returns(Task.FromResult((AnyModel?)model));
 
         var result = (await _controller.Read(id)).Result as OkObjectResult;
@@ -104,7 +104,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         
-        A.CallTo(() => _service.GetAsync(id))
+        A.CallTo(() => _crudHandler.GetAsync(id))
             .Returns(Task.FromResult((AnyModel?)null));
 
         var result = (await _controller.Read(id)).Result as ObjectResult;
@@ -116,7 +116,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task Read_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyAsyncCreateUpdateController(_service);
+        var controller = new AnyAsyncCreateUpdateController(_crudHandler);
 
         var result = (await controller.Read("1")).Result as ObjectResult;
 
@@ -133,7 +133,7 @@ public class AsyncCrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _service.List())
+        A.CallTo(() => _crudHandler.List())
             .Returns(models);
 
         var result = (await _controller.ReadAll()).Result as OkObjectResult;
@@ -151,7 +151,7 @@ public class AsyncCrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _service.List())
+        A.CallTo(() => _crudHandler.List())
             .Returns(models);
 
         var result = (await _controller.ReadAll()).Result as OkObjectResult;
@@ -163,7 +163,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyAsyncCreateUpdateController(_service);
+        var controller = new AnyAsyncCreateUpdateController(_crudHandler);
 
         var result = (await controller.ReadAll()).Result as ObjectResult;
 
@@ -179,7 +179,7 @@ public class AsyncCrudControllerTests
 
         await _controller.Update(id, model);
 
-        A.CallTo(() => _service.UpdateAsync(id, model))
+        A.CallTo(() => _crudHandler.UpdateAsync(id, model))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -200,7 +200,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyCrudHandler>());
 
         var result = await controller.Update(id, model) as ObjectResult;
 
@@ -213,7 +213,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        A.CallTo(() => _service.UpdateAsync(id, model))
+        A.CallTo(() => _crudHandler.UpdateAsync(id, model))
             .Throws<KeyNotFoundException>();
 
         var result = await _controller.Update(id, model) as ObjectResult;
@@ -225,7 +225,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task Update_NullArguments_ReturnsBadRequest()
     {
-        A.CallTo(() => _service.UpdateAsync(null, null))
+        A.CallTo(() => _crudHandler.UpdateAsync(null, null))
             .Throws<ArgumentNullException>();
 
         var result = await _controller.Update(null, null) as ObjectResult;
@@ -252,7 +252,7 @@ public class AsyncCrudControllerTests
 
         await _controller.Delete(id);
 
-        A.CallTo(() => _service.DeleteAsync(id))
+        A.CallTo(() => _crudHandler.DeleteAsync(id))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -260,7 +260,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyService>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyCrudHandler>());
 
         var result = await controller.Delete(id) as ObjectResult;
 
@@ -272,7 +272,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_NonExistingId_ReturnsNotFound()
     {
         const string id = "1";
-        A.CallTo(() => _service.DeleteAsync(id))
+        A.CallTo(() => _crudHandler.DeleteAsync(id))
             .Throws<KeyNotFoundException>();
 
         var result = await _controller.Delete(id) as ObjectResult;
@@ -285,7 +285,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_NullId_ReturnsBadRequest()
     {
         const string id = "1";
-        A.CallTo(() => _service.DeleteAsync(id))
+        A.CallTo(() => _crudHandler.DeleteAsync(id))
             .Throws<ArgumentNullException>();
 
         var result = await _controller.Delete(id) as ObjectResult;
