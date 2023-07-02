@@ -18,6 +18,5 @@ namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data
         public int TemperatureC { get; set; }
 
         public string Summary { get; set; } = "";
-        
     }
 }

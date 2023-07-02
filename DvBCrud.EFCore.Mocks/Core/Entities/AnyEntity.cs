@@ -11,13 +11,12 @@ namespace DvBCrud.EFCore.Mocks.Core.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
-        
+        public string Id { get; set; } = "";
+
         public DateTimeOffset CreatedAt { get; set; }
         
         public DateTimeOffset ModifiedAt { get; set; }
         
-        public string AnyString { get; set; }
-        
+        public string? AnyString { get; set; }
     }
 }
