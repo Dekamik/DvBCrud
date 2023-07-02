@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using DvBCrud.EFCore.API.CrudActions;
 using DvBCrud.EFCore.API.Extensions;
+using DvBCrud.EFCore.API.Permissions;
 using DvBCrud.EFCore.API.Swagger;
 using DvBCrud.EFCore.Exceptions;
 using DvBCrud.EFCore.Repositories;
@@ -19,7 +19,7 @@ namespace DvBCrud.EFCore.API.Controllers
         where TRepository : IRepository<TId, TModel>
     {
         protected readonly TRepository Repository;
-        protected readonly CrudAction[]? CrudActions;
+        protected readonly CrudActions CrudActions;
 
         protected CrudController(TRepository repository)
         {
@@ -30,10 +30,10 @@ namespace DvBCrud.EFCore.API.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [SwaggerDocsFilter(CrudAction.Create)]
+        [SwaggerDocsFilter(CrudActions.Create)]
         public virtual IActionResult Create([FromBody] TModel model)
         {
-            if (!CrudActions.IsActionAllowed(CrudAction.Create))
+            if (!CrudActions.IsActionAllowed(CrudActions.Create))
             {
                 return NotAllowed(HttpMethod.Post.Method);
             }
@@ -53,10 +53,10 @@ namespace DvBCrud.EFCore.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [SwaggerDocsFilter(CrudAction.Read)]
+        [SwaggerDocsFilter(CrudActions.Read)]
         public virtual ActionResult<TModel> Read(TId id)
         {
-            if (!CrudActions.IsActionAllowed(CrudAction.Read))
+            if (!CrudActions.IsActionAllowed(CrudActions.Read))
             {
                 return NotAllowed(HttpMethod.Get.Method);
             }
@@ -74,10 +74,10 @@ namespace DvBCrud.EFCore.API.Controllers
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [SwaggerDocsFilter(CrudAction.Read)]
+        [SwaggerDocsFilter(CrudActions.Read)]
         public virtual ActionResult<IEnumerable<TModel>> ReadAll()
         {
-            if (!CrudActions.IsActionAllowed(CrudAction.Read))
+            if (!CrudActions.IsActionAllowed(CrudActions.Read))
             {
                 return NotAllowed(HttpMethod.Get.Method);
             }
@@ -89,10 +89,10 @@ namespace DvBCrud.EFCore.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [SwaggerDocsFilter(CrudAction.Update)]
+        [SwaggerDocsFilter(CrudActions.Update)]
         public virtual IActionResult Update(TId id, [FromBody] TModel model)
         {
-            if (!CrudActions.IsActionAllowed(CrudAction.Update))
+            if (!CrudActions.IsActionAllowed(CrudActions.Update))
             {
                 return NotAllowed(HttpMethod.Put.Method);
             }
@@ -116,10 +116,10 @@ namespace DvBCrud.EFCore.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [SwaggerDocsFilter(CrudAction.Delete)]
+        [SwaggerDocsFilter(CrudActions.Delete)]
         public virtual IActionResult Delete(TId id)
         {
-            if (!CrudActions.IsActionAllowed(CrudAction.Delete))
+            if (!CrudActions.IsActionAllowed(CrudActions.Delete))
             {
                 return NotAllowed(HttpMethod.Delete.Method);
             }

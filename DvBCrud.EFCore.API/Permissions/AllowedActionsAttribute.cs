@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace DvBCrud.EFCore.API.CrudActions;
+namespace DvBCrud.EFCore.API.Permissions;
 
 /// <summary>
 /// Defines which actions are allowed on a CrudController
@@ -10,9 +10,9 @@ namespace DvBCrud.EFCore.API.CrudActions;
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class AllowedActionsAttribute : Attribute
 {
-    public CrudAction[] AllowedActions { get; }
+    public CrudActions AllowedActions { get; }
 
-    public AllowedActionsAttribute(params CrudAction[] allowedActions)
+    public AllowedActionsAttribute(CrudActions allowedActions)
     {
         AllowedActions = allowedActions;
     }

@@ -23,7 +23,7 @@ namespace DvBCrud.EFCore.Repositories
 
         protected IQueryable<TEntity> QueryableWithIncludes { get; init; }
 
-        public Repository(TDbContext context, TMapper mapper)
+        protected Repository(TDbContext context, TMapper mapper)
         {
             Context = context;
             Mapper = mapper;

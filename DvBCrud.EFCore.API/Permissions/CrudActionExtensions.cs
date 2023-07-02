@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace DvBCrud.EFCore.API.CrudActions;
+namespace DvBCrud.EFCore.API.Permissions;
 
 public static class CrudActionExtensions
 {
@@ -15,11 +15,13 @@ public static class CrudActionExtensions
     /// <param name="allowedActions">An array of allowed actions</param>
     /// <param name="action">Action to check for</param>
     /// <returns>True if selected action is allowed or if <paramref name="allowedActions"/> is null or empty</returns>
-    public static bool IsActionAllowed(this IEnumerable<CrudAction>? allowedActions, CrudAction action)
+    public static bool IsActionAllowed(this CrudActions allowedActions, CrudActions action)
     {
-        var allowedActionsArr = allowedActions?.ToArray();
-        return allowedActionsArr == null ||
-               !allowedActionsArr.Any() ||
-               allowedActionsArr.Contains(action);
+        // var allowedActionsArr = allowedActions?.ToArray();
+        // return allowedActionsArr == null ||
+        //        !allowedActionsArr.Any() ||
+        //        allowedActionsArr.Contains(action);
+        return allowedActions == CrudActions.All ||
+               (allowedActions & action) == action;
     }
 }

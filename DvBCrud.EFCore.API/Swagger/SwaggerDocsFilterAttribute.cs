@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using DvBCrud.EFCore.API.CrudActions;
+using DvBCrud.EFCore.API.Permissions;
 
 namespace DvBCrud.EFCore.API.Swagger;
 
@@ -11,9 +11,9 @@ namespace DvBCrud.EFCore.API.Swagger;
 [AttributeUsage(AttributeTargets.Method)]
 public sealed class SwaggerDocsFilterAttribute : Attribute
 {
-    public CrudAction HideIfNotAllowed { get; }
+    public CrudActions HideIfNotAllowed { get; }
     
-    public SwaggerDocsFilterAttribute(CrudAction hideIfNotAllowed)
+    public SwaggerDocsFilterAttribute(CrudActions hideIfNotAllowed)
     {
         HideIfNotAllowed = hideIfNotAllowed;
     }
