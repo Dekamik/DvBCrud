@@ -1,8 +1,6 @@
 using System;
-using System.Threading;
 using DvBCrud.EFCore.Mocks.Core.DbContexts;
 using DvBCrud.EFCore.Mocks.Core.Entities;
-using DvBCrud.EFCore.Mocks.Core.Repositories;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;

@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace DvBCrud.EFCore.Entities
+﻿namespace DvBCrud.EFCore.Entities
 {
     /// <summary>
     /// Base interface for all entities that are to be manipulated by IRepository and IReadOnlyRepository

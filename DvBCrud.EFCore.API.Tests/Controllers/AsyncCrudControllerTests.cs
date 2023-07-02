@@ -4,7 +4,6 @@ using System.Net;
 using System.Threading.Tasks;
 using DvBCrud.EFCore.Mocks.Controllers;
 using DvBCrud.EFCore.Mocks.Core.Repositories;
-using DvBCrud.EFCore.Mocks.Services;
 using DvBCrud.EFCore.Mocks.Services.Model;
 using FakeItEasy;
 using FluentAssertions;
