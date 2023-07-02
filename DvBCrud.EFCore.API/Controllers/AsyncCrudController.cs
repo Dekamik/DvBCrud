@@ -83,14 +83,7 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            try
-            {
-                return Ok(await Task.Run(() => CrudHandler.List()));
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            return Ok(await Task.Run(() => CrudHandler.List()));
         }
 
         [HttpPut("{id}")]
