@@ -55,7 +55,7 @@ public class ServiceTests
             }
         };
 
-        A.CallTo(() => _repository.GetAll())
+        A.CallTo(() => _repository.List())
             .Returns(entities);
         A.CallTo(() => _mapper.ToModel(entities.First()))
             .Returns(models.First());

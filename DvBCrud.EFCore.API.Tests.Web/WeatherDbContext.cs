@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DvBCrud.EFCore.API.Tests.Web
 {
     [ExcludeFromCodeCoverage]
-    public class WeatherDbContext : DbContext
+    public class WeatherDbContext : CrudDbContext
     {
         public WeatherDbContext(DbContextOptions options) : base(options)
         {

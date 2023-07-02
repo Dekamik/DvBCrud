@@ -9,7 +9,7 @@ namespace DvBCrud.EFCore.Repositories
 {
     public abstract class Repository<TEntity, TId, TDbContext> : IRepository<TEntity, TId>
         where TEntity : BaseEntity<TId>
-        where TDbContext : DbContext
+        where TDbContext : CrudDbContext
     {
         protected readonly TDbContext Context;
 
@@ -23,7 +23,7 @@ namespace DvBCrud.EFCore.Repositories
             QueryableWithIncludes = Set.AsQueryable();
         }
 
-        public virtual IQueryable<TEntity> GetAll()
+        public virtual IQueryable<TEntity> List()
         {
             return QueryableWithIncludes;
         }

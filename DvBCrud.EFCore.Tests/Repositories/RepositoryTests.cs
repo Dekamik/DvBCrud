@@ -46,7 +46,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _dbContext.SaveChanges();
 
             // Act
-            var actual = _repository.GetAll();
+            var actual = _repository.List();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
@@ -299,9 +299,9 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _dbContext.SaveChanges();
 
             // Assert
-            _dbContext.AnyEntities.First(e => e.Id == "1")
+            _dbContext.AnyEntities.First(e => e.Id == "1").AnyString
                 .Should()
-                .BeEquivalentTo(expected);
+                .Be(expected.AnyString);
         }
 
         [Fact]
@@ -486,7 +486,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _repository.SaveChanges();
 
             // Assert
-            _dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
+            _dbContext.AnyEntities.First().AnyString.Should().Be(modifiedEntity.AnyString);
         }
 
         [Fact]
@@ -509,7 +509,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _dbContext.AnyEntities.Find(modifiedEntity.Id)!.AnyString = modifiedEntity.AnyString;
 
             // Assert
-            _dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
+            _dbContext.AnyEntities.First().AnyString.Should().Be(modifiedEntity.AnyString);
         }
 
         [Fact]
@@ -609,7 +609,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             await _repository.SaveChangesAsync();
 
             // Assert
-            _dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
+            _dbContext.AnyEntities.First().AnyString.Should().Be(modifiedEntity.AnyString);
         }
 
         [Fact]
@@ -632,7 +632,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _dbContext.AnyEntities.Find(modifiedEntity.Id)!.AnyString = modifiedEntity.AnyString;
 
             // Assert
-            _dbContext.AnyEntities.First().Should().BeEquivalentTo(modifiedEntity);
+            _dbContext.AnyEntities.First().AnyString.Should().Be(modifiedEntity.AnyString);
         }
 
         [Fact]

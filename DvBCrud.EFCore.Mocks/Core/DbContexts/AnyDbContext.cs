@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DvBCrud.EFCore.Mocks.Core.DbContexts
 {
     [ExcludeFromCodeCoverage]
-    public class AnyDbContext : DbContext
+    public class AnyDbContext : CrudDbContext
     {
         public AnyDbContext(DbContextOptions options) : base(options)
         {
