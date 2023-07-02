@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using DvBCrud.EFCore.Exceptions;
 using DvBCrud.EFCore.Mocks.Controllers;
 using DvBCrud.EFCore.Mocks.Core.Repositories;
 using DvBCrud.EFCore.Mocks.Services.Model;
@@ -105,7 +106,7 @@ public class CrudControllerTests
         const string id = "1";
         
         A.CallTo(() => _repository.Get(id))
-            .Returns(null);
+            .Throws<NotFoundException>();
 
         var result = _controller.Read(id).Result as ObjectResult;
 
@@ -214,7 +215,7 @@ public class CrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         A.CallTo(() => _repository.Update(id, model))
-            .Throws<KeyNotFoundException>();
+            .Throws<NotFoundException>();
 
         var result = _controller.Update(id, model) as ObjectResult;
 
@@ -273,7 +274,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         A.CallTo(() => _repository.Delete(id))
-            .Throws<KeyNotFoundException>();
+            .Throws<NotFoundException>();
 
         var result = _controller.Delete(id) as ObjectResult;
 

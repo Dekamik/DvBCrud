@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using DvBCrud.EFCore.Exceptions;
 using DvBCrud.EFCore.Mocks.Controllers;
 using DvBCrud.EFCore.Mocks.Core.Repositories;
 using DvBCrud.EFCore.Mocks.Services.Model;
@@ -106,7 +107,7 @@ public class AsyncCrudControllerTests
         const string id = "1";
         
         A.CallTo(() => _repository.GetAsync(id))
-            .Returns(Task.FromResult((AnyModel?)null));
+            .Throws<NotFoundException>();
 
         var result = (await _controller.Read(id)).Result as ObjectResult;
 

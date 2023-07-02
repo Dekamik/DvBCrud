@@ -7,7 +7,7 @@ using DvBCrud.EFCore.Entities;
 namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data
 {
     [ExcludeFromCodeCoverage]
-    public class WeatherForecast : IEntity<int>
+    public record WeatherForecast : IEntity<int>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
