@@ -14,11 +14,11 @@ namespace DvBCrud.EFCore.Repositories
         where TEntity : BaseEntity<TId>
     {
         /// <summary>
-        /// Gets all entities
+        /// Lists all entities
         /// </summary>
         /// <returns>An <see cref="IQueryable"/> containing all <typeparamref name="TEntity"/> instances</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
-        IQueryable<TEntity> GetAll();
+        IQueryable<TEntity> List();
 
         /// <summary>
         /// Finds a single <typeparamref name="TEntity"/> whose Id matches <paramref name="id"/>

@@ -19,7 +19,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
         Repository = repository;
     }
 
-    public virtual IEnumerable<TModel> GetAll() => Repository.GetAll().Select(Mapper.ToModel);
+    public virtual IEnumerable<TModel> GetAll() => Repository.List().Select(Mapper.ToModel);
 
     public virtual TModel? Get(TId id)
     {

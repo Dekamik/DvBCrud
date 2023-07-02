@@ -46,7 +46,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _dbContext.SaveChanges();
 
             // Act
-            var actual = _repository.GetAll();
+            var actual = _repository.List();
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
