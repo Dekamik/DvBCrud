@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,15 +10,10 @@ namespace DvBCrud.EFCore;
 
 public abstract class CrudDbContext : DbContext
 {
-    public CrudDbContext()
-    {
-        
-    }
+    [ExcludeFromCodeCoverage]
+    protected CrudDbContext() { }
 
-    public CrudDbContext(DbContextOptions options) : base(options)
-    {
-        
-    }
+    protected CrudDbContext(DbContextOptions options) : base(options) { }
     
     public override int SaveChanges()
     {
@@ -47,14 +43,13 @@ public abstract class CrudDbContext : DbContext
         foreach (var entry in addedEntries)
         {
             var utcNow = DateTimeOffset.UtcNow;
-            switch (entry)
+            if (entry is ICreatedAt addedModel)
             {
-                case ICreatedAt addedModel:
-                    addedModel.CreatedAt = utcNow;
-                    break;
-                case IModifiedAt modifiedModel:
-                    modifiedModel.ModifiedAt = utcNow;
-                    break;
+                addedModel.CreatedAt = utcNow;
+            }
+            if (entry is IModifiedAt modifiedModel)
+            {
+                modifiedModel.ModifiedAt = utcNow;
             }
         }
 
