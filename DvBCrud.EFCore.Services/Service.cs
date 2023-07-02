@@ -1,6 +1,7 @@
 ﻿using DvBCrud.Common.Services.Mapping;
 using DvBCrud.EFCore.Entities;
 using DvBCrud.EFCore.Repositories;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace DvBCrud.EFCore.Services;
 
@@ -13,13 +14,18 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
     protected readonly TRepository Repository;
     protected readonly TMapper Mapper;
 
-    public Service(TRepository repository, TMapper mapper)
+    protected Service(TRepository repository, TMapper mapper)
     {
         Mapper = mapper;
         Repository = repository;
     }
 
-    public virtual IEnumerable<TModel> GetAll() => Repository.List().Select(Mapper.ToModel);
+    public virtual IEnumerable<TModel> GetAll()
+    {
+        return Repository.List()
+            .AsEnumerable()
+            .Select(Mapper.ToModel);
+    }
 
     public virtual TModel? Get(TId id)
     {

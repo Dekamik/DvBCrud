@@ -5,7 +5,7 @@ using DvBCrud.EFCore.Entities;
 namespace DvBCrud.EFCore.Mocks.Core.Entities
 {
     [ExcludeFromCodeCoverage]
-    public class AnyEntity : BaseEntity<string>, ICreatedAt, IModifiedAt // Using string type for Id to test nullable cases
+    public class AnyEntity : BaseEntity<string>, ICreatedAt, IModifiedAt  // Using string type for Id to test nullable cases
     {
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset ModifiedAt { get; set; }
