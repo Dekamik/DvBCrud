@@ -133,7 +133,7 @@ public class AsyncCrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _service.GetAll())
+        A.CallTo(() => _service.List())
             .Returns(models);
 
         var result = (await _controller.ReadAll()).Result as OkObjectResult;
@@ -151,7 +151,7 @@ public class AsyncCrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _service.GetAll())
+        A.CallTo(() => _service.List())
             .Returns(models);
 
         var result = (await _controller.ReadAll()).Result as OkObjectResult;

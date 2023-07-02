@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DvBCrud.EFCore.Services\DvBCrud.EFCore.Services.csproj" />
     <ProjectReference Include="..\DvBCrud.EFCore\DvBCrud.EFCore.csproj" />
   </ItemGroup>
 

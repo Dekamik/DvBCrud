@@ -1,4 +1,8 @@
-﻿using DvBCrud.EFCore.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DvBCrud.EFCore.Entities;
 using DvBCrud.EFCore.Mapping;
 using DvBCrud.EFCore.Repositories;
 // ReSharper disable MemberCanBePrivate.Global
@@ -20,7 +24,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
         Repository = repository;
     }
 
-    public virtual IEnumerable<TModel> GetAll()
+    public virtual IEnumerable<TModel> List()
     {
         return Repository.List()
             .AsEnumerable()

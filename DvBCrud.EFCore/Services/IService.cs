@@ -1,8 +1,11 @@
-﻿namespace DvBCrud.EFCore.Services;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace DvBCrud.EFCore.Services;
 
 public interface IService<TId, TModel> where TModel : class
 {
-    IEnumerable<TModel> GetAll();
+    IEnumerable<TModel> List();
     TModel? Get(TId id);
     Task<TModel?> GetAsync(TId id);
     TId Create(TModel model);

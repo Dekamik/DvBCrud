@@ -30,7 +30,6 @@ jobs:
       matrix:
         project:
           - DvBCrud.EFCore
-          - DvBCrud.EFCore.Services
           - DvBCrud.EFCore.API
     runs-on: ubuntu-latest
     needs: test

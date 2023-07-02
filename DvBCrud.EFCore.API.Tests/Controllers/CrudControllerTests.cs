@@ -132,7 +132,7 @@ public class CrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _service.GetAll())
+        A.CallTo(() => _service.List())
             .Returns(models);
 
         var result = _controller.ReadAll().Result as OkObjectResult;
@@ -150,7 +150,7 @@ public class CrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _service.GetAll())
+        A.CallTo(() => _service.List())
             .Returns(models);
 
         var result = _controller.ReadAll().Result as OkObjectResult;

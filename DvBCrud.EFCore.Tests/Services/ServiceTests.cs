@@ -62,7 +62,7 @@ public class ServiceTests
         A.CallTo(() => _mapper.ToModel(entities.Last()))
             .Returns(models.Last());
 
-        var actual = _service.GetAll();
+        var actual = _service.List();
 
         actual.Should().Contain(models);
     }

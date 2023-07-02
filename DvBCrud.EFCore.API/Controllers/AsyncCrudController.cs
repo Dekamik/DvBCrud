@@ -81,7 +81,7 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var entities = await Task.Run(() => Service.GetAll());
+            var entities = await Task.Run(() => Service.List());
 
             return Ok(entities);
         }

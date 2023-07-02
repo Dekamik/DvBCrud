@@ -80,7 +80,7 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var entities = Service.GetAll();
+            var entities = Service.List();
 
             return Ok(entities);
         }
