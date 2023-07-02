@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DvBCrud.EFCore.Mocks.Core.DbContexts;
 using DvBCrud.EFCore.Mocks.Core.Entities;
 using DvBCrud.EFCore.Mocks.Core.Repositories;
+using DvBCrud.EFCore.Mocks.Services.Model;
 using Xunit;
 
 namespace DvBCrud.EFCore.Tests.Repositories
@@ -14,6 +15,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
     public class RepositoryTests
     {
         private readonly AnyDbContext _dbContext;
+        private readonly AnyMapper _mapper;
         private readonly IAnyRepository _repository;
 
         public RepositoryTests()
@@ -22,7 +24,8 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
             _dbContext = new AnyDbContext(options);
-            _repository = new AnyRepository(_dbContext);
+            _mapper = new AnyMapper();
+            _repository = new AnyRepository(_dbContext, _mapper);
         }
 
         [Fact]
@@ -198,10 +201,7 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _dbContext.SaveChanges();
 
             // Act
-            _repository.Create(entity);
-
-            // Assert
-            _dbContext.Invoking(db => db.SaveChanges()).Should().Throw<ArgumentException>();
+            _repository.Invoking(x => x.Create(entity)).Should().Throw<ArgumentException>();
         }
 
         [Fact]
@@ -209,9 +209,48 @@ namespace DvBCrud.EFCore.Tests.Repositories
             _repository.Invoking(r => r.Create(null))
                 .Should()
                 .Throw<ArgumentNullException>();
+        
+        [Fact]
+        public async Task CreateAsync_AnyEntity_EntityCreated()
+        {
+            // Arrange
+            var expected = new AnyEntity
+            {
+                AnyString = "AnyString"
+            };
+
+            // Act
+            await _repository.CreateAsync(expected);
+            await _dbContext.SaveChangesAsync();
+
+            // Assert
+            _dbContext.AnyEntities.First().AnyString.Should().Be(expected.AnyString);
+        }
 
         [Fact]
-        public void Update_ExistingEntity_EntityUpdatedAsync()
+        public void CreateAsync_ExistingEntity_ThrowsArgumentException()
+        {
+            // Arrange
+            var entity = new AnyEntity
+            {
+                Id = "1",
+                AnyString = "AnyString"
+            };
+            _dbContext.AnyEntities.Add(entity);
+            _dbContext.SaveChanges();
+
+            // Act
+            _repository.Invoking(x => x.CreateAsync(entity)).Should().ThrowAsync<ArgumentException>();
+        }
+
+        [Fact]
+        public void CreateAsync_Null_ThrowsArgumentNullException() => 
+            _repository.Invoking(r => r.CreateAsync(null))
+                .Should()
+                .ThrowAsync<ArgumentNullException>();
+
+        [Fact]
+        public void Update_ExistingEntity_EntityUpdated()
         {
             // Arrange
             _dbContext.AnyEntities.Add(new AnyEntity
@@ -227,7 +266,6 @@ namespace DvBCrud.EFCore.Tests.Repositories
 
             // Act
             _repository.Update("1", expected);
-            _dbContext.SaveChanges();
 
             // Assert
             _dbContext.AnyEntities.First(e => e.Id == "1")
@@ -296,7 +334,6 @@ namespace DvBCrud.EFCore.Tests.Repositories
 
             // Act
             await _repository.UpdateAsync("1", expected);
-            _dbContext.SaveChanges();
 
             // Assert
             _dbContext.AnyEntities.First(e => e.Id == "1").AnyString
@@ -428,253 +465,6 @@ namespace DvBCrud.EFCore.Tests.Repositories
                 .Should()
                 .ThrowAsync<KeyNotFoundException>();
 
-        [Fact]
-        public void SaveChanges_CallAfterAdd_ChangesSaved()
-        {
-            // Arrange
-            var expected = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            };
-
-            // Act
-            _dbContext.AnyEntities.Add(expected);
-            _repository.SaveChanges();
-
-            // Assert
-            _dbContext.AnyEntities.First()
-                .Should()
-                .BeEquivalentTo(expected);
-        }
-
-        [Fact]
-        public void SaveChanges_NoCallAfterAdd_ChangesNotSaved()
-        {
-            // Arrange
-            var entity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            };
-
-            // Act
-            _dbContext.AnyEntities.Add(entity);
-
-            // Assert
-            _dbContext.AnyEntities.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void SaveChanges_CallAfterModify_ChangesSaved()
-        {
-            // Arrange
-            _dbContext.Add(new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            });
-            _dbContext.SaveChanges();
-            var modifiedEntity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyNewString"
-            };
-
-            // Act
-            _dbContext.AnyEntities.Find(modifiedEntity.Id)!.AnyString = modifiedEntity.AnyString;
-            _repository.SaveChanges();
-
-            // Assert
-            _dbContext.AnyEntities.First().AnyString.Should().Be(modifiedEntity.AnyString);
-        }
-
-        [Fact]
-        public void SaveChanges_NoCallAfterModify_ChangesSaved()
-        {
-            // Arrange
-            _dbContext.Add(new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            });
-            _dbContext.SaveChanges();
-            var modifiedEntity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyNewString"
-            };
-
-            // Act
-            _dbContext.AnyEntities.Find(modifiedEntity.Id)!.AnyString = modifiedEntity.AnyString;
-
-            // Assert
-            _dbContext.AnyEntities.First().AnyString.Should().Be(modifiedEntity.AnyString);
-        }
-
-        [Fact]
-        public void SaveChanges_CallAfterRemove_ChangesSaved()
-        {
-            // Arrange
-            var entity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            };
-            _dbContext.Add(entity);
-            _dbContext.SaveChanges();
-            _dbContext.AnyEntities.Should().Contain(entity);
-
-            // Act
-            _dbContext.AnyEntities.Remove(entity);
-            _repository.SaveChanges();
-
-            // Assert
-            _dbContext.AnyEntities.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void SaveChanges_NoCallAfterRemove_ChangesNotSaved()
-        {
-            // Arrange
-            var entity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            };
-            _dbContext.Add(entity);
-            _dbContext.SaveChanges();
-            _dbContext.AnyEntities.Should().Contain(entity);
-
-            // Act
-            _dbContext.AnyEntities.Remove(entity);
-
-            // Assert
-            _dbContext.AnyEntities.Should().Contain(entity);
-        }
-
-        [Fact]
-        public async Task SaveChangesAsync_CallAfterAdd_ChangesSaved()
-        {
-            // Arrange
-            var expected = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            };
-
-            // Act
-            _dbContext.AnyEntities.Add(expected);
-            await _repository.SaveChangesAsync();
-
-            // Assert
-            _dbContext.AnyEntities.First().Should().BeEquivalentTo(expected);
-        }
-
-        [Fact]
-        public void SaveChangesAsync_NoCallAfterAdd_ChangesNotSaved()
-        {
-            // Arrange
-            var entity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            };
-
-            // Act
-            _dbContext.AnyEntities.Add(entity);
-
-            // Assert
-            _dbContext.AnyEntities.Should().BeEmpty();
-        }
-
-        [Fact]
-        public async Task SaveChangesAsync_CallAfterModify_ChangesSaved()
-        {
-            // Arrange
-            _dbContext.Add(new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            });
-            _dbContext.SaveChanges();
-            var modifiedEntity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyNewString"
-            };
-
-            // Act
-            _dbContext.AnyEntities.Find(modifiedEntity.Id)!.AnyString = modifiedEntity.AnyString;
-            await _repository.SaveChangesAsync();
-
-            // Assert
-            _dbContext.AnyEntities.First().AnyString.Should().Be(modifiedEntity.AnyString);
-        }
-
-        [Fact]
-        public void SaveChangesAsync_NoCallAfterModify_ChangesSaved()
-        {
-            // Arrange
-            _dbContext.Add(new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            });
-            _dbContext.SaveChanges();
-            var modifiedEntity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyNewString"
-            };
-
-            // Act
-            _dbContext.AnyEntities.Find(modifiedEntity.Id)!.AnyString = modifiedEntity.AnyString;
-
-            // Assert
-            _dbContext.AnyEntities.First().AnyString.Should().Be(modifiedEntity.AnyString);
-        }
-
-        [Fact]
-        public async Task SaveChangesAsync_CallAfterRemove_ChangesSaved()
-        {
-            // Arrange
-            var entity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            };
-            _dbContext.Add(entity);
-            _dbContext.SaveChanges();
-            _dbContext.AnyEntities.Should().Contain(entity);
-
-            // Act
-            _dbContext.AnyEntities.Remove(entity);
-            await _repository.SaveChangesAsync();
-
-            // Assert
-            _dbContext.AnyEntities.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void SaveChangesAsync_NoCallAfterRemove_ChangesNotSaved()
-        {
-            // Arrange
-            var entity = new AnyEntity
-            {
-                Id = "1",
-                AnyString = "AnyString"
-            };
-            _dbContext.Add(entity);
-            _dbContext.SaveChanges();
-            _dbContext.AnyEntities.Should().Contain(entity);
-
-            // Act
-            _dbContext.AnyEntities.Remove(entity);
-
-            // Assert
-            _dbContext.AnyEntities.Should().Contain(entity);
-        }
 
         [Fact]
         public void Exists_EntityExists_ReturnsTrue()

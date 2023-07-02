@@ -114,8 +114,6 @@ public class ServiceTests
 
         A.CallTo(() => _repository.Create(entity))
             .MustHaveHappenedOnceExactly();
-        A.CallTo(() => _repository.SaveChanges())
-            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -136,9 +134,7 @@ public class ServiceTests
         
         await _service.CreateAsync(model);
 
-        A.CallTo(() => _repository.Create(entity))
-            .MustHaveHappenedOnceExactly();
-        A.CallTo(() => _repository.SaveChangesAsync())
+        A.CallTo(() => _repository.CreateAsync(entity))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -161,9 +157,7 @@ public class ServiceTests
         
         _service.Update(id, model);
 
-        A.CallTo(() => _repository.Update(id, entity))
-            .MustHaveHappenedOnceExactly();
-        A.CallTo(() => _repository.SaveChanges())
+        A.CallTo(() => _repository.Update(id, A<AnyEntity>._))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -195,8 +189,6 @@ public class ServiceTests
 
         A.CallTo(() => _repository.UpdateAsync(id, entity))
             .MustHaveHappenedOnceExactly();
-        A.CallTo(() => _repository.SaveChangesAsync())
-            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -222,8 +214,6 @@ public class ServiceTests
 
         A.CallTo(() => _repository.Delete(id))
             .MustHaveHappenedOnceExactly();
-        A.CallTo(() => _repository.SaveChanges())
-            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -241,8 +231,6 @@ public class ServiceTests
         await _service.DeleteAsync(id);
 
         A.CallTo(() => _repository.DeleteAsync(id))
-            .MustHaveHappenedOnceExactly();
-        A.CallTo(() => _repository.SaveChangesAsync())
             .MustHaveHappenedOnceExactly();
     }
 

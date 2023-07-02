@@ -19,4 +19,9 @@ public class AnyMapper : IAnyMapper
             Id = model.Id,
             AnyString = model.AnyString
         };
+
+    public void UpdateEntity(AnyEntity source, AnyEntity destination)
+    {
+        destination.AnyString = source.AnyString;
+    }
 }

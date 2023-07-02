@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using DvBCrud.Common.Api.CrudActions;
+using DvBCrud.EFCore.API.CrudActions;
 
 namespace DvBCrud.EFCore.API.Extensions;
 
