@@ -5,22 +5,24 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using DvBCrud.EFCore.API.CrudActions;
 using DvBCrud.EFCore.API.Extensions;
-using DvBCrud.EFCore.API.Handlers;
 using DvBCrud.EFCore.API.Swagger;
+using DvBCrud.EFCore.Exceptions;
+using DvBCrud.EFCore.Repositories;
 using Microsoft.AspNetCore.Mvc;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace DvBCrud.EFCore.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public abstract class AsyncCrudController<TId, TModel, TService> : CrudControllerBase<TModel>
+    public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudControllerBase<TModel>
         where TModel : class
-        where TService : ICrudHandler<TId, TModel>
+        where TRepository : IRepository<TId, TModel>
     {
-        protected readonly TService CrudHandler;
+        protected readonly TRepository CrudHandler;
         protected readonly CrudAction[]? CrudActions;
 
-        public AsyncCrudController(TService crudHandler)
+        protected AsyncCrudController(TRepository crudHandler)
         {
             CrudHandler = crudHandler;
             CrudActions = GetType().GetCrudActions();
@@ -60,14 +62,14 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var entity = await CrudHandler.GetAsync(id);
-
-            if (entity == null)
+            try
             {
-                return NotFound($"{typeof(TModel)} {id} not found.");
+                return Ok(await CrudHandler.GetAsync(id));
             }
-
-            return Ok(entity);
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -81,15 +83,20 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var entities = await Task.Run(() => CrudHandler.List());
-
-            return Ok(entities);
+            try
+            {
+                return Ok(await Task.Run(() => CrudHandler.List()));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [SwaggerDocsFilter(CrudAction.Update)]
         public virtual async Task<IActionResult> Update(TId id, [FromBody] TModel model)
         {
@@ -103,20 +110,20 @@ namespace DvBCrud.EFCore.API.Controllers
                 await CrudHandler.UpdateAsync(id, model);
                 return NoContent();
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"{typeof(TModel)} {id} not found.");
-            }
             catch (ArgumentNullException ex)
             {
                 return BadRequest(ex);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"{typeof(TModel)} {id} not found.");
             }
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [SwaggerDocsFilter(CrudAction.Delete)]
         public virtual async Task<IActionResult> Delete(TId id)
         {
@@ -130,13 +137,13 @@ namespace DvBCrud.EFCore.API.Controllers
                 await CrudHandler.DeleteAsync(id);
                 return NoContent();
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"{typeof(TModel)} {id} not found.");
-            }
             catch (ArgumentNullException ex)
             {
                 return BadRequest(ex);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound($"{typeof(TModel)} {id} not found.");
             }
         }
     }

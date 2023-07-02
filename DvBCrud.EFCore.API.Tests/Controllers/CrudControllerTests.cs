@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using DvBCrud.EFCore.Mocks.Controllers;
+using DvBCrud.EFCore.Mocks.Core.Repositories;
 using DvBCrud.EFCore.Mocks.Services;
 using DvBCrud.EFCore.Mocks.Services.Model;
 using FakeItEasy;
@@ -14,13 +15,13 @@ namespace DvBCrud.EFCore.API.Tests.Controllers;
 
 public class CrudControllerTests
 {
-    private readonly IAnyCrudHandler _crudHandler;
+    private readonly IAnyRepository _repository;
     private readonly AnyCrudController _controller;
     
     public CrudControllerTests()
     {
-        _crudHandler = A.Fake<IAnyCrudHandler>();
-        _controller = new AnyCrudController(_crudHandler);
+        _repository = A.Fake<IAnyRepository>();
+        _controller = new AnyCrudController(_repository);
     }
 
     [Fact]
@@ -30,7 +31,7 @@ public class CrudControllerTests
 
         _controller.Create(model);
 
-        A.CallTo(() => _crudHandler.Create(model))
+        A.CallTo(() => _repository.Create(model))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -49,7 +50,7 @@ public class CrudControllerTests
     public void Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyReadOnlyController(A.Fake<IAnyCrudHandler>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyRepository>());
 
         var result = controller.Create(model) as ObjectResult;
 
@@ -60,7 +61,7 @@ public class CrudControllerTests
     [Fact]
     public void Create_NullModel_ReturnsBadRequest()
     {
-        A.CallTo(() => _crudHandler.Create(null))
+        A.CallTo(() => _repository.Create(null))
             .Throws<ArgumentNullException>();
 
         var result = _controller.Create(null) as ObjectResult;
@@ -75,7 +76,7 @@ public class CrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         
-        A.CallTo(() => _crudHandler.Get(id))
+        A.CallTo(() => _repository.Get(id))
             .Returns(model);
 
         var result = _controller.Read(id).Result as OkObjectResult;
@@ -90,7 +91,7 @@ public class CrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         
-        A.CallTo(() => _crudHandler.Get(id))
+        A.CallTo(() => _repository.Get(id))
             .Returns(model);
 
         var result = _controller.Read(id).Result as OkObjectResult;
@@ -104,7 +105,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         
-        A.CallTo(() => _crudHandler.Get(id))
+        A.CallTo(() => _repository.Get(id))
             .Returns(null);
 
         var result = _controller.Read(id).Result as ObjectResult;
@@ -116,7 +117,7 @@ public class CrudControllerTests
     [Fact]
     public void Read_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyCreateUpdateController(_crudHandler);
+        var controller = new AnyCreateUpdateController(_repository);
 
         var result = controller.Read("1").Result as ObjectResult;
 
@@ -133,7 +134,7 @@ public class CrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _crudHandler.List())
+        A.CallTo(() => _repository.List())
             .Returns(models);
 
         var result = _controller.ReadAll().Result as OkObjectResult;
@@ -151,7 +152,7 @@ public class CrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _crudHandler.List())
+        A.CallTo(() => _repository.List())
             .Returns(models);
 
         var result = _controller.ReadAll().Result as OkObjectResult;
@@ -163,7 +164,7 @@ public class CrudControllerTests
     [Fact]
     public void ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyCreateUpdateController(_crudHandler);
+        var controller = new AnyCreateUpdateController(_repository);
 
         var result = controller.ReadAll().Result as ObjectResult;
 
@@ -179,7 +180,7 @@ public class CrudControllerTests
 
         _controller.Update(id, model);
 
-        A.CallTo(() => _crudHandler.Update(id, model))
+        A.CallTo(() => _repository.Update(id, model))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -200,7 +201,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyReadOnlyController(A.Fake<IAnyCrudHandler>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyRepository>());
 
         var result = controller.Update(id, model) as ObjectResult;
 
@@ -213,7 +214,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        A.CallTo(() => _crudHandler.Update(id, model))
+        A.CallTo(() => _repository.Update(id, model))
             .Throws<KeyNotFoundException>();
 
         var result = _controller.Update(id, model) as ObjectResult;
@@ -225,7 +226,7 @@ public class CrudControllerTests
     [Fact]
     public void Update_NullArguments_ReturnsBadRequest()
     {
-        A.CallTo(() => _crudHandler.Update(null, null))
+        A.CallTo(() => _repository.Update(null, null))
             .Throws<ArgumentNullException>();
 
         var result = _controller.Update(null, null) as ObjectResult;
@@ -252,7 +253,7 @@ public class CrudControllerTests
 
         _controller.Delete(id);
 
-        A.CallTo(() => _crudHandler.Delete(id))
+        A.CallTo(() => _repository.Delete(id))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -260,7 +261,7 @@ public class CrudControllerTests
     public void Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyReadOnlyController(A.Fake<IAnyCrudHandler>());
+        var controller = new AnyReadOnlyController(A.Fake<IAnyRepository>());
 
         var result = controller.Delete(id) as ObjectResult;
 
@@ -272,7 +273,7 @@ public class CrudControllerTests
     public void Delete_NonExistingId_ReturnsNotFound()
     {
         const string id = "1";
-        A.CallTo(() => _crudHandler.Delete(id))
+        A.CallTo(() => _repository.Delete(id))
             .Throws<KeyNotFoundException>();
 
         var result = _controller.Delete(id) as ObjectResult;
@@ -285,7 +286,7 @@ public class CrudControllerTests
     public void Delete_NullId_ReturnsBadRequest()
     {
         const string id = "1";
-        A.CallTo(() => _crudHandler.Delete(id))
+        A.CallTo(() => _repository.Delete(id))
             .Throws<ArgumentNullException>();
 
         var result = _controller.Delete(id) as ObjectResult;

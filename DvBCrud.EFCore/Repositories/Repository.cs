@@ -73,6 +73,7 @@ namespace DvBCrud.EFCore.Repositories
             return entity.Id;
         }
 
+        /// <inheritdoc/>
         public async Task<TId> CreateAsync(TModel model)
         {
             if (model == null)

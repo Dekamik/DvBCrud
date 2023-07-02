@@ -1,14 +1,14 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using DvBCrud.EFCore.API.Controllers;
+using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
-using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Service;
 
 namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts
 {
     [ExcludeFromCodeCoverage]
-    public class WeatherForecastController : CrudController<int, WeatherForecastModel, IWeatherForecastCrudHandler>
+    public class WeatherForecastController : CrudController<int, WeatherForecastModel, IWeatherForecastRepository>
     {
-        public WeatherForecastController(IWeatherForecastCrudHandler crudHandler) : base(crudHandler)
+        public WeatherForecastController(IWeatherForecastRepository crudHandler) : base(crudHandler)
         {
         }
     }

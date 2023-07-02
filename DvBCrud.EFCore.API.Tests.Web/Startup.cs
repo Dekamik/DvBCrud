@@ -1,9 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
-using DvBCrud.EFCore.API.Filters;
 using DvBCrud.EFCore.API.Swagger;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
-using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -33,12 +31,8 @@ namespace DvBCrud.EFCore.API.Tests.Web
 
             services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
             services.AddScoped<IWeatherForecastMapper, WeatherForecastMapper>();
-            services.AddScoped<IWeatherForecastCrudHandler, WeatherForecastCrudHandler>();
 
-            services.AddControllers(options =>
-            {
-                options.AddCrudExceptionFilters();
-            });
+            services.AddControllers();
 
             services.AddCrudSwaggerGen();
         }

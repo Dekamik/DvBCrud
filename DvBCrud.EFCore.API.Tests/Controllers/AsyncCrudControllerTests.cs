@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using DvBCrud.EFCore.Mocks.Controllers;
+using DvBCrud.EFCore.Mocks.Core.Repositories;
 using DvBCrud.EFCore.Mocks.Services;
 using DvBCrud.EFCore.Mocks.Services.Model;
 using FakeItEasy;
@@ -15,13 +16,13 @@ namespace DvBCrud.EFCore.API.Tests.Controllers;
 
 public class AsyncCrudControllerTests
 {
-    private readonly IAnyCrudHandler _crudHandler;
+    private readonly IAnyRepository _repository;
     private readonly AnyAsyncCrudController _controller;
     
     public AsyncCrudControllerTests()
     {
-        _crudHandler = A.Fake<IAnyCrudHandler>();
-        _controller = new AnyAsyncCrudController(_crudHandler);
+        _repository = A.Fake<IAnyRepository>();
+        _controller = new AnyAsyncCrudController(_repository);
     }
 
     [Fact]
@@ -31,7 +32,7 @@ public class AsyncCrudControllerTests
 
         await _controller.Create(model);
 
-        A.CallTo(() => _crudHandler.CreateAsync(model))
+        A.CallTo(() => _repository.CreateAsync(model))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -50,7 +51,7 @@ public class AsyncCrudControllerTests
     public async Task Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyCrudHandler>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyRepository>());
 
         var result = await controller.Create(model) as ObjectResult;
 
@@ -61,7 +62,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task Create_NullModel_ReturnsBadRequest()
     {
-        A.CallTo(() => _crudHandler.CreateAsync(null))
+        A.CallTo(() => _repository.CreateAsync(null))
             .Throws<ArgumentNullException>();
 
         var result = await _controller.Create(null) as ObjectResult;
@@ -76,7 +77,7 @@ public class AsyncCrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         
-        A.CallTo(() => _crudHandler.GetAsync(id))
+        A.CallTo(() => _repository.GetAsync(id))
             .Returns(Task.FromResult((AnyModel?)model));
 
         var result = (await _controller.Read(id)).Result as OkObjectResult;
@@ -91,7 +92,7 @@ public class AsyncCrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         
-        A.CallTo(() => _crudHandler.GetAsync(id))
+        A.CallTo(() => _repository.GetAsync(id))
             .Returns(Task.FromResult((AnyModel?)model));
 
         var result = (await _controller.Read(id)).Result as OkObjectResult;
@@ -105,7 +106,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         
-        A.CallTo(() => _crudHandler.GetAsync(id))
+        A.CallTo(() => _repository.GetAsync(id))
             .Returns(Task.FromResult((AnyModel?)null));
 
         var result = (await _controller.Read(id)).Result as ObjectResult;
@@ -117,7 +118,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task Read_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyAsyncCreateUpdateController(_crudHandler);
+        var controller = new AnyAsyncCreateUpdateController(_repository);
 
         var result = (await controller.Read("1")).Result as ObjectResult;
 
@@ -134,7 +135,7 @@ public class AsyncCrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _crudHandler.List())
+        A.CallTo(() => _repository.List())
             .Returns(models);
 
         var result = (await _controller.ReadAll()).Result as OkObjectResult;
@@ -152,7 +153,7 @@ public class AsyncCrudControllerTests
             new AnyModel()
         };
         
-        A.CallTo(() => _crudHandler.List())
+        A.CallTo(() => _repository.List())
             .Returns(models);
 
         var result = (await _controller.ReadAll()).Result as OkObjectResult;
@@ -164,7 +165,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
-        var controller = new AnyAsyncCreateUpdateController(_crudHandler);
+        var controller = new AnyAsyncCreateUpdateController(_repository);
 
         var result = (await controller.ReadAll()).Result as ObjectResult;
 
@@ -180,7 +181,7 @@ public class AsyncCrudControllerTests
 
         await _controller.Update(id, model);
 
-        A.CallTo(() => _crudHandler.UpdateAsync(id, model))
+        A.CallTo(() => _repository.UpdateAsync(id, model))
             .MustHaveHappenedOnceExactly();
     }
     
@@ -201,7 +202,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyCrudHandler>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyRepository>());
 
         var result = await controller.Update(id, model) as ObjectResult;
 
@@ -214,7 +215,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        A.CallTo(() => _crudHandler.UpdateAsync(id, model))
+        A.CallTo(() => _repository.UpdateAsync(id, model))
             .Throws<KeyNotFoundException>();
 
         var result = await _controller.Update(id, model) as ObjectResult;
@@ -226,7 +227,7 @@ public class AsyncCrudControllerTests
     [Fact]
     public async Task Update_NullArguments_ReturnsBadRequest()
     {
-        A.CallTo(() => _crudHandler.UpdateAsync(null, null))
+        A.CallTo(() => _repository.UpdateAsync(null, null))
             .Throws<ArgumentNullException>();
 
         var result = await _controller.Update(null, null) as ObjectResult;
@@ -253,7 +254,7 @@ public class AsyncCrudControllerTests
 
         await _controller.Delete(id);
 
-        A.CallTo(() => _crudHandler.DeleteAsync(id))
+        A.CallTo(() => _repository.DeleteAsync(id))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -261,7 +262,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyCrudHandler>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IAnyRepository>());
 
         var result = await controller.Delete(id) as ObjectResult;
 
@@ -273,7 +274,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_NonExistingId_ReturnsNotFound()
     {
         const string id = "1";
-        A.CallTo(() => _crudHandler.DeleteAsync(id))
+        A.CallTo(() => _repository.DeleteAsync(id))
             .Throws<KeyNotFoundException>();
 
         var result = await _controller.Delete(id) as ObjectResult;
@@ -286,7 +287,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_NullId_ReturnsBadRequest()
     {
         const string id = "1";
-        A.CallTo(() => _crudHandler.DeleteAsync(id))
+        A.CallTo(() => _repository.DeleteAsync(id))
             .Throws<ArgumentNullException>();
 
         var result = await _controller.Delete(id) as ObjectResult;

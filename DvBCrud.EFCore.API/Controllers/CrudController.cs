@@ -4,24 +4,26 @@ using System.Net;
 using System.Net.Http;
 using DvBCrud.EFCore.API.CrudActions;
 using DvBCrud.EFCore.API.Extensions;
-using DvBCrud.EFCore.API.Handlers;
 using DvBCrud.EFCore.API.Swagger;
+using DvBCrud.EFCore.Exceptions;
+using DvBCrud.EFCore.Repositories;
 using Microsoft.AspNetCore.Mvc;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace DvBCrud.EFCore.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public abstract class CrudController<TId, TModel, TService> : CrudControllerBase<TModel>
+    public abstract class CrudController<TId, TModel, TRepository> : CrudControllerBase<TModel>
         where TModel : class
-        where TService : ICrudHandler<TId, TModel>
+        where TRepository : IRepository<TId, TModel>
     {
-        protected readonly TService CrudHandler;
+        protected readonly TRepository Repository;
         protected readonly CrudAction[]? CrudActions;
 
-        public CrudController(TService crudHandler)
+        protected CrudController(TRepository repository)
         {
-            CrudHandler = crudHandler;
+            Repository = repository;
             CrudActions = GetType().GetCrudActions();
         }
 
@@ -38,8 +40,8 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                var id = CrudHandler.Create(model);
-                var createdModel = CrudHandler.Get(id);
+                var id = Repository.Create(model);
+                var createdModel = Repository.Get(id);
                 return CreatedAtRoute(new { id }, createdModel);
             }
             catch (ArgumentNullException ex)
@@ -59,14 +61,14 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var model = CrudHandler.Get(id);
-
-            if (model == null)
+            try
             {
-                return NotFound($"{typeof(TModel)} {id} not found.");
+                return Ok(Repository.Get(id));
             }
-
-            return Ok(model);
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -80,15 +82,13 @@ namespace DvBCrud.EFCore.API.Controllers
                 return NotAllowed(HttpMethod.Get.Method);
             }
 
-            var entities = CrudHandler.List();
-
-            return Ok(entities);
+            return Ok(Repository.List());
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [SwaggerDocsFilter(CrudAction.Update)]
         public virtual IActionResult Update(TId id, [FromBody] TModel model)
         {
@@ -99,23 +99,23 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                CrudHandler.Update(id, model);
+                Repository.Update(id, model);
                 return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"{typeof(TModel)} {id} not found.");
             }
             catch (ArgumentNullException ex)
             {
                 return BadRequest(ex);
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [SwaggerDocsFilter(CrudAction.Delete)]
         public virtual IActionResult Delete(TId id)
         {
@@ -126,16 +126,16 @@ namespace DvBCrud.EFCore.API.Controllers
 
             try
             {
-                CrudHandler.Delete(id);
+                Repository.Delete(id);
                 return NoContent();
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound($"{typeof(TModel)} {id} not found.");
             }
             catch (ArgumentNullException ex)
             {
                 return BadRequest(ex);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
         }
     }
