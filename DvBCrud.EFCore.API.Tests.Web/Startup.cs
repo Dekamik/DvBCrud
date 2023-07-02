@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using DvBCrud.EFCore.API.Filters;
 using DvBCrud.EFCore.API.Swagger;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
@@ -34,7 +35,10 @@ namespace DvBCrud.EFCore.API.Tests.Web
             services.AddScoped<IWeatherForecastMapper, WeatherForecastMapper>();
             services.AddScoped<IWeatherForecastCrudHandler, WeatherForecastCrudHandler>();
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.AddCrudExceptionFilters();
+            });
 
             services.AddCrudSwaggerGen();
         }
