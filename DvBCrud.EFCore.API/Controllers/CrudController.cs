@@ -40,8 +40,8 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 var id = Service.Create(model);
-                var url = Request.GetResourceUrl(id);
-                return Created(url, model);
+                var createdModel = Service.Get(id);
+                return CreatedAtRoute(new { id }, createdModel);
             }
             catch (ArgumentNullException ex)
             {

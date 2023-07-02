@@ -41,8 +41,8 @@ namespace DvBCrud.EFCore.API.Controllers
             try
             {
                 var id = await Service.CreateAsync(model);
-                var url = Request.GetResourceUrl(id);
-                return Created(url, null);
+                var createdModel = await Service.GetAsync(id);
+                return CreatedAtRoute(new { id }, createdModel);
             }
             catch (ArgumentNullException ex)
             {

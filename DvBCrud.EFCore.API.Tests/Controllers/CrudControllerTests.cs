@@ -38,7 +38,7 @@ public class CrudControllerTests
     {
         var model = new AnyModel();
 
-        var result = _controller.Create(model) as CreatedResult;
+        var result = _controller.Create(model) as CreatedAtRouteResult;
 
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be((int)HttpStatusCode.Created);
