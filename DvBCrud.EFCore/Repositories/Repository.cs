@@ -4,22 +4,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DvBCrud.EFCore.Mapping;
+
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace DvBCrud.EFCore.Repositories
 {
-    public abstract class Repository<TEntity, TId, TDbContext> : IRepository<TEntity, TId>
-        where TEntity : BaseEntity<TId>
-        where TDbContext : CrudDbContext
+    public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel> : IRepository<TEntity, TId>
+        where TEntity : class, IEntity<TId>
+        where TDbContext : DbContext 
+        where TMapper : IMapper<TEntity, TModel>
     {
         protected readonly TDbContext Context;
+        protected readonly TMapper Mapper;
 
         protected DbSet<TEntity> Set => Context.Set<TEntity>();
 
         protected IQueryable<TEntity> QueryableWithIncludes { get; init; }
 
-        public Repository(TDbContext context)
+        public Repository(TDbContext context, TMapper mapper)
         {
             Context = context;
+            Mapper = mapper;
             QueryableWithIncludes = Set.AsQueryable();
         }
 
@@ -53,6 +59,16 @@ namespace DvBCrud.EFCore.Repositories
                 throw new ArgumentNullException(nameof(entity));
 
             Set.Add(entity);
+            Context.SaveChanges();
+        }
+
+        public async Task CreateAsync(TEntity entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
+            Set.Add(entity);
+            await Context.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
@@ -72,7 +88,8 @@ namespace DvBCrud.EFCore.Repositories
                 throw new KeyNotFoundException(message);
             }
 
-            existingEntity.Copy(entity);
+            Mapper.UpdateEntity(entity, existingEntity);
+            Context.SaveChanges();
         }
 
         /// <inheritdoc/>
@@ -91,8 +108,9 @@ namespace DvBCrud.EFCore.Repositories
                 var message = $"{typeof(TEntity).Name} {id} not found";
                 throw new KeyNotFoundException(message);
             }
-
-            existingEntity.Copy(entity);
+            
+            Mapper.UpdateEntity(entity, existingEntity);
+            await Context.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
@@ -110,6 +128,7 @@ namespace DvBCrud.EFCore.Repositories
             }
 
             Set.Remove(entity);
+            Context.SaveChanges();
         }
 
         /// <inheritdoc/>
@@ -127,16 +146,7 @@ namespace DvBCrud.EFCore.Repositories
             }
 
             Set.Remove(entity);
-        }
-
-        public virtual void SaveChanges()
-        {
-            Context.SaveChanges();
-        }
-
-        public virtual Task SaveChangesAsync()
-        {
-            return Context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
         public virtual bool Exists(TId id) => Set.Any(entity => entity.Id!.Equals(id));

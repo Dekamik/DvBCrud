@@ -1,12 +1,12 @@
-﻿using DvBCrud.Common.Services.Mapping;
-using DvBCrud.EFCore.Entities;
+﻿using DvBCrud.EFCore.Entities;
+using DvBCrud.EFCore.Mapping;
 using DvBCrud.EFCore.Repositories;
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace DvBCrud.EFCore.Services;
 
 public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : IService<TId, TModel> 
-    where TEntity : BaseEntity<TId>
+    where TEntity : IEntity<TId>
     where TRepository : IRepository<TEntity, TId>
     where TModel : class
     where TMapper : IMapper<TEntity, TModel>
@@ -46,7 +46,6 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
 
         var entity = Mapper.ToEntity(model);
         Repository.Create(entity);
-        Repository.SaveChanges();
         return entity.Id;
     }
 
@@ -56,8 +55,7 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
             throw new ArgumentNullException(nameof(model));
 
         var entity = Mapper.ToEntity(model);
-        Repository.Create(entity);
-        await Repository.SaveChangesAsync();
+        await Repository.CreateAsync(entity);
         return entity.Id;
     }
 
@@ -67,9 +65,8 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
             throw new ArgumentNullException(nameof(id));
         if (model == null)
             throw new ArgumentNullException(nameof(model));
-        
+
         Repository.Update(id, Mapper.ToEntity(model));
-        Repository.SaveChanges();
     }
     
     public virtual async Task UpdateAsync(TId id, TModel model)
@@ -80,7 +77,6 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
             throw new ArgumentNullException(nameof(model));
         
         await Repository.UpdateAsync(id, Mapper.ToEntity(model));
-        await Repository.SaveChangesAsync();
     }
 
     public virtual void Delete(TId id)
@@ -89,7 +85,6 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
             throw new ArgumentNullException(nameof(id));
         
         Repository.Delete(id);
-        Repository.SaveChanges();
     }
     
     public virtual async Task DeleteAsync(TId id)
@@ -98,6 +93,5 @@ public abstract class Service<TEntity, TId, TRepository, TModel, TMapper> : ISer
             throw new ArgumentNullException(nameof(id));
         
         await Repository.DeleteAsync(id);
-        await Repository.SaveChangesAsync();
     }
 }

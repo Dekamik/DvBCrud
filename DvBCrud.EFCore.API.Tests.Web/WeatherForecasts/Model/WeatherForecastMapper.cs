@@ -6,13 +6,6 @@ namespace DvBCrud.EFCore.API.Tests.Web.WeatherForecasts.Model;
 [ExcludeFromCodeCoverage]
 public class WeatherForecastMapper : IWeatherForecastMapper
 {
-    private readonly IWeatherForecastRepository _repository;
-    
-    public WeatherForecastMapper(IWeatherForecastRepository repository)
-    {
-        _repository = repository;
-    }
-    
     public WeatherForecastModel ToModel(WeatherForecast entity) =>
         new()
         {
@@ -22,16 +15,18 @@ public class WeatherForecastMapper : IWeatherForecastMapper
             TemperatureC = entity.TemperatureC
         };
 
-    public WeatherForecast ToEntity(WeatherForecastModel model)
-    {
-        var weatherForecast = model.Id != default ? 
-            _repository.Get(model.Id) ?? new WeatherForecast() : 
-            new WeatherForecast();
+    public WeatherForecast ToEntity(WeatherForecastModel model) =>
+        new()
+        {
+            Date = model.Date,
+            Summary = model.Summary,
+            TemperatureC = model.TemperatureC
+        };
 
-        weatherForecast.Date = model.Date;
-        weatherForecast.Summary = model.Summary;
-        weatherForecast.TemperatureC = model.TemperatureC;
-        
-        return weatherForecast;
+    public void UpdateEntity(WeatherForecast source, WeatherForecast destination)
+    {
+        destination.Date = source.Date;
+        destination.TemperatureC = source.TemperatureC;
+        destination.Summary = source.Summary;
     }
 }

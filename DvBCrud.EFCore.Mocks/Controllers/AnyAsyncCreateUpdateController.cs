@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.Common.Api.CrudActions;
 using DvBCrud.EFCore.API.Controllers;
+using DvBCrud.EFCore.API.CrudActions;
 using DvBCrud.EFCore.Mocks.Services;
 using DvBCrud.EFCore.Mocks.Services.Model;
 

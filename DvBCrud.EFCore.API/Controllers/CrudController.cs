@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using DvBCrud.Common.Api.Controllers;
-using DvBCrud.Common.Api.CrudActions;
-using DvBCrud.Common.Api.Swagger;
+using DvBCrud.EFCore.API.CrudActions;
 using DvBCrud.EFCore.API.Extensions;
+using DvBCrud.EFCore.API.Swagger;
 using DvBCrud.EFCore.Services;
 using Microsoft.AspNetCore.Mvc;
 
