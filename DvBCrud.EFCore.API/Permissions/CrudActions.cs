@@ -10,5 +10,5 @@ public enum CrudActions
     Read = 0b_0010,
     Update = 0b_0100,
     Delete = 0b_1000,
-    All = Create | Read | Update | Delete
+    All = Create | Read | Update | Delete,
 }
