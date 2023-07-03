@@ -107,7 +107,7 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
         {
             return BadRequest(ex);
         }
-        catch (KeyNotFoundException)
+        catch (NotFoundException)
         {
             return NotFound($"{typeof(TModel)} {id} not found.");
         }
@@ -134,7 +134,7 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
         {
             return BadRequest(ex);
         }
-        catch (KeyNotFoundException)
+        catch (NotFoundException)
         {
             return NotFound($"{typeof(TModel)} {id} not found.");
         }
