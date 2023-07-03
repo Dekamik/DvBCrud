@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.EFCore;
-using DvBCrud.Mocks.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DvBCrud.Mocks.Core.DbContexts
+namespace DvBCrud.EFCore.Tests.Mocks
 {
     [ExcludeFromCodeCoverage]
     public class AnyDbContext : CrudDbContext

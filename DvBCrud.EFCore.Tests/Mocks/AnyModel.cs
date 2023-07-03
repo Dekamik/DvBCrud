@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace DvBCrud.Mocks.Model;
+namespace DvBCrud.EFCore.Tests.Mocks;
 
 [ExcludeFromCodeCoverage]
 public class AnyModel

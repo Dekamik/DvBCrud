@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.Mocks.Core.Entities;
 
-namespace DvBCrud.Mocks.Model;
+namespace DvBCrud.EFCore.Tests.Mocks.Mappers;
 
 [ExcludeFromCodeCoverage]
 public class AnyMapper : IAnyMapper

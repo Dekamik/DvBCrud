@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using DvBCrud.Shared.Entities;
 
-namespace DvBCrud.Mocks.Core.Entities
+namespace DvBCrud.EFCore.Tests.Mocks
 {
     [ExcludeFromCodeCoverage]
     public record AnyEntity : IEntity<string>, ICreatedAt, IModifiedAt  // Using string type for Id to test nullable cases

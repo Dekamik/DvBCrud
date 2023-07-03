@@ -1,10 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.EFCore;
-using DvBCrud.Mocks.Core.DbContexts;
-using DvBCrud.Mocks.Core.Entities;
-using DvBCrud.Mocks.Model;
+using DvBCrud.EFCore.Tests.Mocks.Mappers;
 
-namespace DvBCrud.Mocks.Core.Repositories
+namespace DvBCrud.EFCore.Tests.Mocks.Repositories
 {
     [ExcludeFromCodeCoverage]
     public class AnyRepository : Repository<AnyEntity, string, AnyDbContext, AnyMapper, AnyModel>, IAnyRepository

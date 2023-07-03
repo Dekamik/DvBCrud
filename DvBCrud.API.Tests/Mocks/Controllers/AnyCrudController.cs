@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.API.Controllers;
 using DvBCrud.Shared;
 
 namespace DvBCrud.API.Tests.Mocks.Controllers

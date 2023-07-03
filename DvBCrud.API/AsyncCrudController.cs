@@ -8,9 +8,10 @@ using DvBCrud.API.Swagger;
 using DvBCrud.Shared;
 using DvBCrud.Shared.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace DvBCrud.API.Controllers
+namespace DvBCrud.API
 {
     [ApiController]
     [Route("[controller]")]

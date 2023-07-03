@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.API.Controllers;
 using DvBCrud.API.Permissions;
 using DvBCrud.Shared;
 

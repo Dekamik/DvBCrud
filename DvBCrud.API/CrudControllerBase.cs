@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace DvBCrud.API.Controllers;
+namespace DvBCrud.API;
 
 /// <summary>
 /// Internal class for shared methods.

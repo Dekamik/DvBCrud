@@ -1,17 +1,17 @@
-﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DvBCrud.Mocks.Core.DbContexts;
-using DvBCrud.Mocks.Core.Entities;
-using DvBCrud.Mocks.Core.Repositories;
-using DvBCrud.Mocks.Model;
+using DvBCrud.EFCore.Tests.Mocks;
+using DvBCrud.EFCore.Tests.Mocks.Mappers;
+using DvBCrud.EFCore.Tests.Mocks.Repositories;
 using DvBCrud.Shared.Exceptions;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
+
 #pragma warning disable CS8625
 
-namespace DvBCrud.EFCore.Tests.Repositories
+namespace DvBCrud.EFCore.Tests
 {
     public class RepositoryTests
     {

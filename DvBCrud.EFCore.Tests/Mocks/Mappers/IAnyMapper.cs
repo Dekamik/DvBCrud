@@ -1,7 +1,6 @@
-﻿using DvBCrud.Mocks.Core.Entities;
-using DvBCrud.Shared;
+﻿using DvBCrud.Shared;
 
-namespace DvBCrud.Mocks.Model;
+namespace DvBCrud.EFCore.Tests.Mocks.Mappers;
 
 public interface IAnyMapper : IMapper<AnyEntity, AnyModel>
 {

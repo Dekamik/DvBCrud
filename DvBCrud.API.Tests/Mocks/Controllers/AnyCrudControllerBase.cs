@@ -1,5 +1,4 @@
-﻿using DvBCrud.API.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.API.Tests.Mocks.Controllers;
 

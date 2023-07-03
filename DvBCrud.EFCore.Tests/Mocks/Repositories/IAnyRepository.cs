@@ -1,7 +1,6 @@
-﻿using DvBCrud.Mocks.Model;
-using DvBCrud.Shared;
+﻿using DvBCrud.Shared;
 
-namespace DvBCrud.Mocks.Core.Repositories
+namespace DvBCrud.EFCore.Tests.Mocks.Repositories
 {
     public interface IAnyRepository : IRepository<string, AnyModel>
     {
