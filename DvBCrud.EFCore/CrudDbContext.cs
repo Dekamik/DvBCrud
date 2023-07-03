@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DvBCrud.EFCore.Entities;
+using DvBCrud.Shared.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DvBCrud.EFCore;

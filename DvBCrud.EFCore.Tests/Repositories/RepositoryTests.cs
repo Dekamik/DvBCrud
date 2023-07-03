@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using DvBCrud.EFCore.Exceptions;
-using DvBCrud.EFCore.Mocks.Core.DbContexts;
-using DvBCrud.EFCore.Mocks.Core.Entities;
-using DvBCrud.EFCore.Mocks.Core.Repositories;
-using DvBCrud.EFCore.Mocks.Services.Model;
+using DvBCrud.Mocks.Core.DbContexts;
+using DvBCrud.Mocks.Core.Entities;
+using DvBCrud.Mocks.Core.Repositories;
+using DvBCrud.Mocks.Model;
+using DvBCrud.Shared.Exceptions;
 using Xunit;
 #pragma warning disable CS8625
 
