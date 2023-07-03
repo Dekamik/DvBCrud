@@ -4,19 +4,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using DvBCrud.Shared.Entities;
 
-namespace DvBCrud.API.Tests.Web.WeatherForecasts.Data
+namespace DvBCrud.API.Tests.Web.WeatherForecasts.Data;
+
+[ExcludeFromCodeCoverage]
+public record WeatherForecast : IEntity<int>
 {
-    [ExcludeFromCodeCoverage]
-    public record WeatherForecast : IEntity<int>
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
         
-        public DateTime Date { get; set; }
+    public DateTime Date { get; set; }
 
-        public int TemperatureC { get; set; }
+    public int TemperatureC { get; set; }
 
-        public string Summary { get; set; } = "";
-    }
+    public string Summary { get; set; } = "";
 }

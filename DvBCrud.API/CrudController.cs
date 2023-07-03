@@ -10,133 +10,132 @@ using Microsoft.AspNetCore.Mvc;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace DvBCrud.API
+namespace DvBCrud.API;
+
+[ApiController]
+[Route("[controller]")]
+public abstract class CrudController<TId, TModel, TRepository> : CrudControllerBase<TModel>
+    where TModel : class
+    where TRepository : IRepository<TId, TModel>
 {
-    [ApiController]
-    [Route("[controller]")]
-    public abstract class CrudController<TId, TModel, TRepository> : CrudControllerBase<TModel>
-        where TModel : class
-        where TRepository : IRepository<TId, TModel>
+    protected readonly TRepository Repository;
+    protected readonly CrudActions CrudActions;
+
+    protected CrudController(TRepository repository)
     {
-        protected readonly TRepository Repository;
-        protected readonly CrudActions CrudActions;
+        Repository = repository;
+        CrudActions = GetType().GetCrudActions();
+    }
 
-        protected CrudController(TRepository repository)
+    [HttpPost]
+    [ProducesResponseType((int)HttpStatusCode.Created)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [SwaggerDocsFilter(CrudActions.Create)]
+    public virtual IActionResult Create([FromBody] TModel model)
+    {
+        if (!CrudActions.IsActionAllowed(CrudActions.Create))
         {
-            Repository = repository;
-            CrudActions = GetType().GetCrudActions();
+            return NotAllowed(HttpMethod.Post.Method);
         }
 
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [SwaggerDocsFilter(CrudActions.Create)]
-        public virtual IActionResult Create([FromBody] TModel model)
+        try
         {
-            if (!CrudActions.IsActionAllowed(CrudActions.Create))
-            {
-                return NotAllowed(HttpMethod.Post.Method);
-            }
+            var id = Repository.Create(model);
+            var createdModel = Repository.Get(id);
+            return CreatedAtRoute(new { id }, createdModel);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex);
+        }
+    }
 
-            try
-            {
-                var id = Repository.Create(model);
-                var createdModel = Repository.Get(id);
-                return CreatedAtRoute(new { id }, createdModel);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex);
-            }
+    [HttpGet("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [SwaggerDocsFilter(CrudActions.Read)]
+    public virtual ActionResult<TModel> Read(TId id)
+    {
+        if (!CrudActions.IsActionAllowed(CrudActions.Read))
+        {
+            return NotAllowed(HttpMethod.Get.Method);
         }
 
-        [HttpGet("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [SwaggerDocsFilter(CrudActions.Read)]
-        public virtual ActionResult<TModel> Read(TId id)
+        try
         {
-            if (!CrudActions.IsActionAllowed(CrudActions.Read))
-            {
-                return NotAllowed(HttpMethod.Get.Method);
-            }
+            return Ok(Repository.Get(id));
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
 
-            try
-            {
-                return Ok(Repository.Get(id));
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+    [HttpGet]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [SwaggerDocsFilter(CrudActions.Read)]
+    public virtual ActionResult<IEnumerable<TModel>> ReadAll()
+    {
+        if (!CrudActions.IsActionAllowed(CrudActions.Read))
+        {
+            return NotAllowed(HttpMethod.Get.Method);
         }
 
-        [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [SwaggerDocsFilter(CrudActions.Read)]
-        public virtual ActionResult<IEnumerable<TModel>> ReadAll()
-        {
-            if (!CrudActions.IsActionAllowed(CrudActions.Read))
-            {
-                return NotAllowed(HttpMethod.Get.Method);
-            }
+        return Ok(Repository.List());
+    }
 
-            return Ok(Repository.List());
+    [HttpPut("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [SwaggerDocsFilter(CrudActions.Update)]
+    public virtual IActionResult Update(TId id, [FromBody] TModel model)
+    {
+        if (!CrudActions.IsActionAllowed(CrudActions.Update))
+        {
+            return NotAllowed(HttpMethod.Put.Method);
         }
 
-        [HttpPut("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [SwaggerDocsFilter(CrudActions.Update)]
-        public virtual IActionResult Update(TId id, [FromBody] TModel model)
+        try
         {
-            if (!CrudActions.IsActionAllowed(CrudActions.Update))
-            {
-                return NotAllowed(HttpMethod.Put.Method);
-            }
+            Repository.Update(id, model);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
 
-            try
-            {
-                Repository.Update(id, model);
-                return NoContent();
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+    [HttpDelete("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [SwaggerDocsFilter(CrudActions.Delete)]
+    public virtual IActionResult Delete(TId id)
+    {
+        if (!CrudActions.IsActionAllowed(CrudActions.Delete))
+        {
+            return NotAllowed(HttpMethod.Delete.Method);
         }
 
-        [HttpDelete("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [SwaggerDocsFilter(CrudActions.Delete)]
-        public virtual IActionResult Delete(TId id)
+        try
         {
-            if (!CrudActions.IsActionAllowed(CrudActions.Delete))
-            {
-                return NotAllowed(HttpMethod.Delete.Method);
-            }
-
-            try
-            {
-                Repository.Delete(id);
-                return NoContent();
-            }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            Repository.Delete(id);
+            return NoContent();
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
         }
     }
 }
