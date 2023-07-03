@@ -8,7 +8,7 @@ namespace DvBCrud.API.Tests.Mocks.Controllers
     [AllowedActions(CrudActions.Read)]
     public class AnyAsyncReadOnlyController : AsyncCrudController<string, AnyModel, IRepository<string, AnyModel>>
     {
-        public AnyAsyncReadOnlyController(IRepository<string, AnyModel> crudHandler) : base(crudHandler)
+        public AnyAsyncReadOnlyController(IRepository<string, AnyModel> repository) : base(repository)
         {
         }
     }

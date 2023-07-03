@@ -30,13 +30,14 @@ namespace DvBCrud.EFCore
             QueryableWithIncludes = Set.AsQueryable();
         }
 
+        /// <inheritdoc/>
         public virtual IEnumerable<TModel> List()
         {
             return QueryableWithIncludes.AsEnumerable().Select(Mapper.ToModel);
         }
 
         /// <inheritdoc/>
-        public virtual TModel? Get(TId id)
+        public virtual TModel Get(TId id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
@@ -49,7 +50,7 @@ namespace DvBCrud.EFCore
         }
 
         /// <inheritdoc/>
-        public virtual async Task<TModel?> GetAsync(TId id)
+        public virtual async Task<TModel> GetAsync(TId id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));

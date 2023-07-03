@@ -21,7 +21,8 @@ namespace DvBCrud.Shared
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TModel"/></returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
-        TModel? Get(TId id);
+        /// <exception cref="NotFoundException">Thrown if <typeparamref name="TModel"/> with <paramref name="id"/> not found</exception>
+        TModel Get(TId id);
 
         /// <summary>
         /// Finds a single <typeparamref name="TModel"/> whose Id matches <paramref name="id"/> asynchronously
@@ -29,7 +30,8 @@ namespace DvBCrud.Shared
         /// <param name="id">Key value to query</param>
         /// <returns>The matching <typeparamref name="TModel"/></returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
-        Task<TModel?> GetAsync(TId id);
+        /// <exception cref="NotFoundException">Thrown if <typeparamref name="TModel"/> with <paramref name="id"/> not found</exception>
+        Task<TModel> GetAsync(TId id);
 
         /// <summary>
         /// Creates the specified <paramref name="model"/> and tracks it
@@ -83,7 +85,7 @@ namespace DvBCrud.Shared
         Task DeleteAsync(TId id);
 
         /// <summary>
-        /// Checks whether or not a specific <typeparamref name="TModel" exists/>
+        /// Checks whether or not a specific <typeparamref name="TModel"/> exists
         /// </summary>
         /// <param name="id">Id of <typeparamref name="TModel"/> to check</param>
         /// <returns>true if exists, otherwise false</returns>

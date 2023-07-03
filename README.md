@@ -1,48 +1,27 @@
-# DvBCrud.EFCore
+# DvBCrud
 ![Test Status](https://github.com/Dekamik/DvBCrud.EFCore/actions/workflows/test.yml/badge.svg)
 ![Build Status](https://github.com/Dekamik/DvBCrud.EFCore/actions/workflows/release.yml/badge.svg)
 
-EFCore implementation of DvBCrud.
+A NuGet library for CRUD templates , complete with base entities, repositories and synchronous & asynchronous API 
+controllers for rapid API development.
 
-## [DvBCrud.EFCore](DvBCrud.EFCore)
+## Getting started
+
+Get started with DvBCrud-based project by doing the following:
+
+1. Choose an ORM:
+   - EF Core `DvBCrud.EFCore`
+2. Choose an interface: 
+   - REST API `DvBCrud.API`
+
+## NuGet libraries
+
+### [DvBCrud.API](DvBCrud.API)
+[![Nuget](https://img.shields.io/nuget/v/DvBCrud.API?label=DvBCrud.API)](https://www.nuget.org/packages/DvBCrud.API/)
+
+Templates for generating CRUDControllers for REST APIs.
+
+### [DvBCrud.EFCore](DvBCrud.EFCore)
 [![Nuget](https://img.shields.io/nuget/v/DvBCrud.EFCore?label=DvBCrud.EFCore)](https://www.nuget.org/packages/DvBCrud.EFCore/)
 
-The core implementation for handling repositories and entities using Entity Framework Core.
-
-## [DvBCrud.EFCore.Services](DvBCrud.EFCore.Services)
-[![Nuget](https://img.shields.io/nuget/v/DvBCrud.EFCore.Services?label=DvBCrud.EFCore.Services)](https://www.nuget.org/packages/DvBCrud.EFCore.Services/)
-
-Templates for generating services, models and converters.
-
-## [DvBCrud.EFCore.API](DvBCrud.EFCore.API)
-[![Nuget](https://img.shields.io/nuget/v/DvBCrud.EFCore.API?label=DvBCrud.EFCore.API)](https://www.nuget.org/packages/DvBCrud.EFCore.API/)
-
-Templates for generating CRUDControllers for Web APIs using EFCore.
-
-## Component map
-
-<img src='https://g.gravizo.com/svg?
-	graph G {
-		node [shape=box];
-		DB [shape=cylinder];
-		subgraph cluster0 {
-			CrudController;
-			label="DvBCrud.EFCore.API"
-		}
-		subgraph cluster1 {
-			Service;
-			Converter;
-			Model;
-			label="DvBCrud.EFCore.Services"
-		}
-		subgraph cluster2 {
-			Repository;
-			Entity;
-			label="DvBCrud.EFCore.Core"
-		}
-		Repository -- Entity;
-		Service -- Repository [label="Entity"];
-		CrudController -- Service [label="Model"];
-		Entity -- DB;
-	}
-'/>
+Repositories and entities using Entity Framework Core.
