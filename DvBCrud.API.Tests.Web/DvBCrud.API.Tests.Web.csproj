@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DvBCrud.API\DvBCrud.API.csproj" />
+    <ProjectReference Include="..\DvBCrud.EFCore\DvBCrud.EFCore.csproj" />
   </ItemGroup>
 
 
