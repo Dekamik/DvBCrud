@@ -19,7 +19,6 @@ public abstract class SqliteTestBase : IDisposable
             .UseSqlite(_connection)
             .Options;
         DbContext = new AnyDbContext(options);
-        DbContext.Database.EnsureDeleted();
         DbContext.Database.EnsureCreated();
     }
 
