@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DvBCrud.EFCore.Tests;
 
-public abstract class AnyDbContextTest : IDisposable
+public abstract class SqliteTestBase : IDisposable
 {
     private readonly SqliteConnection _connection;
     protected readonly AnyDbContext DbContext;
 
-    protected AnyDbContextTest()
+    protected SqliteTestBase()
     {
         _connection = new SqliteConnection("Filename=:memory:");
         _connection.Open();

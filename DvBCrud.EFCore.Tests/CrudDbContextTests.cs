@@ -6,7 +6,7 @@ using Xunit;
 
 namespace DvBCrud.EFCore.Tests;
 
-public class CrudDbContextAnyDbContextTests : AnyDbContextTest
+public class CrudDbContextTests : SqliteTestBase
 {
     [Fact]
     public void ModifyTimestamps_CreatedEntityHasCreatedAt_SetsCreatedAtToUtcNow()
