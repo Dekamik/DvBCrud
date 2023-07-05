@@ -6,6 +6,7 @@ using DvBCrud.EFCore.Tests.Mocks.Mappers;
 using DvBCrud.EFCore.Tests.Mocks.Repositories;
 using DvBCrud.Shared.Exceptions;
 using FluentAssertions;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -13,20 +14,16 @@ using Xunit;
 
 namespace DvBCrud.EFCore.Tests;
 
-public class RepositoryTests
+public class RepositoryTests : IClassFixture<AnyDbContextFixture>
 {
-    private readonly AnyDbContext _dbContext;
-    private readonly AnyMapper _mapper;
+    private readonly AnyDbContextFixture _dbContextFixture;
     private readonly IAnyRepository _repository;
 
-    public RepositoryTests()
+    public RepositoryTests(AnyDbContextFixture dbContextFixture)
     {
-        var options = new DbContextOptionsBuilder<AnyDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        _dbContext = new AnyDbContext(options);
-        _mapper = new AnyMapper();
-        _repository = new AnyRepository(_dbContext, _mapper);
+        _dbContextFixture = dbContextFixture;
+        var mapper = new AnyMapper();
+        _repository = new AnyRepository(_dbContextFixture.DbContext, mapper);
     }
 
     [Fact]
@@ -46,8 +43,8 @@ public class RepositoryTests
                 AnyString = "Any2"
             }
         };
-        _dbContext.AnyEntities.AddRange(expected);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.AnyEntities.AddRange(expected);
+        _dbContextFixture.DbContext.SaveChanges();
 
         // Act
         var actual = _repository.List();
@@ -73,8 +70,8 @@ public class RepositoryTests
                 AnyString = "AnyTwo"
             }
         };
-        _dbContext.AnyEntities.AddRange(entities);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.AnyEntities.AddRange(entities);
+        _dbContextFixture.DbContext.SaveChanges();
 
         // Act
         var model = _repository.Get("1");
@@ -99,8 +96,8 @@ public class RepositoryTests
                 AnyString = "Any"
             }
         };
-        _dbContext.AnyEntities.AddRange(expected);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.AnyEntities.AddRange(expected);
+        _dbContextFixture.DbContext.SaveChanges();
 
         // Act
         _repository.Invoking(r => r.Get("3"))
@@ -130,8 +127,8 @@ public class RepositoryTests
                 AnyString = "Any2"
             }
         };
-        _dbContext.AnyEntities.AddRange(expected);
-        await _dbContext.SaveChangesAsync();
+        _dbContextFixture.DbContext.AnyEntities.AddRange(expected);
+        await _dbContextFixture.DbContext.SaveChangesAsync();
 
         // Act
         var actual = await _repository.GetAsync("1");
@@ -156,8 +153,8 @@ public class RepositoryTests
                 AnyString = "Any"
             }
         };
-        _dbContext.AnyEntities.AddRange(expected);
-        await _dbContext.SaveChangesAsync();
+        _dbContextFixture.DbContext.AnyEntities.AddRange(expected);
+        await _dbContextFixture.DbContext.SaveChangesAsync();
 
         // Act
         await _repository.Awaiting(r => r.GetAsync("3"))
@@ -182,10 +179,10 @@ public class RepositoryTests
 
         // Act
         _repository.Create(expected);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.SaveChanges();
 
         // Assert
-        _dbContext.AnyEntities.First().AnyString.Should().Be(expected.AnyString);
+        _dbContextFixture.DbContext.AnyEntities.First().AnyString.Should().Be(expected.AnyString);
     }
 
     [Fact]
@@ -202,8 +199,8 @@ public class RepositoryTests
             Id = "1",
             AnyString = "AnyString"
         };
-        _dbContext.AnyEntities.Add(entity);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.AnyEntities.Add(entity);
+        _dbContextFixture.DbContext.SaveChanges();
 
         // Act
         _repository.Invoking(x => x.Create(model)).Should().Throw<InvalidOperationException>();
@@ -226,10 +223,10 @@ public class RepositoryTests
 
         // Act
         await _repository.CreateAsync(expected);
-        await _dbContext.SaveChangesAsync();
+        await _dbContextFixture.DbContext.SaveChangesAsync();
 
         // Assert
-        _dbContext.AnyEntities.First().AnyString.Should().Be(expected.AnyString);
+        _dbContextFixture.DbContext.AnyEntities.First().AnyString.Should().Be(expected.AnyString);
     }
 
     [Fact]
@@ -246,8 +243,8 @@ public class RepositoryTests
             Id = "1",
             AnyString = "AnyString"
         };
-        _dbContext.AnyEntities.Add(entity);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.AnyEntities.Add(entity);
+        _dbContextFixture.DbContext.SaveChanges();
 
         // Act
         _repository.Invoking(x => x.CreateAsync(model)).Should().ThrowAsync<ArgumentException>();
@@ -263,12 +260,12 @@ public class RepositoryTests
     public void Update_ExistingEntity_EntityUpdated()
     {
         // Arrange
-        _dbContext.AnyEntities.Add(new AnyEntity
+        _dbContextFixture.DbContext.AnyEntities.Add(new AnyEntity
         {
             Id = "1",
             AnyString = "AnyString"
         });
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.SaveChanges();
         var expected = new AnyModel
         {
             AnyString = "AnyNewString"
@@ -278,7 +275,7 @@ public class RepositoryTests
         _repository.Update("1", expected);
 
         // Assert
-        _dbContext.AnyEntities.First(e => e.Id == "1")
+        _dbContextFixture.DbContext.AnyEntities.First(e => e.Id == "1")
             .AnyString
             .Should()
             .BeEquivalentTo(expected.AnyString);
@@ -288,12 +285,12 @@ public class RepositoryTests
     public void Update_NonExistingEntity_ThrowsKeyNotFoundException()
     {
         // Arrange
-        _dbContext.AnyEntities.Add(new AnyEntity
+        _dbContextFixture.DbContext.AnyEntities.Add(new AnyEntity
         {
             Id = "1",
             AnyString = "AnyString"
         });
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.SaveChanges();
         var updatedModel = new AnyModel
         {
             AnyString = "AnyNewString"
@@ -330,12 +327,12 @@ public class RepositoryTests
     public async Task UpdateAsync_ExistingEntity_EntityUpdatedAsync()
     {
         // Arrange
-        _dbContext.AnyEntities.Add(new AnyEntity
+        _dbContextFixture.DbContext.AnyEntities.Add(new AnyEntity
         {
             Id = "1",
             AnyString = "AnyString"
         });
-        _dbContext.SaveChanges();
+        await _dbContextFixture.DbContext.SaveChangesAsync();
         var expected = new AnyModel
         {
             Id = "1",
@@ -346,7 +343,7 @@ public class RepositoryTests
         await _repository.UpdateAsync("1", expected);
 
         // Assert
-        _dbContext.AnyEntities.First(e => e.Id == "1").AnyString
+        _dbContextFixture.DbContext.AnyEntities.First(e => e.Id == "1").AnyString
             .Should()
             .Be(expected.AnyString);
     }
@@ -355,12 +352,12 @@ public class RepositoryTests
     public async Task UpdateAsync_NonExistingEntity_ThrowsKeyNotFoundException()
     {
         // Arrange
-        _dbContext.AnyEntities.Add(new AnyEntity
+        _dbContextFixture.DbContext.AnyEntities.Add(new AnyEntity
         {
             Id = "1",
             AnyString = "AnyString"
         });
-        await _dbContext.SaveChangesAsync();
+        await _dbContextFixture.DbContext.SaveChangesAsync();
         var updatedModel = new AnyModel
         {
             AnyString = "AnyNewString"
@@ -409,16 +406,16 @@ public class RepositoryTests
                 AnyString = "AnyString"
             }
         };
-        _dbContext.AnyEntities.AddRange(entities);
-        _dbContext.SaveChanges();
-        _dbContext.AnyEntities.Should().Contain(entities);
+        _dbContextFixture.DbContext.AnyEntities.AddRange(entities);
+        _dbContextFixture.DbContext.SaveChanges();
+        _dbContextFixture.DbContext.AnyEntities.Should().Contain(entities);
 
         // Act
         _repository.Delete("1");
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.SaveChanges();
 
         // Assert
-        _dbContext.AnyEntities.First()
+        _dbContextFixture.DbContext.AnyEntities.First()
             .Should()
             .BeEquivalentTo(entities.Last());
     }
@@ -451,16 +448,16 @@ public class RepositoryTests
                 AnyString = "AnyString"
             }
         };
-        _dbContext.AnyEntities.AddRange(entities);
-        _dbContext.SaveChanges();
-        _dbContext.AnyEntities.Should().Contain(entities);
+        _dbContextFixture.DbContext.AnyEntities.AddRange(entities);
+        await _dbContextFixture.DbContext.SaveChangesAsync();
+        _dbContextFixture.DbContext.AnyEntities.Should().Contain(entities);
 
         // Act
         await _repository.DeleteAsync("1");
-        _dbContext.SaveChanges();
+        await _dbContextFixture.DbContext.SaveChangesAsync();
 
         // Assert
-        _dbContext.AnyEntities.First().Should().BeEquivalentTo(entities.Last());
+        _dbContextFixture.DbContext.AnyEntities.First().Should().BeEquivalentTo(entities.Last());
     }
 
     [Fact]
@@ -484,8 +481,8 @@ public class RepositoryTests
             Id = "1",
             AnyString = "AnyString"
         };
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.Add(entity);
+        _dbContextFixture.DbContext.SaveChanges();
 
         _repository.Exists("1").Should().BeTrue();
     }

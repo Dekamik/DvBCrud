@@ -4,6 +4,7 @@ using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.API.Tests.Web.WeatherForecasts.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +27,10 @@ public class Startup
     {
         services.AddDbContext<WeatherDbContext>(options =>
         {
-            options.UseInMemoryDatabase(databaseName: "WebDB");
-        });
+            var connection = new SqliteConnection("Filename=:memory:");
+            connection.Open();
+            options.UseSqlite(connection);
+        }, ServiceLifetime.Singleton);
 
         services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
         services.AddScoped<IWeatherForecastMapper, WeatherForecastMapper>();
@@ -40,6 +43,10 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        app.ApplicationServices.GetRequiredService<WeatherDbContext>()
+            .Database
+            .EnsureCreated();
+
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

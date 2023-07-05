@@ -8,14 +8,11 @@ namespace DvBCrud.EFCore.Tests;
 
 public class CrudDbContextTests
 {
-    private readonly AnyDbContext _dbContext;
+    private readonly AnyDbContextFixture _dbContextFixture;
 
-    public CrudDbContextTests()
+    public CrudDbContextTests(AnyDbContextFixture dbContextFixture)
     {
-        var options = new DbContextOptionsBuilder<AnyDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        _dbContext = new AnyDbContext(options);
+        _dbContextFixture = dbContextFixture;
     }
     
     [Fact]
@@ -26,8 +23,8 @@ public class CrudDbContextTests
             AnyString = "AnyString"
         };
         
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.Add(entity);
+        _dbContextFixture.DbContext.SaveChanges();
         var now = DateTimeOffset.UtcNow;
 
         entity.CreatedAt.Should().BeCloseTo(now, TimeSpan.FromMilliseconds(100));
@@ -41,8 +38,8 @@ public class CrudDbContextTests
             AnyString = "AnyString"
         };
         
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.Add(entity);
+        _dbContextFixture.DbContext.SaveChanges();
         var now = DateTimeOffset.UtcNow;
 
         entity.ModifiedAt.Should().BeCloseTo(now, TimeSpan.FromMilliseconds(100));
@@ -56,8 +53,8 @@ public class CrudDbContextTests
             AnyString = "AnyString"
         };
         
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.Add(entity);
+        _dbContextFixture.DbContext.SaveChanges();
 
         entity.CreatedAt.Should().Be(entity.ModifiedAt);
     }
@@ -69,12 +66,12 @@ public class CrudDbContextTests
         {
             AnyString = "AnyString"
         };
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.Add(entity);
+        _dbContextFixture.DbContext.SaveChanges();
         entity.ModifiedAt.Should().Be(entity.CreatedAt);
 
         entity.AnyString = "AnyOtherString";
-        _dbContext.SaveChanges();
+        _dbContextFixture.DbContext.SaveChanges();
         entity.ModifiedAt.Should().NotBe(entity.CreatedAt);
     }
 }
