@@ -6,8 +6,6 @@ using DvBCrud.EFCore.Tests.Mocks.Mappers;
 using DvBCrud.EFCore.Tests.Mocks.Repositories;
 using DvBCrud.Shared.Exceptions;
 using FluentAssertions;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 #pragma warning disable CS8625

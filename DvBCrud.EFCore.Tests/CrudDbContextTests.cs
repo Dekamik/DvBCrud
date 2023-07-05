@@ -1,7 +1,6 @@
 using System;
 using DvBCrud.EFCore.Tests.Mocks;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace DvBCrud.EFCore.Tests;
