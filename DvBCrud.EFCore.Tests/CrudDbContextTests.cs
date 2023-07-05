@@ -6,18 +6,8 @@ using Xunit;
 
 namespace DvBCrud.EFCore.Tests;
 
-public class CrudDbContextTests
+public class CrudDbContextTests : SqliteTestBase
 {
-    private readonly AnyDbContext _dbContext;
-
-    public CrudDbContextTests()
-    {
-        var options = new DbContextOptionsBuilder<AnyDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        _dbContext = new AnyDbContext(options);
-    }
-    
     [Fact]
     public void ModifyTimestamps_CreatedEntityHasCreatedAt_SetsCreatedAtToUtcNow()
     {
@@ -26,8 +16,8 @@ public class CrudDbContextTests
             AnyString = "AnyString"
         };
         
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        DbContext.Add(entity);
+        DbContext.SaveChanges();
         var now = DateTimeOffset.UtcNow;
 
         entity.CreatedAt.Should().BeCloseTo(now, TimeSpan.FromMilliseconds(100));
@@ -41,8 +31,8 @@ public class CrudDbContextTests
             AnyString = "AnyString"
         };
         
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        DbContext.Add(entity);
+        DbContext.SaveChanges();
         var now = DateTimeOffset.UtcNow;
 
         entity.ModifiedAt.Should().BeCloseTo(now, TimeSpan.FromMilliseconds(100));
@@ -56,8 +46,8 @@ public class CrudDbContextTests
             AnyString = "AnyString"
         };
         
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        DbContext.Add(entity);
+        DbContext.SaveChanges();
 
         entity.CreatedAt.Should().Be(entity.ModifiedAt);
     }
@@ -69,12 +59,12 @@ public class CrudDbContextTests
         {
             AnyString = "AnyString"
         };
-        _dbContext.Add(entity);
-        _dbContext.SaveChanges();
+        DbContext.Add(entity);
+        DbContext.SaveChanges();
         entity.ModifiedAt.Should().Be(entity.CreatedAt);
 
         entity.AnyString = "AnyOtherString";
-        _dbContext.SaveChanges();
+        DbContext.SaveChanges();
         entity.ModifiedAt.Should().NotBe(entity.CreatedAt);
     }
 }
