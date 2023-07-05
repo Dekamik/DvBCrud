@@ -79,7 +79,7 @@ public class AsyncCrudControllerTests
         var model = new AnyModel();
         
         A.CallTo(() => _repository.GetAsync(id))
-            .Returns(Task.FromResult((AnyModel?)model));
+            .Returns(Task.FromResult(model));
 
         var result = (await _controller.Read(id)).Result as OkObjectResult;
 
@@ -94,7 +94,7 @@ public class AsyncCrudControllerTests
         var model = new AnyModel();
         
         A.CallTo(() => _repository.GetAsync(id))
-            .Returns(Task.FromResult((AnyModel?)model));
+            .Returns(Task.FromResult(model));
 
         var result = (await _controller.Read(id)).Result as OkObjectResult;
 
