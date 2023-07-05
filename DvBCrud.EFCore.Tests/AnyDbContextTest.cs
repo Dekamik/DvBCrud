@@ -1,15 +1,16 @@
 using System;
+using DvBCrud.EFCore.Tests.Mocks;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace DvBCrud.EFCore.Tests.Mocks;
+namespace DvBCrud.EFCore.Tests;
 
-public class AnyDbContextFixture : IDisposable
+public abstract class AnyDbContextTest : IDisposable
 {
     private readonly SqliteConnection _connection;
-    public readonly AnyDbContext DbContext;
+    protected readonly AnyDbContext DbContext;
 
-    public AnyDbContextFixture()
+    protected AnyDbContextTest()
     {
         _connection = new SqliteConnection("Filename=:memory:");
         _connection.Open();
@@ -18,6 +19,7 @@ public class AnyDbContextFixture : IDisposable
             .UseSqlite(_connection)
             .Options;
         DbContext = new AnyDbContext(options);
+        DbContext.Database.EnsureDeleted();
         DbContext.Database.EnsureCreated();
     }
 
