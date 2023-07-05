@@ -14,11 +14,11 @@ using Xunit;
 
 namespace DvBCrud.EFCore.Tests;
 
-public class RepositoryTestsBase : SqliteTestBase
+public class RepositoryTests : SqliteTestBase
 {
     private readonly IAnyRepository _repository;
 
-    public RepositoryTestsBase()
+    public RepositoryTests()
     {
         var mapper = new AnyMapper();
         _repository = new AnyRepository(DbContext, mapper);
