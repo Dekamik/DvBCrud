@@ -217,7 +217,7 @@ public class AsyncCrudControllerTests
         const string id = "1";
         var model = new AnyModel();
         A.CallTo(() => _repository.UpdateAsync(id, model))
-            .Throws<KeyNotFoundException>();
+            .Throws<NotFoundException>();
 
         var result = await _controller.Update(id, model) as ObjectResult;
 
@@ -276,7 +276,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         A.CallTo(() => _repository.DeleteAsync(id))
-            .Throws<KeyNotFoundException>();
+            .Throws<NotFoundException>();
 
         var result = await _controller.Delete(id) as ObjectResult;
 
