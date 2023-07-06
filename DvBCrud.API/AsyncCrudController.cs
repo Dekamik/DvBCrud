@@ -13,8 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.API;
 
-[ApiController]
-[Route("[controller]")]
 public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudControllerBase<TModel>
     where TModel : class
     where TRepository : IRepository<TId, TModel>
