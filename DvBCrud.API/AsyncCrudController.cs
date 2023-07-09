@@ -8,7 +8,9 @@ using DvBCrud.API.Swagger;
 using DvBCrud.Shared;
 using DvBCrud.Shared.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-
+// ReSharper disable RouteTemplates.ActionRoutePrefixCanBeExtractedToControllerRoute
+// ReSharper disable ConvertIfStatementToReturnStatement
+// ReSharper disable VirtualMemberNeverOverridden.Global
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace DvBCrud.API;
