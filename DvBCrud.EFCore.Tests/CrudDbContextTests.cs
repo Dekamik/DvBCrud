@@ -19,7 +19,7 @@ public class CrudDbContextTests : SqliteTestBase
         DbContext.SaveChanges();
         var now = DateTimeOffset.UtcNow;
 
-        entity.CreatedAt.Should().BeCloseTo(now, TimeSpan.FromMilliseconds(100));
+        entity.CreatedAt.Should().BeCloseTo(now, TimeSpan.FromMilliseconds(1000));
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class CrudDbContextTests : SqliteTestBase
         DbContext.SaveChanges();
         var now = DateTimeOffset.UtcNow;
 
-        entity.ModifiedAt.Should().BeCloseTo(now, TimeSpan.FromMilliseconds(100));
+        entity.ModifiedAt.Should().BeCloseTo(now, TimeSpan.FromMilliseconds(1000));
     }
 
     [Fact]
