@@ -1,4 +1,4 @@
-name: NuGet releases
+name: CI/CD
 on:
   workflow_dispatch:
   push:
