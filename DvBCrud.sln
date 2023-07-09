@@ -10,20 +10,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.Tests", "DvB
 		{D2565219-C14B-44CC-969E-1EDBE01A04ED} = {D2565219-C14B-44CC-969E-1EDBE01A04ED}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.API", "DvBCrud.EFCore.API\DvBCrud.EFCore.API.csproj", "{E27EB620-1DF5-49ED-9C65-9B1DB6AFBCA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.API", "DvBCrud.API\DvBCrud.API.csproj", "{E27EB620-1DF5-49ED-9C65-9B1DB6AFBCA1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D2565219-C14B-44CC-969E-1EDBE01A04ED} = {D2565219-C14B-44CC-969E-1EDBE01A04ED}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.API.Tests", "DvBCrud.EFCore.API.Tests\DvBCrud.EFCore.API.Tests.csproj", "{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.API.Tests", "DvBCrud.API.Tests\DvBCrud.API.Tests.csproj", "{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.EFCore.Mocks", "DvBCrud.EFCore.Mocks\DvBCrud.EFCore.Mocks.csproj", "{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.API.Tests.Web", "DvBCrud.API.Tests.Web\DvBCrud.API.Tests.Web.csproj", "{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore.API.Tests.Web", "DvBCrud.EFCore.API.Tests.Web\DvBCrud.EFCore.API.Tests.Web.csproj", "{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore.Services", "DvBCrud.EFCore.Services\DvBCrud.EFCore.Services.csproj", "{D329D113-26FE-46A9-8892-AF33C560A302}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.EFCore.Services.Tests", "DvBCrud.EFCore.Services.Tests\DvBCrud.EFCore.Services.Tests.csproj", "{09AF4927-C20C-4668-8CD3-0D07264F52DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Shared", "DvBCrud.Shared\DvBCrud.Shared.csproj", "{15E7A7B1-0773-4539-B100-67BAC0E02DEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,22 +43,14 @@ Global
 		{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A5A4E164-0F9B-4C39-A81D-1D0E8C407B7D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D329D113-26FE-46A9-8892-AF33C560A302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D329D113-26FE-46A9-8892-AF33C560A302}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D329D113-26FE-46A9-8892-AF33C560A302}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D329D113-26FE-46A9-8892-AF33C560A302}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09AF4927-C20C-4668-8CD3-0D07264F52DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09AF4927-C20C-4668-8CD3-0D07264F52DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09AF4927-C20C-4668-8CD3-0D07264F52DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09AF4927-C20C-4668-8CD3-0D07264F52DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15E7A7B1-0773-4539-B100-67BAC0E02DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15E7A7B1-0773-4539-B100-67BAC0E02DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15E7A7B1-0773-4539-B100-67BAC0E02DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15E7A7B1-0773-4539-B100-67BAC0E02DEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
