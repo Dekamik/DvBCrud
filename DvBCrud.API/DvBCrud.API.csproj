@@ -9,7 +9,6 @@
     <Version>1.0.0-alpha.1</Version>
     <Title>DvBCrud.API</Title>
     <Copyright>Dennis von Bargen</Copyright>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
