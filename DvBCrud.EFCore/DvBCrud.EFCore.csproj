@@ -9,11 +9,9 @@
     <Version>5.0.0-rc.1</Version>
     <Title>DvBCrud.EFCore</Title>
     <Copyright>Dennis von Bargen</Copyright>
-  </PropertyGroup>
-  
-  <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <IncludeContentInPack>true</IncludeContentInPack>
   </PropertyGroup>
 
   <ItemGroup>
