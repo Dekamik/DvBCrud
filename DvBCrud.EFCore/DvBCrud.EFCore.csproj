@@ -6,9 +6,14 @@
     <Company>Dennis von Bargen</Company>
     <LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>5.0.0-alpha.2</Version>
+    <Version>5.0.0-rc.1</Version>
     <Title>DvBCrud.EFCore</Title>
     <Copyright>Dennis von Bargen</Copyright>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>../LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
