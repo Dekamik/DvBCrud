@@ -32,7 +32,7 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
     [ProducesResponseType((int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [SwaggerDocsFilter(CrudActions.Create)]
-    public virtual async Task<IActionResult> Create([FromBody] TModel model)
+    public virtual async Task<ActionResult<Response<TModel>>> Create([FromBody] TModel model)
     {
         if (!CrudActions.IsActionAllowed(CrudActions.Create))
         {
@@ -43,7 +43,7 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
         {
             var id = await Repository.CreateAsync(model);
             var createdModel = await Repository.GetAsync(id);
-            return CreatedAtRoute(new { id }, createdModel);
+            return CreatedAtRoute(new { id }, new Response<TModel>(createdModel));
         }
         catch (ArgumentNullException ex)
         {
@@ -55,7 +55,7 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [SwaggerDocsFilter(CrudActions.Read)]
-    public virtual async Task<ActionResult<TModel>> Read(TId id)
+    public virtual async Task<ActionResult<Response<TModel>>> Read(TId id)
     {
         if (!CrudActions.IsActionAllowed(CrudActions.Read))
         {
@@ -64,7 +64,8 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
 
         try
         {
-            return Ok(await Repository.GetAsync(id));
+            var model = await Repository.GetAsync(id);
+            return Ok(new Response<TModel>(model));
         }
         catch (NotFoundException ex)
         {
@@ -76,14 +77,15 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [SwaggerDocsFilter(CrudActions.Read)]
-    public virtual async Task<ActionResult<IEnumerable<TModel>>> ReadAll()
+    public virtual async Task<ActionResult<Response<IEnumerable<TModel>>>> ReadAll()
     {
         if (!CrudActions.IsActionAllowed(CrudActions.Read))
         {
             return NotAllowed(HttpMethod.Get.Method);
         }
 
-        return Ok(await Task.Run(() => Repository.List()));
+        var models = Repository.List();
+        return Ok(await Task.Run(() => new Response<IEnumerable<TModel>>(models)));
     }
 
     [HttpPut("{id}")]
