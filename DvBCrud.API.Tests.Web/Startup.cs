@@ -12,7 +12,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace DvBCrud.API.Tests.Web;
 
-[ExcludeFromCodeCoverage]
 public class Startup
 {
     public Startup(IConfiguration configuration)

@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace DvBCrud.API.Tests.Web;
 
-[ExcludeFromCodeCoverage]
 public class Program
 {
     public static void Main(string[] args)

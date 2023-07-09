@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace DvBCrud.API.Tests.Web.WeatherForecasts.Model;
 
-[ExcludeFromCodeCoverage]
 public class WeatherForecastModel
 {
     public int Id { get; set; }

@@ -3,7 +3,6 @@ using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
 
 namespace DvBCrud.API.Tests.Web.WeatherForecasts.Model;
 
-[ExcludeFromCodeCoverage]
 public class WeatherForecastMapper : IWeatherForecastMapper
 {
     public WeatherForecastModel ToModel(WeatherForecast entity)

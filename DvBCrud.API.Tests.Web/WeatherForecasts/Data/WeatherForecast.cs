@@ -6,7 +6,6 @@ using DvBCrud.Shared.Entities;
 
 namespace DvBCrud.API.Tests.Web.WeatherForecasts.Data;
 
-[ExcludeFromCodeCoverage]
 public record WeatherForecast : IEntity<int>
 {
     [Key]

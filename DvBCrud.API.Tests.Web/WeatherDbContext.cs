@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DvBCrud.API.Tests.Web;
 
-[ExcludeFromCodeCoverage]
 public class WeatherDbContext : CrudDbContext
 {
     public WeatherDbContext(DbContextOptions options) : base(options)
