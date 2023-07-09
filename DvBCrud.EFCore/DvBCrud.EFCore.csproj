@@ -23,4 +23,13 @@
     <ProjectReference Include="..\DvBCrud.Shared\DvBCrud.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="LICENSE">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
