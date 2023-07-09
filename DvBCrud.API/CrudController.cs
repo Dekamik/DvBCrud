@@ -31,7 +31,7 @@ public abstract class CrudController<TId, TModel, TRepository> : CrudControllerB
     [ProducesResponseType((int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [SwaggerDocsFilter(CrudActions.Create)]
-    public virtual IActionResult Create([FromBody] TModel model)
+    public virtual ActionResult<Response<TModel>> Create([FromBody] TModel model)
     {
         if (!CrudActions.IsActionAllowed(CrudActions.Create))
         {
@@ -42,7 +42,7 @@ public abstract class CrudController<TId, TModel, TRepository> : CrudControllerB
         {
             var id = Repository.Create(model);
             var createdModel = Repository.Get(id);
-            return CreatedAtRoute(new { id }, createdModel);
+            return CreatedAtRoute(new { id }, new Response<TModel>(createdModel));
         }
         catch (ArgumentNullException ex)
         {
@@ -54,7 +54,7 @@ public abstract class CrudController<TId, TModel, TRepository> : CrudControllerB
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [SwaggerDocsFilter(CrudActions.Read)]
-    public virtual ActionResult<TModel> Read(TId id)
+    public virtual ActionResult<Response<TModel>> Read(TId id)
     {
         if (!CrudActions.IsActionAllowed(CrudActions.Read))
         {
@@ -63,7 +63,8 @@ public abstract class CrudController<TId, TModel, TRepository> : CrudControllerB
 
         try
         {
-            return Ok(Repository.Get(id));
+            var model = Repository.Get(id);
+            return Ok(new Response<TModel>(model));
         }
         catch (NotFoundException ex)
         {
@@ -75,14 +76,15 @@ public abstract class CrudController<TId, TModel, TRepository> : CrudControllerB
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [SwaggerDocsFilter(CrudActions.Read)]
-    public virtual ActionResult<IEnumerable<TModel>> ReadAll()
+    public virtual ActionResult<Response<IEnumerable<TModel>>> ReadAll()
     {
         if (!CrudActions.IsActionAllowed(CrudActions.Read))
         {
             return NotAllowed(HttpMethod.Get.Method);
         }
 
-        return Ok(Repository.List());
+        var models = Repository.List();
+        return Ok(new Response<IEnumerable<TModel>>(models));
     }
 
     [HttpPut("{id}")]

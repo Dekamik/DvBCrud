@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using DvBCrud.API.Tests.Mocks;
@@ -41,7 +42,7 @@ public class AsyncCrudControllerTests
     {
         var model = new AnyModel();
 
-        var result = await _controller.Create(model) as CreatedAtRouteResult;
+        var result = (await _controller.Create(model)).Result as CreatedAtRouteResult;
 
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be((int)HttpStatusCode.Created);
@@ -53,7 +54,7 @@ public class AsyncCrudControllerTests
         var model = new AnyModel();
         var controller = new AnyAsyncReadOnlyController(A.Fake<IRepository<string, AnyModel>>());
 
-        var result = await controller.Create(model) as ObjectResult;
+        var result = (await controller.Create(model)).Result as ObjectResult;
 
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be((int)HttpStatusCode.MethodNotAllowed);
@@ -65,7 +66,7 @@ public class AsyncCrudControllerTests
         A.CallTo(() => _repository.CreateAsync(null))
             .Throws<ArgumentNullException>();
 
-        var result = await _controller.Create(null) as ObjectResult;
+        var result = (await _controller.Create(null)).Result as ObjectResult;
 
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
@@ -76,14 +77,15 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
+        var expected = new Response<AnyModel>(model);
         
         A.CallTo(() => _repository.GetAsync(id))
             .Returns(Task.FromResult(model));
 
-        var result = (await _controller.Read(id)).Result as OkObjectResult;
+        var actual = (await _controller.Read(id)).Result as OkObjectResult;
 
-        result.Should().NotBeNull();
-        result!.Value.Should().Be(model);
+        actual.Should().NotBeNull();
+        actual!.Value.Should().BeEquivalentTo(expected);
     }
     
     [Fact]
@@ -134,14 +136,15 @@ public class AsyncCrudControllerTests
             new AnyModel(),
             new AnyModel()
         };
+        var expected = new Response<IEnumerable<AnyModel>>(models);
         
         A.CallTo(() => _repository.List())
             .Returns(models);
 
-        var result = (await _controller.ReadAll()).Result as OkObjectResult;
+        var actual = (await _controller.ReadAll()).Result as OkObjectResult;
 
-        result.Should().NotBeNull();
-        result!.Value.Should().Be(models);
+        actual.Should().NotBeNull();
+        actual!.Value.Should().BeEquivalentTo(expected);
     }
     
     [Fact]
