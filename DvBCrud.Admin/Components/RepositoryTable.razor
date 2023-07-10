@@ -28,7 +28,7 @@ else
         {
             <th>
                 @(info.GetAttribute<DisplayAttribute>() != null 
-                    ? info.GetAttribute<DisplayAttribute>()!.Name 
+                    ? info.GetAttribute<DisplayAttribute>()?.Name ?? info.Name
                     : info.Name)
             </th>
         }
@@ -62,7 +62,9 @@ else
     {
         base.OnInitialized();
 
-        _properties = typeof(TCrudModel).GetProperties();
+        _properties = typeof(TCrudModel).GetProperties()
+            .OrderBy(p => p.GetAttribute<DisplayAttribute>()?.Order)
+            .ToArray();
         _items = Repository.List()
             .ToList();
     }
