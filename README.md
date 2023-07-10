@@ -1,6 +1,6 @@
 # DvBCrud
 ![Test Status](https://github.com/Dekamik/DvBCrud.EFCore/actions/workflows/test.yml/badge.svg)
-![Build Status](https://github.com/Dekamik/DvBCrud.EFCore/actions/workflows/release.yml/badge.svg)
+![CI/CD Status](https://github.com/Dekamik/DvBCrud.EFCore/actions/workflows/cicd.yml/badge.svg)
 
 A NuGet library for CRUD templates , complete with base entities, repositories and synchronous & asynchronous API 
 controllers for rapid API development.
