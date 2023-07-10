@@ -69,7 +69,7 @@ else
         base.OnInitialized();
 
         _properties = typeof(TCrudModel).GetProperties()
-            .OrderBy(p => p.GetAttribute<DisplayAttribute>()?.Order)
+            .OrderBy(p => p.GetAttribute<DisplayAttribute>()?.GetOrder())
             .ToArray();
         _items = Repository.List()
             .ToList();

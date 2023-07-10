@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using DvBCrud.Admin.Tests.Web.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using DvBCrud.API.Swagger;
 using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.API.Tests.Web.WeatherForecasts.Model;
