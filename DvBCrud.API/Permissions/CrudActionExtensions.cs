@@ -18,6 +18,8 @@ public static class CrudActionExtensions
     }
     
     [ExcludeFromCodeCoverage]
-    public static CrudActions GetCrudActions(this Type type) => 
-        type.GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? CrudActions.All;
+    public static CrudActions GetCrudActions(this Type type)
+    {
+        return type.GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? CrudActions.All;
+    }
 }

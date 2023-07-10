@@ -102,10 +102,12 @@ public class RepositoryTests : SqliteTestBase
     }
 
     [Fact]
-    public void Get_Null_ThrowsArgumentNullException() => 
+    public void Get_Null_ThrowsArgumentNullException()
+    {
         _repository.Invoking(r => r.Get(null))
             .Should()
             .Throw<ArgumentNullException>();
+    }
 
     [Fact]
     public async Task GetAsync_ExistingId_ReturnsEntity()
@@ -159,10 +161,12 @@ public class RepositoryTests : SqliteTestBase
     }
 
     [Fact]
-    public async Task GetAsync_Null_ThrowsArgumentNullException() => 
+    public async Task GetAsync_Null_ThrowsArgumentNullException()
+    {
         await _repository.Awaiting(r => r.GetAsync(null))
             .Should()
             .ThrowAsync<ArgumentNullException>();
+    }
 
     [Fact]
     public void Create_AnyEntity_EntityCreated()
@@ -203,11 +207,13 @@ public class RepositoryTests : SqliteTestBase
     }
 
     [Fact]
-    public void Create_Null_ThrowsArgumentNullException() => 
+    public void Create_Null_ThrowsArgumentNullException()
+    {
         _repository.Invoking(r => r.Create(null))
             .Should()
             .Throw<ArgumentNullException>();
-        
+    }
+
     [Fact]
     public async Task CreateAsync_AnyEntity_EntityCreated()
     {
@@ -247,10 +253,12 @@ public class RepositoryTests : SqliteTestBase
     }
 
     [Fact]
-    public void CreateAsync_Null_ThrowsArgumentNullException() => 
+    public void CreateAsync_Null_ThrowsArgumentNullException()
+    {
         _repository.Invoking(r => r.CreateAsync(null))
             .Should()
             .ThrowAsync<ArgumentNullException>();
+    }
 
     [Fact]
     public void Update_ExistingEntity_EntityUpdated()
@@ -366,10 +374,12 @@ public class RepositoryTests : SqliteTestBase
     }
 
     [Fact]
-    public async Task UpdateAsync_Null_ThrowsArgumentNullException() => 
+    public async Task UpdateAsync_Null_ThrowsArgumentNullException()
+    {
         await _repository.Awaiting(r => r.UpdateAsync("1", null))
             .Should()
             .ThrowAsync<ArgumentNullException>();
+    }
 
     [Fact]
     public async Task UpdateAsync_NullId_ThrowsArgumentNullException()
@@ -417,16 +427,20 @@ public class RepositoryTests : SqliteTestBase
     }
 
     [Fact]
-    public void Delete_Null_ThrowsArgumentNullException() =>
+    public void Delete_Null_ThrowsArgumentNullException()
+    {
         _repository.Invoking(r => r.Delete(null))
             .Should()
             .Throw<ArgumentNullException>();
+    }
 
     [Fact]
-    public void Delete_NonExistingId_ThrowsKeyNotFoundException() => 
+    public void Delete_NonExistingId_ThrowsKeyNotFoundException()
+    {
         _repository.Invoking(r => r.Delete("1"))
             .Should()
             .Throw<NotFoundException>();
+    }
 
     [Fact]
     public async Task DeleteAsync_ExistingEntity_EntityDeleted()
@@ -457,16 +471,20 @@ public class RepositoryTests : SqliteTestBase
     }
 
     [Fact]
-    public async Task DeleteAsync_Null_ThrowsArgumentNullException() =>
+    public async Task DeleteAsync_Null_ThrowsArgumentNullException()
+    {
         await _repository.Awaiting(r => r.DeleteAsync(null))
             .Should()
             .ThrowAsync<ArgumentNullException>();
+    }
 
     [Fact]
-    public async Task DeleteAsync_NonExistingId_ThrowsKeyNotFoundException() => 
+    public async Task DeleteAsync_NonExistingId_ThrowsKeyNotFoundException()
+    {
         await _repository.Awaiting(r => r.DeleteAsync("1"))
             .Should()
             .ThrowAsync<NotFoundException>();
+    }
 
 
     [Fact]

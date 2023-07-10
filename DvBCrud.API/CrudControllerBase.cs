@@ -8,5 +8,8 @@ namespace DvBCrud.API;
 /// <typeparam name="TApiModel">Api model type</typeparam>
 public abstract class CrudControllerBase<TApiModel> : ControllerBase
 {
-    protected ObjectResult NotAllowed(string method) => StatusCode(405, $"{method} not allowed on {typeof(TApiModel).Name}");
+    protected ObjectResult NotAllowed(string method)
+    {
+        return StatusCode(405, $"{method} not allowed on {typeof(TApiModel).Name}");
+    }
 }
