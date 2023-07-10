@@ -21,17 +21,15 @@
 }
 else
 {
-    <table class="table">
+    <table class="table table-hover">
         <thead>
         <tr>
-        @foreach (var info in _properties)
+        @foreach (var prop in _properties)
         {
-            @if (info.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+            @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
             {
                 <th>
-                    @(info.GetAttribute<DisplayAttribute>() != null 
-                        ? info.GetAttribute<DisplayAttribute>()?.Name ?? info.Name
-                        : info.Name)
+                    @prop.GetDisplayName()
                 </th>
             }
         }
@@ -40,14 +38,16 @@ else
         <tbody>
         @foreach (var item in _items)
         {
-            <tr id="@item.Id">
-            @foreach (var info in _properties)
-            {
-                @if (info.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+            <tr id="@item.Id" 
+                onclick="window.location='@(string.IsNullOrWhiteSpace(DetailRoute) ? "" : $"{DetailRoute}/{item.Id}")'"
+                role="button">
+                @foreach (var prop in _properties)
                 {
-                    <td>@info.GetValue(item)</td>
+                    @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+                    {
+                        <td>@prop.GetValue(item)</td>
+                    }
                 }
-            }
             </tr>
         }
         </tbody>
@@ -59,6 +59,9 @@ else
     public string Name { get; set; } = null!;
 
     [Parameter]
+    public string? DetailRoute { get; set; }
+
+    [Parameter]
     public CrudActions Permissions { get; set; } = CrudActions.All;
 
     private PropertyInfo[] _properties = null!;
@@ -68,9 +71,7 @@ else
     {
         base.OnInitialized();
 
-        _properties = typeof(TCrudModel).GetProperties()
-            .OrderBy(p => p.GetAttribute<DisplayAttribute>()?.GetOrder())
-            .ToArray();
+        _properties = MemberInfoHelpers.GetPropertyInfos<TCrudModel>();
         _items = Repository.List()
             .ToList();
     }

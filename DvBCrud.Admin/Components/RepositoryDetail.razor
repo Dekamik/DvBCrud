@@ -1,0 +1,61 @@
+﻿@using DvBCrud.Shared
+@using DvBCrud.Shared.Entities
+@using DvBCrud.Shared.Exceptions
+@using System.Reflection
+@using DvBCrud.Admin.Internal
+@using System.ComponentModel.DataAnnotations
+
+@typeparam TId
+@typeparam TCrudModel where TCrudModel : IEntity<TId>
+@typeparam TRepository where TRepository : IRepository<TId, TCrudModel>
+
+@inject TRepository Repository
+
+<h1>@Name @Id</h1>
+
+@if (_item == null)
+{
+    <p>
+        <em>@(typeof(TCrudModel).Name)[@Id] not found</em>
+    </p>
+}
+else
+{
+    @foreach (var prop in _properties)
+    {
+        @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+        {
+            <label class="fw-bold" for="@prop.Name">@prop.GetDisplayName()</label>
+            <p id="@prop.Name">
+                @prop.GetValue(_item)
+            </p>
+        }
+    }
+}
+
+@code {
+    [Parameter]
+    public TId Id { get; set; } = default!;
+
+    [Parameter]
+    public string Name { get; set; } = default!;
+
+    private PropertyInfo[] _properties = null!;
+    private TCrudModel? _item;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _properties = MemberInfoHelpers.GetPropertyInfos<TCrudModel>();
+
+        try
+        {
+            _item = Repository.Get(Id);
+        }
+        catch (NotFoundException)
+        {
+            _item = default;
+        }
+    }
+}

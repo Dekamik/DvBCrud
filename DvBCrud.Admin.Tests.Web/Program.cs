@@ -49,6 +49,72 @@ var forecasts = new[]
         Date = DateTimeOffset.Parse("2023-07-11T00:00:00+02:00"),
         TemperatureC = 17,
         Summary = "Clear"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-11T06:00:00+02:00"),
+        TemperatureC = 16,
+        Summary = "Sunny"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-11T12:00:00+02:00"),
+        TemperatureC = 23,
+        Summary = "Sunny"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-11T18:00:00+02:00"),
+        TemperatureC = 23,
+        Summary = "Cloudy"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-12T00:00:00+02:00"),
+        TemperatureC = 18,
+        Summary = "Cloudy"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-12T06:00:00+02:00"),
+        TemperatureC = 17,
+        Summary = "Cloudy"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-12T12:00:00+02:00"),
+        TemperatureC = 23,
+        Summary = "Overcast"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-12T18:00:00+02:00"),
+        TemperatureC = 20,
+        Summary = "Rain"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-13T00:00:00+02:00"),
+        TemperatureC = 16,
+        Summary = "Overcast"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-13T06:00:00+02:00"),
+        TemperatureC = 17,
+        Summary = "Cloudy"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-13T12:00:00+02:00"),
+        TemperatureC = 22,
+        Summary = "Sunny"
+    },
+    new WeatherForecast
+    {
+        Date = DateTimeOffset.Parse("2023-07-13T18:00:00+02:00"),
+        TemperatureC = 21,
+        Summary = "Clear"
     }
 };
 context.WeatherForecasts.AddRange(forecasts);
