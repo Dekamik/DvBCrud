@@ -1,6 +1,9 @@
 ﻿@using DvBCrud.Shared
 @using DvBCrud.Shared.Entities
 @using System.Reflection
+@using DvBCrud.Shared.Permissions
+@using System.ComponentModel.DataAnnotations
+@using DvBCrud.Admin.Internal
 
 @typeparam TId
 @typeparam TCrudModel where TCrudModel : IEntity<TId>
@@ -23,14 +26,18 @@ else
         <tr>
         @foreach (var info in _properties)
         {
-            <th>@info.Name</th>
+            <th>
+                @(info.GetAttribute<DisplayAttribute>() != null 
+                    ? info.GetAttribute<DisplayAttribute>()!.Name 
+                    : info.Name)
+            </th>
         }
         </tr>
         </thead>
         <tbody>
         @foreach (var item in _items)
         {
-            <tr>
+            <tr id="@item.Id">
                 @foreach (var info in _properties)
                 {
                     <td>@info.GetValue(item)</td>
@@ -44,6 +51,9 @@ else
 @code {
     [Parameter]
     public string Name { get; set; } = null!;
+
+    [Parameter]
+    public CrudActions Permissions { get; set; } = CrudActions.All;
 
     private PropertyInfo[] _properties = null!;
     private IList<TCrudModel>? _items;
