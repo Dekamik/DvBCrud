@@ -16,6 +16,9 @@ Get started with DvBCrud-based project by doing the following:
 
 ## NuGet libraries
 
+### [DvBCrud.Admin](DvBCrud.Admin)
+[![Nuget](https://img.shields.io/nuget/v/DvBCrud.Admin?label=DvBCrud.Admin)](https://www.nuget.org/packages/DvBCrud.Admin/)
+
 ### [DvBCrud.API](DvBCrud.API)
 [![Nuget](https://img.shields.io/nuget/v/DvBCrud.API?label=DvBCrud.API)](https://www.nuget.org/packages/DvBCrud.API/)
 
