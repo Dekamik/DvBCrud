@@ -30,89 +30,96 @@ if (!app.Environment.IsDevelopment())
 
 var context = app.Services.GetRequiredService<AdminDbContext>();
 context.Database.EnsureCreated();
+
+var currentDate = DateTimeOffset.Now;
+var todayStr = currentDate.ToString("yyyy-MM-dd");
+var tomorrowStr = currentDate.AddDays(1).ToString("yyyy-MM-dd");
+var in2Days = currentDate.AddDays(2).ToString("yyyy-MM-dd");
+var in3Days = currentDate.AddDays(3).ToString("yyyy-MM-dd");
+
 var forecasts = new[]
 {
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-10T12:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{todayStr}T12:00:00+02:00"),
         TemperatureC = 25,
         Summary = "Sunny"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-10T18:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{todayStr}T18:00:00+02:00"),
         TemperatureC = 23,
         Summary = "Sunny"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-11T00:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{tomorrowStr}T00:00:00+02:00"),
         TemperatureC = 17,
         Summary = "Clear"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-11T06:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{tomorrowStr}T06:00:00+02:00"),
         TemperatureC = 16,
         Summary = "Sunny"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-11T12:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{tomorrowStr}T12:00:00+02:00"),
         TemperatureC = 23,
         Summary = "Sunny"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-11T18:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{tomorrowStr}T18:00:00+02:00"),
         TemperatureC = 23,
         Summary = "Cloudy"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-12T00:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{in2Days}T00:00:00+02:00"),
         TemperatureC = 18,
         Summary = "Cloudy"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-12T06:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{in2Days}T06:00:00+02:00"),
         TemperatureC = 17,
         Summary = "Cloudy"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-12T12:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{in2Days}T12:00:00+02:00"),
         TemperatureC = 23,
         Summary = "Overcast"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-12T18:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{in2Days}T18:00:00+02:00"),
         TemperatureC = 20,
         Summary = "Rain"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-13T00:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{in3Days}T00:00:00+02:00"),
         TemperatureC = 16,
         Summary = "Overcast"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-13T06:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{in3Days}T06:00:00+02:00"),
         TemperatureC = 17,
         Summary = "Cloudy"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-13T12:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{in3Days}T12:00:00+02:00"),
         TemperatureC = 22,
         Summary = "Sunny"
     },
     new WeatherForecast
     {
-        Date = DateTimeOffset.Parse("2023-07-13T18:00:00+02:00"),
+        Date = DateTimeOffset.Parse($"{in3Days}T18:00:00+02:00"),
         TemperatureC = 21,
         Summary = "Clear"
     }

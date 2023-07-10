@@ -11,9 +11,9 @@
 
 @inject TRepository Repository
 
-<h1>@Name @Id</h1>
+<h1>@Name</h1>
 
-@if (_item == null)
+@if (Item == null)
 {
     <p>
         <em>@(typeof(TCrudModel).Name)[@Id] not found</em>
@@ -27,7 +27,7 @@ else
         {
             <label class="fw-bold" for="@prop.Name">@prop.GetDisplayName()</label>
             <p id="@prop.Name">
-                @prop.GetValue(_item)
+                @prop.GetValue(Item)
             </p>
         }
     }
@@ -35,27 +35,21 @@ else
 
 @code {
     [Parameter]
-    public TId Id { get; set; } = default!;
+    public TId? Id { get; set; }
+    
+    [Parameter]
+    public TCrudModel? Item { get; set; }
 
     [Parameter]
-    public string Name { get; set; } = default!;
+    public string? Name { get; set; }
 
     private PropertyInfo[] _properties = null!;
-    private TCrudModel? _item;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         _properties = MemberInfoHelpers.GetPropertyInfos<TCrudModel>();
-
-        try
-        {
-            _item = Repository.Get(Id);
-        }
-        catch (NotFoundException)
-        {
-            _item = default;
-        }
+        Item ??= Repository.Get(Id ?? throw new ArgumentNullException(nameof(Id)));
     }
 }

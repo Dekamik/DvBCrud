@@ -1,17 +1,44 @@
 ﻿@page "/weatherforecasts/{id:long}"
 
-<PageTitle>Weather forecast @Id</PageTitle>
+<PageTitle>@GetDateName()</PageTitle>
 
 @using DvBCrud.Admin.Components
 @using DvBCrud.Admin.Tests.Web.Data
 
+@inject WeatherForecastRepository WeatherForecastRepository;
+
 <RepositoryDetail Id="Id"
-                  Name="Weather forecast"
-                  TId="long" 
-                  TRepository="WeatherForecastRepository" 
-                  TCrudModel="WeatherForecastModel" />
+                  Name=@($"Weather forecast for {GetDateName().ToLower()}")
+                  Item="_item"
+                  TId="long"
+                  TCrudModel="WeatherForecastModel" 
+                  TRepository="WeatherForecastRepository" />
 
 @code {
     [Parameter]
     public long Id { get; set; }
+
+    private WeatherForecastModel? _item;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _item = WeatherForecastRepository.Get(Id);
+    }
+
+    private string GetDateName()
+    {
+        if (_item == null)
+        {
+            return "";
+        }
+        
+        var dayDiff = _item.Date.Day - DateTimeOffset.Now.Day;
+        return dayDiff switch
+        {
+            0 => $"Today at {_item.Date:HH:mm}",
+            1 => $"Tomorrow at {_item.Date:HH:mm}",
+            _ => $"{_item.Date:MMM dd yyyy} at {_item.Date:HH:mm}"
+        };
+    }
 }

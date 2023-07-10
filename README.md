@@ -9,15 +9,19 @@ controllers for rapid API development.
 
 Get started with DvBCrud-based project by doing the following:
 
-1. Choose an ORM:
+1. Choose and implement ORM:
    - EF Core `DvBCrud.EFCore`
-2. Choose an interface: 
+2. Choose and implement interface: 
+   - Admin UI `DvBCrud.Admin`
    - REST API `DvBCrud.API`
+3. Run solution
 
 ## NuGet libraries
 
 ### [DvBCrud.Admin](DvBCrud.Admin)
 [![Nuget](https://img.shields.io/nuget/v/DvBCrud.Admin?label=DvBCrud.Admin)](https://www.nuget.org/packages/DvBCrud.Admin/)
+
+Blazor Server templates for creating Admin UI.
 
 ### [DvBCrud.API](DvBCrud.API)
 [![Nuget](https://img.shields.io/nuget/v/DvBCrud.API?label=DvBCrud.API)](https://www.nuget.org/packages/DvBCrud.API/)
