@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Version>0.1.0-alpha.1</Version>
+        <Title>DvBCrud.Admin</Title>
+        <Authors>Dennis von Bargen</Authors>
+        <Company>Dennis von Bargen</Company>
+        <Copyright>Dennis von Bargen</Copyright>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <RepositoryUrl>https://github.com/Dekamik/DvBCrud.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\RepositoryTable.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DvBCrud.Shared\DvBCrud.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
+    </ItemGroup>
+
+</Project>

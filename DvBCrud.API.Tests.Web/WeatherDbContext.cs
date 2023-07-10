@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
+﻿using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.EFCore;
 using Microsoft.EntityFrameworkCore;
 

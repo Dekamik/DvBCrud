@@ -1,0 +1,79 @@
+﻿@using DvBCrud.Shared
+@using DvBCrud.Shared.Entities
+@using System.Reflection
+@using DvBCrud.Shared.Permissions
+@using System.ComponentModel.DataAnnotations
+@using DvBCrud.Admin.Internal
+
+@typeparam TId
+@typeparam TCrudModel where TCrudModel : IEntity<TId>
+@typeparam TRepository where TRepository : IRepository<TId, TCrudModel>
+
+@inject TRepository Repository
+@inject NavigationManager NavigationManager
+
+<h1>@Name</h1>
+
+@if (_items == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table @(string.IsNullOrWhiteSpace(DetailRoute) ? null : "table-hover")">
+        <thead>
+        <tr>
+        @foreach (var prop in _properties)
+        {
+            @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+            {
+                <th>
+                    @prop.GetDisplayName()
+                </th>
+            }
+        }
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in _items)
+        {
+            <tr id="@item.Id" 
+                onclick="window.location='@(string.IsNullOrWhiteSpace(DetailRoute) ? NavigationManager.Uri : $"{DetailRoute}/{item.Id}")'"
+                role="@(string.IsNullOrWhiteSpace(DetailRoute) ? null : "button")">
+                @foreach (var prop in _properties)
+                {
+                    @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+                    {
+                        <td>@prop.GetValue(item)</td>
+                    }
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = null!;
+
+    [Parameter]
+    public string? DetailRoute { get; set; }
+
+    [Parameter]
+    public CrudActions Permissions { get; set; } = CrudActions.All;
+
+    private PropertyInfo[] _properties = null!;
+    private IList<TCrudModel>? _items;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _properties = MemberInfoHelpers.GetPropertyInfos<TCrudModel>();
+        _items = Repository.List()
+            .ToList();
+    }
+}

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.API.Tests.Web.WeatherForecasts.Model;
+﻿using DvBCrud.API.Tests.Web.WeatherForecasts.Model;
 using DvBCrud.EFCore;
 
 namespace DvBCrud.API.Tests.Web.WeatherForecasts.Data;

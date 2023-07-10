@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using DvBCrud.API.Permissions;
 using DvBCrud.API.Swagger;
 using DvBCrud.Shared;
 using DvBCrud.Shared.Exceptions;
+using DvBCrud.Shared.Permissions;
 using Microsoft.AspNetCore.Mvc;
 // ReSharper disable RouteTemplates.ActionRoutePrefixCanBeExtractedToControllerRoute
 // ReSharper disable ConvertIfStatementToReturnStatement

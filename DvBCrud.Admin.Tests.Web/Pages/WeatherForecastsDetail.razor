@@ -1,0 +1,17 @@
+﻿@page "/weatherforecasts/{id:long}"
+
+<PageTitle>Weather forecast @Id</PageTitle>
+
+@using DvBCrud.Admin.Components
+@using DvBCrud.Admin.Tests.Web.Data
+
+<RepositoryDetail Id="Id"
+                  Name="Weather forecast"
+                  TId="long" 
+                  TRepository="WeatherForecastRepository" 
+                  TCrudModel="WeatherForecastModel" />
+
+@code {
+    [Parameter]
+    public long Id { get; set; }
+}

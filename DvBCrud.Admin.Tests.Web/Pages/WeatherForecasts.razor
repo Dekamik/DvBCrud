@@ -1,0 +1,12 @@
+﻿@page "/weatherforecasts"
+
+<PageTitle>Weather forecasts</PageTitle>
+
+@using DvBCrud.Admin.Components
+@using DvBCrud.Admin.Tests.Web.Data
+
+<RepositoryTable Name="Weather forecasts"
+                 DetailRoute="weatherforecasts"
+                 TId="long" 
+                 TRepository="WeatherForecastRepository" 
+                 TCrudModel="WeatherForecastModel" />
