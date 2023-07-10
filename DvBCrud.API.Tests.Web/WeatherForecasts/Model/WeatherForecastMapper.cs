@@ -5,31 +5,31 @@ namespace DvBCrud.API.Tests.Web.WeatherForecasts.Model;
 
 public class WeatherForecastMapper : IWeatherForecastMapper
 {
-    public WeatherForecastModel ToModel(WeatherForecast entity)
+    public WeatherForecastModel ToModel(WeatherForecast other)
     {
         return new WeatherForecastModel
         {
-            Id = entity.Id,
-            Date = entity.Date,
-            Summary = entity.Summary,
-            TemperatureC = entity.TemperatureC
+            Id = other.Id,
+            Date = other.Date,
+            Summary = other.Summary,
+            TemperatureC = other.TemperatureC
         };
     }
 
-    public WeatherForecast ToEntity(WeatherForecastModel model)
+    public WeatherForecast ToEntity(WeatherForecastModel other)
     {
         return new WeatherForecast
         {
-            Date = model.Date,
-            Summary = model.Summary,
-            TemperatureC = model.TemperatureC
+            Date = other.Date,
+            Summary = other.Summary,
+            TemperatureC = other.TemperatureC
         };
     }
 
-    public void UpdateEntity(WeatherForecast destination, WeatherForecast source)
+    public void UpdateEntity(WeatherForecast target, WeatherForecast other)
     {
-        destination.Date = source.Date;
-        destination.TemperatureC = source.TemperatureC;
-        destination.Summary = source.Summary;
+        target.Date = other.Date;
+        target.TemperatureC = other.TemperatureC;
+        target.Summary = other.Summary;
     }
 }

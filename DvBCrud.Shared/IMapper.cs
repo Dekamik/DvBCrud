@@ -10,21 +10,21 @@ public interface IMapper<TEntity, TModel>
     /// <summary>
     /// Convert from <typeparamref name="TEntity"/> to <typeparamref name="TModel"/> 
     /// </summary>
-    /// <param name="entity">The entity to convert</param>
+    /// <param name="other">The entity to convert</param>
     /// <returns>The converted model</returns>
-    TModel ToModel(TEntity entity);
+    TModel ToModel(TEntity other);
     
     /// <summary>
     /// Convert from <typeparamref name="TModel"/> to <typeparamref name="TEntity"/>
     /// </summary>
-    /// <param name="entity">The model to convert</param>
+    /// <param name="other">The model to convert</param>
     /// <returns>The converted entity</returns>
-    TEntity ToEntity(TModel entity);
+    TEntity ToEntity(TModel other);
     
     /// <summary>
-    /// Update <paramref name="destination"/> entity with values from <paramref name="source"/>
+    /// Update <paramref name="target"/> entity with values from <paramref name="other"/>
     /// </summary>
-    /// <param name="source">Entity to copy from</param>
-    /// <param name="destination">Entity to copy to</param>
-    void UpdateEntity(TEntity destination, TEntity source);
+    /// <param name="other">Entity to copy from</param>
+    /// <param name="target">Entity to copy to</param>
+    void UpdateEntity(TEntity target, TEntity other);
 }

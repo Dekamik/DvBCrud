@@ -9,7 +9,7 @@ namespace DvBCrud.API.Tests.Web.WeatherForecasts;
 [Route("api/v1/[controller]")]
 public class WeatherForecastController : CrudController<int, WeatherForecastModel, IWeatherForecastRepository>
 {
-    public WeatherForecastController(IWeatherForecastRepository crudHandler) : base(crudHandler)
+    public WeatherForecastController(IWeatherForecastRepository repository) : base(repository)
     {
     }
 }

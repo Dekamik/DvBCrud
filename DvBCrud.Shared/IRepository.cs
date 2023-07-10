@@ -13,6 +13,7 @@ public interface IRepository<TId, TModel>
     /// Lists all entities
     /// </summary>
     /// <returns>An <see cref="IQueryable"/> containing all <typeparamref name="TModel"/> instances</returns>
+    [Obsolete("Method signature will be changed to support pagination")]
     IEnumerable<TModel> List();
 
     /// <summary>
