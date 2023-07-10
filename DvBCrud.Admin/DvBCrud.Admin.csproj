@@ -1,18 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <Version>0.1.0-alpha.1</Version>
-        <Title>DvBCrud.Admin</Title>
-        <Authors>Dennis von Bargen</Authors>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+
     <ItemGroup>
-      <Content Update="Components\RepositoryTable.razor">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </Content>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\RepositoryTable.razor" />
     </ItemGroup>
 
     <ItemGroup>

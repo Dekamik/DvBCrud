@@ -8,12 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DvBCrud.Admin\DvBCrud.Admin.csproj" />
       <ProjectReference Include="..\DvBCrud.EFCore\DvBCrud.EFCore.csproj" />
       <ProjectReference Include="..\DvBCrud.Shared\DvBCrud.Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="Components\RepositoryTable.razor" />
     </ItemGroup>
 
     <ItemGroup>
