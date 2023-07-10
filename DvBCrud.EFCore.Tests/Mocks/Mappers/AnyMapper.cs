@@ -5,26 +5,26 @@ namespace DvBCrud.EFCore.Tests.Mocks.Mappers;
 [ExcludeFromCodeCoverage]
 public class AnyMapper : IAnyMapper
 {
-    public AnyModel ToModel(AnyEntity entity)
+    public AnyModel ToModel(AnyEntity other)
     {
         return new AnyModel
         {
-            Id = entity.Id,
-            AnyString = entity.AnyString
+            Id = other.Id,
+            AnyString = other.AnyString
         };
     }
 
-    public AnyEntity ToEntity(AnyModel model)
+    public AnyEntity ToEntity(AnyModel other)
     {
         return new AnyEntity
         {
-            Id = model.Id,
-            AnyString = model.AnyString
+            Id = other.Id,
+            AnyString = other.AnyString
         };
     }
 
-    public void UpdateEntity(AnyEntity destination, AnyEntity source)
+    public void UpdateEntity(AnyEntity target, AnyEntity other)
     {
-        destination.AnyString = source.AnyString;
+        target.AnyString = other.AnyString;
     }
 }
