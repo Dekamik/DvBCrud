@@ -26,11 +26,14 @@ else
         <tr>
         @foreach (var info in _properties)
         {
-            <th>
-                @(info.GetAttribute<DisplayAttribute>() != null 
-                    ? info.GetAttribute<DisplayAttribute>()?.Name ?? info.Name
-                    : info.Name)
-            </th>
+            @if (info.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+            {
+                <th>
+                    @(info.GetAttribute<DisplayAttribute>() != null 
+                        ? info.GetAttribute<DisplayAttribute>()?.Name ?? info.Name
+                        : info.Name)
+                </th>
+            }
         }
         </tr>
         </thead>
@@ -38,10 +41,13 @@ else
         @foreach (var item in _items)
         {
             <tr id="@item.Id">
-                @foreach (var info in _properties)
+            @foreach (var info in _properties)
+            {
+                @if (info.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
                 {
                     <td>@info.GetValue(item)</td>
                 }
+            }
             </tr>
         }
         </tbody>

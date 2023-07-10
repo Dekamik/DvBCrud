@@ -5,6 +5,7 @@ namespace DvBCrud.Admin.Tests.Web.Data;
 
 public class WeatherForecastModel : IEntity<long>
 {
+    [Display(AutoGenerateField = false)]
     public long Id { get; set; }
     
     public DateTimeOffset Date { get; set; }
