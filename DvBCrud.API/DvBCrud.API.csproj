@@ -6,7 +6,7 @@
     <Company>Dennis von Bargen</Company>
     <LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>1.0.1-rc.1</Version>
+    <Version>1.0.1</Version>
     <Title>DvBCrud.API</Title>
     <Copyright>Dennis von Bargen</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
