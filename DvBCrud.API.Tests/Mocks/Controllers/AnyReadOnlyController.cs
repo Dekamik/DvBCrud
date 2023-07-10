@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.API.Permissions;
 using DvBCrud.Shared;
+using DvBCrud.Shared.Permissions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.API.Tests.Mocks.Controllers;

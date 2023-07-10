@@ -1,7 +1,6 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace DvBCrud.API.Permissions;
+namespace DvBCrud.Shared.Permissions;
 
 /// <summary>
 /// Defines which actions are allowed on a CrudController

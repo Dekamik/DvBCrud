@@ -1,0 +1,59 @@
+﻿@using DvBCrud.Shared
+@using DvBCrud.Shared.Entities
+@using System.Reflection
+
+@typeparam TId
+@typeparam TCrudModel where TCrudModel : IEntity<TId>
+@typeparam TRepository where TRepository : IRepository<TId, TCrudModel>
+
+@inject TRepository Repository
+
+<h1>@(Name)</h1>
+
+@if (_items == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+        @foreach (var info in _properties)
+        {
+            <th>@info.Name</th>
+        }
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in _items)
+        {
+            <tr>
+                @foreach (var info in _properties)
+                {
+                    <td>@info.GetValue(item)</td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = null!;
+
+    private PropertyInfo[] _properties = null!;
+    private IList<TCrudModel>? _items;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _properties = typeof(TCrudModel).GetProperties();
+        _items = Repository.List()
+            .ToList();
+    }
+}

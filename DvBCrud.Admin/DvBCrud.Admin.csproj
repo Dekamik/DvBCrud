@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>0.1.0-alpha.1</Version>
+        <Title>DvBCrud.Admin</Title>
+        <Authors>Dennis von Bargen</Authors>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Update="Components\RepositoryTable.razor">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DvBCrud.Shared\DvBCrud.Shared.csproj" />
+    </ItemGroup>
+
+</Project>

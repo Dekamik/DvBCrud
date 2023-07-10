@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DvBCrud.API.Permissions;
+﻿namespace DvBCrud.Shared.Permissions;
 
 [Flags]
 public enum CrudActions

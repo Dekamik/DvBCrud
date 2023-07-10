@@ -1,8 +1,7 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace DvBCrud.API.Permissions;
+namespace DvBCrud.Shared.Permissions;
 
 public static class CrudActionExtensions
 {

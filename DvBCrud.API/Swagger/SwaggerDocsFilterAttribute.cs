@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using DvBCrud.API.Permissions;
+using DvBCrud.Shared.Permissions;
 
 namespace DvBCrud.API.Swagger;
 

@@ -1,8 +1,8 @@
-﻿using DvBCrud.API.Permissions;
+﻿using DvBCrud.Shared.Permissions;
 using FluentAssertions;
 using Xunit;
 
-namespace DvBCrud.API.Tests.Permissions;
+namespace DvBCrud.Shared.Tests.Permissions;
 
 public class CrudActionExtensionsTests
 {
