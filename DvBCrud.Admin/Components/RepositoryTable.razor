@@ -10,6 +10,7 @@
 @typeparam TRepository where TRepository : IRepository<TId, TCrudModel>
 
 @inject TRepository Repository
+@inject NavigationManager NavigationManager
 
 <h1>@Name</h1>
 
@@ -21,7 +22,7 @@
 }
 else
 {
-    <table class="table table-hover">
+    <table class="table @(string.IsNullOrWhiteSpace(DetailRoute) ? null : "table-hover")">
         <thead>
         <tr>
         @foreach (var prop in _properties)
@@ -39,8 +40,8 @@ else
         @foreach (var item in _items)
         {
             <tr id="@item.Id" 
-                onclick="window.location='@(string.IsNullOrWhiteSpace(DetailRoute) ? "" : $"{DetailRoute}/{item.Id}")'"
-                role="button">
+                onclick="window.location='@(string.IsNullOrWhiteSpace(DetailRoute) ? NavigationManager.Uri : $"{DetailRoute}/{item.Id}")'"
+                role="@(string.IsNullOrWhiteSpace(DetailRoute) ? null : "button")">
                 @foreach (var prop in _properties)
                 {
                     @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
