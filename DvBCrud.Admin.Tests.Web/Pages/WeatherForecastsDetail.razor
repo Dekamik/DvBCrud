@@ -8,7 +8,7 @@
 @inject WeatherForecastRepository WeatherForecastRepository;
 
 <RepositoryDetail Id="Id"
-                  Name=@($"Weather forecast for {GetDateName().ToLower()}")
+                  Name=@($"Weather forecast for {GetDateName()}")
                   Item="_item"
                   TId="long"
                   TCrudModel="WeatherForecastModel" 
@@ -36,9 +36,9 @@
         var dayDiff = _item.Date.Day - DateTimeOffset.Now.Day;
         return dayDiff switch
         {
-            0 => $"Today at {_item.Date:HH:mm}",
-            1 => $"Tomorrow at {_item.Date:HH:mm}",
-            _ => $"{_item.Date:MMM dd yyyy} at {_item.Date:HH:mm}"
+            0 => $"Today at {_item.Date:t}",
+            1 => $"Tomorrow at {_item.Date:t}",
+            _ => $"{_item.Date:D} at {_item.Date:t}"
         };
     }
 }

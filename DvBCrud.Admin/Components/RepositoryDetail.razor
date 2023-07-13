@@ -3,6 +3,7 @@
 @using System.Reflection
 @using DvBCrud.Admin.Internal
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
 
 @typeparam TId
 @typeparam TCrudModel where TCrudModel : IEntity<TId>
@@ -20,22 +21,69 @@
 }
 else
 {
-    @foreach (var prop in _properties)
-    {
-        @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+    <div class="col">
+        <div class="row text-end">
+            <div>
+                <div class="btn-group">
+                    @if (!_editMode)
+                    {
+                        <button class="btn btn-primary" onclick="@ToggleEditMode">Edit</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary" type="submit" onclick="@HandleSave">Save</button>
+                        <button class="btn btn-outline-danger" onclick="@ToggleEditMode">Cancel</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-8">
+        @if (_editMode)
         {
-            <label class="fw-bold" for="@prop.Name">@prop.GetDisplayName()</label>
-            <p id="@prop.Name">
-                @prop.GetValue(Item)
-            </p>
+            @foreach (var prop in _properties)
+            {
+                @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+                {
+                    <div class="row">
+                        <label class="fw-bold" for="@prop.Name">@prop.GetDisplayName()</label>
+                        @if (prop.PropertyType == typeof(DateTimeOffset))
+                        {
+                            
+                        }
+                        else
+                        {
+                            <InputText id="@prop.Name" 
+                                       @bind-Value="@(((StringWrapper)_propertyVars[prop.Name]).Value)"
+                                       disabled="@(!prop.CanWrite)" />
+                        }
+                    </div>
+                }
+            }
         }
-    }
+        else
+        {
+            @foreach (var prop in _properties)
+            {
+                @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+                {
+                    <div class="row">
+                        <label class="fw-bold" for="@prop.Name">@prop.GetDisplayName()</label>
+                        <p id="@prop.Name">
+                            @prop.GetValue(Item)
+                        </p>
+                    </div>
+                }
+            }
+        }
+    </div>
 }
 
 @code {
     [Parameter]
-    public TId? Id { get; set; }
-    
+    public TId Id { get; set; } = default!;
+
     [Parameter]
     public TCrudModel? Item { get; set; }
 
@@ -43,12 +91,77 @@ else
     public string? Name { get; set; }
 
     private PropertyInfo[] _properties = null!;
+    
+    private bool _editMode = false;
+    private Dictionary<string, IWrapper> _propertyVars = new();
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         _properties = MemberInfoHelpers.GetPropertyInfos<TCrudModel>();
+        RefreshProperties();
         Item ??= Repository.Get(Id ?? throw new ArgumentNullException(nameof(Id)));
+    }
+
+    private void ToggleEditMode()
+    {
+        _editMode = !_editMode;
+        StateHasChanged();
+    }
+
+    private void HandleSave()
+    {
+        foreach (var prop in _properties)
+        {
+            if (!prop.CanWrite || !(prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true))
+            {
+                continue;
+            }
+            if (prop.PropertyType == typeof(DateTimeOffset))
+            {
+                
+            }
+            else if (prop.PropertyType == typeof(string))
+            {
+                prop.SetValue(Item, ((StringWrapper)_propertyVars[prop.Name]).Value);
+            }
+            else if (prop.PropertyType == typeof(int))
+            {
+                prop.SetValue(Item, int.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
+            }
+            else if (prop.PropertyType == typeof(long))
+            {
+                prop.SetValue(Item, long.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
+            }
+            else if (prop.PropertyType == typeof(float))
+            {
+                prop.SetValue(Item, float.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
+            }
+            else if (prop.PropertyType == typeof(double))
+            {
+                prop.SetValue(Item, double.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
+            }
+            else if (prop.PropertyType == typeof(decimal))
+            {
+                prop.SetValue(Item, decimal.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
+            }
+        }
+        Repository.Update(Id, Item ?? throw new InvalidOperationException());
+        ToggleEditMode();
+    }
+
+    private void HandleCancel()
+    {
+        RefreshProperties();
+        ToggleEditMode();
+    }
+
+    private void RefreshProperties()
+    {
+        foreach (var prop in _properties)
+        {
+            _propertyVars.Add(prop.Name, new StringWrapper(prop.GetValue(Item)?.ToString()));
+        }
     }
 }
