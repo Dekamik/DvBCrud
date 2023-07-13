@@ -1,0 +1,32 @@
+@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using DvBCrud.Admin.Internal
+
+@typeparam TItem
+
+@foreach (var prop in _properties)
+{
+    @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+    {
+        <div class="row">
+            <LabelFor Property="prop" />
+            <p id="@prop.Name">
+                @prop.GetValue(Item)
+            </p>
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public TItem Item { get; set; } = default!;
+
+    private PropertyInfo[] _properties = null!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        
+        _properties = MemberInfoHelpers.GetPropertyInfos<TItem>();
+    }
+}

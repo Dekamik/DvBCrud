@@ -2,6 +2,7 @@
 @using DvBCrud.Shared.Entities
 @using System.Reflection
 @using DvBCrud.Admin.Internal
+@using DvBCrud.Admin.Internal.Components
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
 
@@ -42,40 +43,11 @@ else
     <div class="col-8">
         @if (_editMode)
         {
-            @foreach (var prop in _properties)
-            {
-                @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
-                {
-                    <div class="row">
-                        <label class="fw-bold" for="@prop.Name">@prop.GetDisplayName()</label>
-                        @if (prop.PropertyType == typeof(DateTimeOffset))
-                        {
-                            
-                        }
-                        else
-                        {
-                            <InputText id="@prop.Name" 
-                                       @bind-Value="@(((StringWrapper)_propertyVars[prop.Name]).Value)"
-                                       disabled="@(!prop.CanWrite)" />
-                        }
-                    </div>
-                }
-            }
+            <RepositoryDetailEdit PropertyVars="_propertyVars" TCrudModel="TCrudModel" />
         }
         else
         {
-            @foreach (var prop in _properties)
-            {
-                @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
-                {
-                    <div class="row">
-                        <label class="fw-bold" for="@prop.Name">@prop.GetDisplayName()</label>
-                        <p id="@prop.Name">
-                            @prop.GetValue(Item)
-                        </p>
-                    </div>
-                }
-            }
+            <RepositoryDetailView Item="Item" TItem="TCrudModel" />
         }
     </div>
 }
@@ -161,7 +133,14 @@ else
     {
         foreach (var prop in _properties)
         {
-            _propertyVars.Add(prop.Name, new StringWrapper(prop.GetValue(Item)?.ToString()));
+            if (_propertyVars.TryGetValue(prop.Name, out var propertyVar))
+            {
+                ((StringWrapper)propertyVar).Value = prop.GetValue(Item)?.ToString();
+            }
+            else
+            {
+                _propertyVars.Add(prop.Name, new StringWrapper(prop.GetValue(Item)?.ToString()));
+            }
         }
     }
 }

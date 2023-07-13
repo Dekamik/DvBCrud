@@ -1,0 +1,40 @@
+@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using Microsoft.AspNetCore.Components.Forms
+
+@typeparam TCrudModel
+
+
+@foreach (var prop in _properties)
+{
+    @if (prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true)
+    {
+        <div class="row">
+            <label class="fw-bold" for="@prop.Name">@prop.GetDisplayName()</label>
+            @if (prop.PropertyType == typeof(DateTimeOffset))
+            {
+                
+            }
+            else
+            {
+                <InputText id="@prop.Name" 
+                           @bind-Value="@(((StringWrapper)PropertyVars[prop.Name]).Value)"
+                           disabled="@(!prop.CanWrite)" />
+            }
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public Dictionary<string, IWrapper> PropertyVars { get; set; } = new();
+
+    private PropertyInfo[] _properties = null!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _properties = MemberInfoHelpers.GetPropertyInfos<TCrudModel>();
+    }
+}

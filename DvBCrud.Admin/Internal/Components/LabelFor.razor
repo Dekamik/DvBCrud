@@ -1,0 +1,11 @@
+@using System.Reflection
+@using DvBCrud.Admin.Internal
+@using System.ComponentModel.DataAnnotations
+
+<label class="fw-bold" for="@Property.Name">@Property.GetDisplayName()</label>
+
+@code {
+    [Required]
+    [Parameter]
+    public PropertyInfo Property { get; set; } = null!;
+}
