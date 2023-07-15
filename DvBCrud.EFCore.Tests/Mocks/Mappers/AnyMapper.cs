@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using DvBCrud.Shared;
 
 namespace DvBCrud.EFCore.Tests.Mocks.Mappers;
 
 [ExcludeFromCodeCoverage]
-public class AnyMapper : IAnyMapper
+public class AnyMapper : BaseMapper<AnyEntity, AnyModel, AnyFilter>
 {
-    public AnyModel ToModel(AnyEntity other)
+    public override AnyModel ToModel(AnyEntity other)
     {
         return new AnyModel
         {
@@ -17,7 +18,7 @@ public class AnyMapper : IAnyMapper
         };
     }
 
-    public AnyEntity ToEntity(AnyModel other)
+    public override AnyEntity ToEntity(AnyModel other)
     {
         return new AnyEntity
         {
@@ -26,12 +27,12 @@ public class AnyMapper : IAnyMapper
         };
     }
 
-    public void UpdateEntity(AnyEntity target, AnyEntity other)
+    public override void UpdateEntity(AnyEntity target, AnyEntity other)
     {
         target.AnyString = other.AnyString;
     }
 
-    public IEnumerable<AnyEntity> FilterOrderAndPaginate(IEnumerable<AnyEntity> entities, AnyFilter filter)
+    public override IEnumerable<AnyEntity> FilterAndSort(IEnumerable<AnyEntity> entities, AnyFilter filter)
     {
         if (!string.IsNullOrWhiteSpace(filter.AnyString))
         {
@@ -63,7 +64,6 @@ public class AnyMapper : IAnyMapper
         if (filter.Descending.HasValue && filter.Descending.Value)
             entities = entities.Reverse();
 
-        return entities.Skip(filter.Skip)
-            .Take(filter.Take);
+        return base.FilterAndSort(entities, filter);
     }
 }

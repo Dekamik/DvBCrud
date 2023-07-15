@@ -14,7 +14,7 @@ namespace DvBCrud.EFCore;
 public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel, TFilter> : IRepository<TId, TModel, TFilter>
     where TEntity : class, IEntity<TId>
     where TDbContext : DbContext 
-    where TMapper : IMapper<TEntity, TModel, TFilter>
+    where TMapper : BaseMapper<TEntity, TModel, TFilter>
 {
     protected readonly TDbContext Context;
     protected readonly TMapper Mapper;
@@ -33,7 +33,7 @@ public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel, TFil
     /// <inheritdoc/>
     public virtual IEnumerable<TModel> List(TFilter filter)
     {
-        return Mapper.FilterOrderAndPaginate(QueryableWithIncludes, filter)
+        return Mapper.FilterAndSort(QueryableWithIncludes, filter)
             .Select(Mapper.ToModel);
     }
 

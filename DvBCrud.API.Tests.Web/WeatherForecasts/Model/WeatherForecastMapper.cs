@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
+using DvBCrud.Shared;
 
 namespace DvBCrud.API.Tests.Web.WeatherForecasts.Model;
 
-public class WeatherForecastMapper : IWeatherForecastMapper
+public class WeatherForecastMapper : BaseMapper<WeatherForecast, WeatherForecastModel, WeatherForecastFilter>
 {
-    public WeatherForecastModel ToModel(WeatherForecast other)
+    public override WeatherForecastModel ToModel(WeatherForecast other)
     {
         return new WeatherForecastModel
         {
@@ -18,7 +19,7 @@ public class WeatherForecastMapper : IWeatherForecastMapper
         };
     }
 
-    public WeatherForecast ToEntity(WeatherForecastModel other)
+    public override WeatherForecast ToEntity(WeatherForecastModel other)
     {
         return new WeatherForecast
         {
@@ -28,14 +29,14 @@ public class WeatherForecastMapper : IWeatherForecastMapper
         };
     }
 
-    public void UpdateEntity(WeatherForecast target, WeatherForecast other)
+    public override void UpdateEntity(WeatherForecast target, WeatherForecast other)
     {
         target.Date = other.Date;
         target.TemperatureC = other.TemperatureC;
         target.Summary = other.Summary;
     }
 
-    public IEnumerable<WeatherForecast> FilterOrderAndPaginate(IEnumerable<WeatherForecast> entities, WeatherForecastFilter filter)
+    public override IEnumerable<WeatherForecast> FilterAndSort(IEnumerable<WeatherForecast> entities, WeatherForecastFilter filter)
     {
         if (filter.Date.HasValue)
             entities = entities.Where(e => e.Date.Date == filter.Date.Value.Date);

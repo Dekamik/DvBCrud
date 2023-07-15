@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using DvBCrud.API.Swagger;
 using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.API.Tests.Web.WeatherForecasts.Model;
@@ -32,9 +33,10 @@ public class Startup
         }, ServiceLifetime.Singleton);
 
         services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
-        services.AddScoped<IWeatherForecastMapper, WeatherForecastMapper>();
+        services.AddScoped<WeatherForecastMapper>();
 
-        services.AddControllers();
+        services.AddControllers()
+            .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
         services.AddCrudSwaggerGen();
     }

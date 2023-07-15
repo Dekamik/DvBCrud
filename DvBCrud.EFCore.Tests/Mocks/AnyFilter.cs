@@ -1,6 +1,8 @@
+using DvBCrud.Shared.Filtering;
+
 namespace DvBCrud.EFCore.Tests.Mocks;
 
-public class AnyFilter
+public class AnyFilter : IPaginateFilter
 {
     public enum AnyOrder
     {
