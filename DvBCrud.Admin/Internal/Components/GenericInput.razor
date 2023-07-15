@@ -1,0 +1,32 @@
+@using Microsoft.AspNetCore.Components.Forms
+
+@if (Property! is DateTimeOffset or DateTime)
+{
+    <InputDate id="@Id" 
+               Type="InputDateType.DateTimeLocal"
+               @bind-Value="@Property"
+               disabled="@(!CanWrite)"/>
+}
+else if (Property! is long or int or float or double or decimal)
+{
+    <InputNumber id="@Id"
+                 @bind-Value="@Property"
+                 disabled="@(!CanWrite)" />
+}
+else
+{
+    <InputText id="@Id"
+               @bind-Value="@(Property)"
+               disabled="@(!CanWrite)"/>
+}
+
+@code {
+    [Parameter]
+    public object? Property { get; set; }
+
+    [Parameter]
+    public string Id { get; set; } = null!;
+
+    [Parameter]
+    public bool CanWrite { get; set; } = true;
+}

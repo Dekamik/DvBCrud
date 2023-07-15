@@ -4,6 +4,7 @@
 @using DvBCrud.Admin.Internal
 @using DvBCrud.Admin.Internal.Components
 @using System.ComponentModel.DataAnnotations
+@using DvBCrud.Admin.Internal.Wrappers
 @using Microsoft.AspNetCore.Components.Forms
 
 @typeparam TId
@@ -65,7 +66,7 @@ else
     private PropertyInfo[] _properties = null!;
     
     private bool _editMode = false;
-    private Dictionary<string, IWrapper> _propertyVars = new();
+    private Dictionary<string, Wrapper<dynamic>> _propertyVars = new();
 
     protected override void OnInitialized()
     {
@@ -84,41 +85,7 @@ else
 
     private void HandleSave()
     {
-        foreach (var prop in _properties)
-        {
-            if (!prop.CanWrite || !(prop.GetAttribute<DisplayAttribute>()?.GetAutoGenerateField() ?? true))
-            {
-                continue;
-            }
-            if (prop.PropertyType == typeof(DateTimeOffset))
-            {
-                
-            }
-            else if (prop.PropertyType == typeof(string))
-            {
-                prop.SetValue(Item, ((StringWrapper)_propertyVars[prop.Name]).Value);
-            }
-            else if (prop.PropertyType == typeof(int))
-            {
-                prop.SetValue(Item, int.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
-            }
-            else if (prop.PropertyType == typeof(long))
-            {
-                prop.SetValue(Item, long.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
-            }
-            else if (prop.PropertyType == typeof(float))
-            {
-                prop.SetValue(Item, float.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
-            }
-            else if (prop.PropertyType == typeof(double))
-            {
-                prop.SetValue(Item, double.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
-            }
-            else if (prop.PropertyType == typeof(decimal))
-            {
-                prop.SetValue(Item, decimal.Parse(((StringWrapper)_propertyVars[prop.Name]).Value!));
-            }
-        }
+        Item.FromPropertyWrappers(_propertyVars);
         Repository.Update(Id, Item ?? throw new InvalidOperationException());
         ToggleEditMode();
     }
@@ -131,16 +98,6 @@ else
 
     private void RefreshProperties()
     {
-        foreach (var prop in _properties)
-        {
-            if (_propertyVars.TryGetValue(prop.Name, out var propertyVar))
-            {
-                ((StringWrapper)propertyVar).Value = prop.GetValue(Item)?.ToString();
-            }
-            else
-            {
-                _propertyVars.Add(prop.Name, new StringWrapper(prop.GetValue(Item)?.ToString()));
-            }
-        }
+        _propertyVars = Item.ToPropertyWrappers();
     }
 }
