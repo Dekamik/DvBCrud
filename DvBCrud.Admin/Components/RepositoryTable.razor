@@ -6,8 +6,9 @@
 @using DvBCrud.Admin.Internal
 
 @typeparam TId
+@typeparam TFilter
 @typeparam TCrudModel where TCrudModel : IEntity<TId>
-@typeparam TRepository where TRepository : IRepository<TId, TCrudModel>
+@typeparam TRepository where TRepository : IRepository<TId, TCrudModel, TFilter> where TFilter : new()
 
 @inject TRepository Repository
 @inject NavigationManager NavigationManager
@@ -73,7 +74,7 @@ else
         base.OnInitialized();
 
         _properties = MemberInfoHelpers.GetPropertyInfos<TCrudModel>();
-        _items = Repository.List()
+        _items = Repository.List(new TFilter())
             .ToList();
     }
 }

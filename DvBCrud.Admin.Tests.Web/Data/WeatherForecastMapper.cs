@@ -2,7 +2,7 @@
 
 namespace DvBCrud.Admin.Tests.Web.Data;
 
-public class WeatherForecastMapper : IMapper<WeatherForecast, WeatherForecastModel>
+public class WeatherForecastMapper : IMapper<WeatherForecast, WeatherForecastModel, WeatherForecastFilter>
 {
     public WeatherForecastModel ToModel(WeatherForecast entity)
     {
@@ -30,5 +30,10 @@ public class WeatherForecastMapper : IMapper<WeatherForecast, WeatherForecastMod
         destination.Date = source.Date;
         destination.TemperatureC = source.TemperatureC;
         destination.Summary = source.Summary;
+    }
+
+    public IEnumerable<WeatherForecast> FilterOrderAndPaginate(IEnumerable<WeatherForecast> entities, WeatherForecastFilter filter)
+    {
+        return entities;
     }
 }

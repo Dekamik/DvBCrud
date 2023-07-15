@@ -6,8 +6,9 @@
 @using System.ComponentModel.DataAnnotations
 
 @typeparam TId
+@typeparam TFilter
 @typeparam TCrudModel where TCrudModel : IEntity<TId>
-@typeparam TRepository where TRepository : IRepository<TId, TCrudModel>
+@typeparam TRepository where TRepository : IRepository<TId, TCrudModel, TFilter>
 
 @inject TRepository Repository
 
