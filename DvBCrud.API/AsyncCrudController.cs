@@ -15,9 +15,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.API;
 
-public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudControllerBase<TModel>
+public abstract class AsyncCrudController<TId, TModel, TRepository, TFilter> : CrudControllerBase<TModel>
     where TModel : class
-    where TRepository : IRepository<TId, TModel>
+    where TRepository : IRepository<TId, TModel, TFilter>
 {
     protected readonly TRepository Repository;
     protected readonly CrudActions CrudActions;
@@ -54,10 +54,10 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
     [HttpGet("{id}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    [SwaggerDocsFilter(CrudActions.Read)]
+    [SwaggerDocsFilter(CrudActions.ReadById)]
     public virtual async Task<ActionResult<Response<TModel>>> Read(TId id)
     {
-        if (!CrudActions.IsActionAllowed(CrudActions.Read))
+        if (!CrudActions.IsActionAllowed(CrudActions.ReadById))
         {
             return NotAllowed(HttpMethod.Get.Method);
         }
@@ -76,15 +76,15 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    [SwaggerDocsFilter(CrudActions.Read)]
-    public virtual async Task<ActionResult<Response<IEnumerable<TModel>>>> ReadAll()
+    [SwaggerDocsFilter(CrudActions.ReadById)]
+    public virtual async Task<ActionResult<Response<IEnumerable<TModel>>>> List([FromQuery] TFilter filter)
     {
-        if (!CrudActions.IsActionAllowed(CrudActions.Read))
+        if (!CrudActions.IsActionAllowed(CrudActions.List))
         {
             return NotAllowed(HttpMethod.Get.Method);
         }
 
-        var models = Repository.List();
+        var models = Repository.List(filter);
         return Ok(await Task.Run(() => new Response<IEnumerable<TModel>>(models)));
     }
 

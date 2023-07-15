@@ -8,10 +8,10 @@ namespace DvBCrud.API.Tests.Mocks.Controllers;
 [ExcludeFromCodeCoverage]
 [ApiController]
 [Route("api/v1/[controller]")]
-[AllowedActions(CrudActions.Read)]
-public class AnyReadOnlyController : CrudController<string, AnyModel, IRepository<string, AnyModel>>
+[AllowedActions(CrudActions.ReadById)]
+public class AnyReadOnlyController : CrudController<string, AnyModel, IRepository<string, AnyModel, AnyFilter>, AnyFilter>
 {
-    public AnyReadOnlyController(IRepository<string, AnyModel> repository) : base(repository)
+    public AnyReadOnlyController(IRepository<string, AnyModel, AnyFilter> repository) : base(repository)
     {
     }
 }

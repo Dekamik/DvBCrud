@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DvBCrud.Shared.Entities;
 
-namespace DvBCrud.API.Tests.Web.WeatherForecasts.Data;
+namespace DvBCrud.API.Tests.Web.WeatherForecasts;
 
 public record WeatherForecast : IEntity<int>
 {

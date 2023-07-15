@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DvBCrud.EFCore.Tests.Mocks;
-using DvBCrud.EFCore.Tests.Mocks.Mappers;
-using DvBCrud.EFCore.Tests.Mocks.Repositories;
 using DvBCrud.Shared.Exceptions;
 using FluentAssertions;
 using Xunit;
@@ -43,7 +41,7 @@ public class RepositoryTests : SqliteTestBase
         DbContext.SaveChanges();
 
         // Act
-        var actual = _repository.List();
+        var actual = _repository.List(new AnyFilter());
 
         // Assert
         actual.First().AnyString.Should().BeEquivalentTo(expected.First().AnyString);
@@ -484,26 +482,5 @@ public class RepositoryTests : SqliteTestBase
         await _repository.Awaiting(r => r.DeleteAsync("1"))
             .Should()
             .ThrowAsync<NotFoundException>();
-    }
-
-
-    [Fact]
-    public void Exists_EntityExists_ReturnsTrue()
-    {
-        var entity = new AnyEntity
-        {
-            Id = "1",
-            AnyString = "AnyString"
-        };
-        DbContext.Add(entity);
-        DbContext.SaveChanges();
-
-        _repository.Exists("1").Should().BeTrue();
-    }
-
-    [Fact]
-    public void Exists_EntityDoesntExist_ReturnsFalse()
-    {
-        _repository.Exists("1").Should().BeFalse();
     }
 }
