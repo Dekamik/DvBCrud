@@ -17,7 +17,7 @@
       },
       "nativeDebugging": true
     },
-    "DvBCrud.EFCore.API.Tests.Web": {
+    "DvBCrud.EFCore.API.Tests.EFCore": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace DvBCrud.API.Tests.Web;
+namespace DvBCrud.API.Tests.EFCore;
 
 public class Program
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DvBCrud.API.Tests.Web.WeatherForecasts;
+namespace DvBCrud.API.Tests.EFCore.WeatherForecasts;
 
 public class WeatherForecastModel
 {

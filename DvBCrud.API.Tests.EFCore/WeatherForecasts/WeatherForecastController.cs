@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace DvBCrud.API.Tests.Web.WeatherForecasts;
+namespace DvBCrud.API.Tests.EFCore.WeatherForecasts;
 
 [ApiController]
 [Route("api/v1/[controller]")]

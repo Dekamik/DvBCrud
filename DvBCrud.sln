@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.API", "DvBCrud.API\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DvBCrud.API.Tests", "DvBCrud.API.Tests\DvBCrud.API.Tests.csproj", "{3493858F-BFDD-43B1-93B5-FFF6E21B0F3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.API.Tests.Web", "DvBCrud.API.Tests.Web\DvBCrud.API.Tests.Web.csproj", "{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.API.Tests.EFCore", "DvBCrud.API.Tests.EFCore\DvBCrud.API.Tests.EFCore.csproj", "{35AFA05C-A936-4EE0-8ED8-4E8EE272E668}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Shared", "DvBCrud.Shared\DvBCrud.Shared.csproj", "{15E7A7B1-0773-4539-B100-67BAC0E02DEE}"
 EndProject

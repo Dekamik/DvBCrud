@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 using DvBCrud.API.Swagger;
-using DvBCrud.API.Tests.Web.WeatherForecasts;
+using DvBCrud.API.Tests.EFCore.WeatherForecasts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace DvBCrud.API.Tests.Web;
+namespace DvBCrud.API.Tests.EFCore;
 
 public class Startup
 {

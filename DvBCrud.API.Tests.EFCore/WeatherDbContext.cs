@@ -1,8 +1,8 @@
-﻿using DvBCrud.API.Tests.Web.WeatherForecasts;
+﻿using DvBCrud.API.Tests.EFCore.WeatherForecasts;
 using DvBCrud.EFCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DvBCrud.API.Tests.Web;
+namespace DvBCrud.API.Tests.EFCore;
 
 public class WeatherDbContext : CrudDbContext
 {

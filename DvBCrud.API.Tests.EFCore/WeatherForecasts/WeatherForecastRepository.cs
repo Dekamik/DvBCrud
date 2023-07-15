@@ -1,6 +1,6 @@
 ﻿using DvBCrud.EFCore;
 
-namespace DvBCrud.API.Tests.Web.WeatherForecasts;
+namespace DvBCrud.API.Tests.EFCore.WeatherForecasts;
 
 public class WeatherForecastRepository : Repository<WeatherForecast, int, WeatherDbContext, WeatherForecastMapper, WeatherForecastModel, WeatherForecastFilter>, IWeatherForecastRepository
 {

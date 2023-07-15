@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DvBCrud.Shared;
 
-namespace DvBCrud.API.Tests.Web.WeatherForecasts;
+namespace DvBCrud.API.Tests.EFCore.WeatherForecasts;
 
 public class WeatherForecastMapper : BaseMapper<WeatherForecast, WeatherForecastModel, WeatherForecastFilter>
 {
