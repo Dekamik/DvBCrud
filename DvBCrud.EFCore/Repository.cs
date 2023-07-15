@@ -19,10 +19,7 @@ public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel> : IR
     protected readonly TDbContext Context;
     protected readonly TMapper Mapper;
 
-    protected DbSet<TEntity> Set
-    {
-        get { return Context.Set<TEntity>(); }
-    }
+    protected DbSet<TEntity> Set => Context.Set<TEntity>();
 
     protected IQueryable<TEntity> QueryableWithIncludes { get; init; }
 

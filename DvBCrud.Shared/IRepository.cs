@@ -43,31 +43,31 @@ public interface IRepository<TId, TModel>
     TId Create(TModel model);
         
     /// <summary>
-    /// Creates the specified <paramref name="entity"/> asynchronously and tracks it
+    /// Creates the specified <paramref name="model"/> asynchronously and tracks it
     /// </summary>
-    /// <param name="entity">The entity to create</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
-    Task<TId> CreateAsync(TModel entity);
+    /// <param name="model">The entity to create</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="model"/> is null</exception>
+    Task<TId> CreateAsync(TModel model);
 
     /// <summary>
-    /// Finds the tracked <typeparamref name="TModel"/> by <paramref name="id"/> and copies values from the <paramref name="entity"/> to its corresponding tracked <typeparamref name="TModel"/>
+    /// Finds the tracked <typeparamref name="TModel"/> by <paramref name="id"/> and copies values from the <paramref name="model"/> to its corresponding tracked <typeparamref name="TModel"/>
     /// </summary>
     /// <param name="id">The Id of entity to update</param>
-    /// <param name="entity">New entity data</param>
+    /// <param name="model">New entity data</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="model"/> is null</exception>
     /// <exception cref="NotFoundException">Thrown if <typeparamref name="TModel"/> with <paramref name="id"/> not found</exception>"
-    void Update(TId id, TModel entity);
+    void Update(TId id, TModel model);
 
     /// <summary>
-    /// Finds the tracked <typeparamref name="TModel"/> by <paramref name="id"/> asynchronously and copies values from the <paramref name="entity"/> to its corresponding tracked <typeparamref name="TModel"/>
+    /// Finds the tracked <typeparamref name="TModel"/> by <paramref name="id"/> asynchronously and copies values from the <paramref name="model"/> to its corresponding tracked <typeparamref name="TModel"/>
     /// </summary>
     /// <param name="id">The Id of entity to update</param>
-    /// <param name="entity">New entity data</param>
+    /// <param name="model">New entity data</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is null</exception>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="model"/> is null</exception>
     /// <exception cref="NotFoundException">Thrown if <typeparamref name="TModel"/> with <paramref name="id"/> not found</exception>"
-    Task UpdateAsync(TId id, TModel entity);
+    Task UpdateAsync(TId id, TModel model);
 
     /// <summary>
     /// Finds and removes the <typeparamref name="TModel"/> whose Id matches <paramref name="id"/>
