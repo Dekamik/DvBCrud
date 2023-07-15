@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DvBCrud.EFCore.Tests.Mocks;
-using DvBCrud.EFCore.Tests.Mocks.Mappers;
-using DvBCrud.EFCore.Tests.Mocks.Repositories;
 using DvBCrud.Shared.Exceptions;
 using FluentAssertions;
 using Xunit;

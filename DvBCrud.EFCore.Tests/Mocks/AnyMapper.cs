@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using DvBCrud.Shared;
 
-namespace DvBCrud.EFCore.Tests.Mocks.Mappers;
+namespace DvBCrud.EFCore.Tests.Mocks;
 
 [ExcludeFromCodeCoverage]
 public class AnyMapper : BaseMapper<AnyEntity, AnyModel, AnyFilter>
@@ -35,10 +35,8 @@ public class AnyMapper : BaseMapper<AnyEntity, AnyModel, AnyFilter>
     public override IEnumerable<AnyEntity> FilterAndSort(IEnumerable<AnyEntity> entities, AnyFilter filter)
     {
         if (!string.IsNullOrWhiteSpace(filter.AnyString))
-        {
             entities = entities.Where(e => e.AnyString?.Contains(filter.AnyString) ?? false);
-        }
-        
+
         switch (filter.Order)
         {
             case AnyFilter.AnyOrder.Id:
