@@ -1,0 +1,7 @@
+namespace DvBCrud.Shared.Filtering;
+
+public interface IPaginateFilter
+{
+    public int Skip { get; set; }
+    public int Take { get; set; }
+}

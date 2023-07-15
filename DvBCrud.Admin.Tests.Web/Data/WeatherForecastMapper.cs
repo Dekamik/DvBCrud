@@ -2,9 +2,9 @@
 
 namespace DvBCrud.Admin.Tests.Web.Data;
 
-public class WeatherForecastMapper : IMapper<WeatherForecast, WeatherForecastModel>
+public class WeatherForecastMapper : BaseMapper<WeatherForecast, WeatherForecastModel, WeatherForecastFilter>
 {
-    public WeatherForecastModel ToModel(WeatherForecast entity)
+    public override WeatherForecastModel ToModel(WeatherForecast entity)
     {
         return new WeatherForecastModel
         {
@@ -15,7 +15,7 @@ public class WeatherForecastMapper : IMapper<WeatherForecast, WeatherForecastMod
         };
     }
 
-    public WeatherForecast ToEntity(WeatherForecastModel entity)
+    public override WeatherForecast ToEntity(WeatherForecastModel entity)
     {
         return new WeatherForecast
         {
@@ -25,7 +25,7 @@ public class WeatherForecastMapper : IMapper<WeatherForecast, WeatherForecastMod
         };
     }
 
-    public void UpdateEntity(WeatherForecast destination, WeatherForecast source)
+    public override void UpdateEntity(WeatherForecast destination, WeatherForecast source)
     {
         destination.Date = source.Date;
         destination.TemperatureC = source.TemperatureC;

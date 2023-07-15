@@ -7,9 +7,9 @@ namespace DvBCrud.API.Tests.Mocks.Controllers;
 [ExcludeFromCodeCoverage]
 [ApiController]
 [Route("api/v1/[controller]")]
-public class AnyAsyncCrudController : AsyncCrudController<string, AnyModel, IRepository<string,AnyModel>>
+public class AnyAsyncCrudController : AsyncCrudController<string, AnyModel, IRepository<string, AnyModel, AnyFilter>, AnyFilter>
 {
-    public AnyAsyncCrudController(IRepository<string,AnyModel> repository) : base(repository)
+    public AnyAsyncCrudController(IRepository<string, AnyModel, AnyFilter> repository) : base(repository)
     {
 
     }

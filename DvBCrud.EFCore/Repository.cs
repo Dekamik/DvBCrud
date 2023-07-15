@@ -11,18 +11,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DvBCrud.EFCore;
 
-public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel> : IRepository<TId, TModel>
+public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel, TFilter> : IRepository<TId, TModel, TFilter>
     where TEntity : class, IEntity<TId>
     where TDbContext : DbContext 
-    where TMapper : IMapper<TEntity, TModel>
+    where TMapper : BaseMapper<TEntity, TModel, TFilter>
 {
     protected readonly TDbContext Context;
     protected readonly TMapper Mapper;
 
-    protected DbSet<TEntity> Set
-    {
-        get { return Context.Set<TEntity>(); }
-    }
+    protected DbSet<TEntity> Set => Context.Set<TEntity>();
 
     protected IQueryable<TEntity> QueryableWithIncludes { get; init; }
 
@@ -34,9 +31,10 @@ public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel> : IR
     }
 
     /// <inheritdoc/>
-    public virtual IEnumerable<TModel> List()
+    public virtual IEnumerable<TModel> List(TFilter filter)
     {
-        return QueryableWithIncludes.AsEnumerable().Select(Mapper.ToModel);
+        return Mapper.FilterAndSort(QueryableWithIncludes, filter)
+            .Select(Mapper.ToModel);
     }
 
     /// <inheritdoc/>
@@ -185,11 +183,5 @@ public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel> : IR
 
         Set.Remove(entity);
         await Context.SaveChangesAsync();
-    }
-
-    /// <inheritdoc/>
-    public virtual bool Exists(TId id)
-    {
-        return Set.Any(entity => entity.Id!.Equals(id));
     }
 }

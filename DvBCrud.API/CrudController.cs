@@ -14,9 +14,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.API;
 
-public abstract class CrudController<TId, TModel, TRepository> : CrudControllerBase<TModel>
+public abstract class CrudController<TId, TModel, TRepository, TFilter> : CrudControllerBase<TModel>
     where TModel : class
-    where TRepository : IRepository<TId, TModel>
+    where TRepository : IRepository<TId, TModel, TFilter>
 {
     protected readonly TRepository Repository;
     protected readonly CrudActions CrudActions;
@@ -53,10 +53,10 @@ public abstract class CrudController<TId, TModel, TRepository> : CrudControllerB
     [HttpGet("{id}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    [SwaggerDocsFilter(CrudActions.Read)]
+    [SwaggerDocsFilter(CrudActions.ReadById)]
     public virtual ActionResult<Response<TModel>> Read(TId id)
     {
-        if (!CrudActions.IsActionAllowed(CrudActions.Read))
+        if (!CrudActions.IsActionAllowed(CrudActions.ReadById))
         {
             return NotAllowed(HttpMethod.Get.Method);
         }
@@ -75,15 +75,15 @@ public abstract class CrudController<TId, TModel, TRepository> : CrudControllerB
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    [SwaggerDocsFilter(CrudActions.Read)]
-    public virtual ActionResult<Response<IEnumerable<TModel>>> ReadAll()
+    [SwaggerDocsFilter(CrudActions.ReadById)]
+    public virtual ActionResult<Response<IEnumerable<TModel>>> List([FromQuery] TFilter filter)
     {
-        if (!CrudActions.IsActionAllowed(CrudActions.Read))
+        if (!CrudActions.IsActionAllowed(CrudActions.List))
         {
             return NotAllowed(HttpMethod.Get.Method);
         }
 
-        var models = Repository.List();
+        var models = Repository.List(filter);
         return Ok(new Response<IEnumerable<TModel>>(models));
     }
 

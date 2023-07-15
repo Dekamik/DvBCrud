@@ -3,10 +3,12 @@
 [Flags]
 public enum CrudActions
 {
-    None = 0b_0000,
-    Create = 0b_0001,
-    Read = 0b_0010,
-    Update = 0b_0100,
-    Delete = 0b_1000,
-    All = Create | Read | Update | Delete,
+    None = 0x00,
+    Create = 0x01,
+    ReadById = 0x02,
+    Update = 0x04,
+    Delete = 0x08,
+    List = 0x10,
+    ReadOnly = ReadById | List,
+    All = Create | ReadById | Update | Delete | List,
 }
