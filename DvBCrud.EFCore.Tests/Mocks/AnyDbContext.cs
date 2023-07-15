@@ -11,5 +11,5 @@ public class AnyDbContext : CrudDbContext
 
     }
 
-    public DbSet<AnyEntity> AnyEntities { get; set; }
+    public DbSet<AnyEntity> AnyEntities { get; set; } = null!;
 }

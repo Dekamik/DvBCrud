@@ -1,6 +1,6 @@
 using System;
 
-namespace DvBCrud.API.Tests.Web.WeatherForecasts.Model;
+namespace DvBCrud.API.Tests.Web.WeatherForecasts;
 
 public class WeatherForecastFilter
 {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
 using DvBCrud.Shared;
 
-namespace DvBCrud.API.Tests.Web.WeatherForecasts.Model;
+namespace DvBCrud.API.Tests.Web.WeatherForecasts;
 
 public class WeatherForecastMapper : BaseMapper<WeatherForecast, WeatherForecastModel, WeatherForecastFilter>
 {

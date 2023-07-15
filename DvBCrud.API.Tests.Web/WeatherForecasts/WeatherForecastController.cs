@@ -1,6 +1,4 @@
-﻿using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
-using DvBCrud.API.Tests.Web.WeatherForecasts.Model;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.API.Tests.Web.WeatherForecasts;
 

@@ -1,4 +1,4 @@
-﻿using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
+﻿using DvBCrud.API.Tests.Web.WeatherForecasts;
 using DvBCrud.EFCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,5 +11,5 @@ public class WeatherDbContext : CrudDbContext
 
     }
 
-    public DbSet<WeatherForecast> WeatherForecasts { get; set; }
+    public DbSet<WeatherForecast> WeatherForecasts { get; set; } = null!;
 }

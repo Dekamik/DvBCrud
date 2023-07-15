@@ -1,8 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 using DvBCrud.API.Swagger;
-using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
-using DvBCrud.API.Tests.Web.WeatherForecasts.Model;
+using DvBCrud.API.Tests.Web.WeatherForecasts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.Sqlite;
