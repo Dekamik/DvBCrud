@@ -17,12 +17,12 @@ namespace DvBCrud.API.Tests;
 
 public class AsyncCrudControllerTests
 {
-    private readonly IRepository<string,AnyModel> _repository;
+    private readonly IRepository<string, AnyModel, AnyFilter> _repository;
     private readonly AnyAsyncCrudController _controller;
     
     public AsyncCrudControllerTests()
     {
-        _repository = A.Fake<IRepository<string,AnyModel>>();
+        _repository = A.Fake<IRepository<string, AnyModel, AnyFilter>>();
         _controller = new AnyAsyncCrudController(_repository);
     }
 
@@ -52,7 +52,7 @@ public class AsyncCrudControllerTests
     public async Task Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IRepository<string, AnyModel>>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IRepository<string, AnyModel, AnyFilter>>());
 
         var result = (await controller.Create(model)).Result as ObjectResult;
 
@@ -137,11 +137,12 @@ public class AsyncCrudControllerTests
             new AnyModel()
         };
         var expected = new Response<IEnumerable<AnyModel>>(models);
+        var filter = new AnyFilter();
         
-        A.CallTo(() => _repository.List())
+        A.CallTo(() => _repository.List(filter))
             .Returns(models);
 
-        var actual = (await _controller.ReadAll()).Result as OkObjectResult;
+        var actual = (await _controller.List(filter)).Result as OkObjectResult;
 
         actual.Should().NotBeNull();
         actual!.Value.Should().BeEquivalentTo(expected);
@@ -155,11 +156,12 @@ public class AsyncCrudControllerTests
             new AnyModel(),
             new AnyModel()
         };
+        var filter = new AnyFilter();
         
-        A.CallTo(() => _repository.List())
+        A.CallTo(() => _repository.List(filter))
             .Returns(models);
 
-        var result = (await _controller.ReadAll()).Result as OkObjectResult;
+        var result = (await _controller.List(filter)).Result as OkObjectResult;
 
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
@@ -169,8 +171,9 @@ public class AsyncCrudControllerTests
     public async Task ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
         var controller = new AnyAsyncCreateUpdateController(_repository);
+        var filter = new AnyFilter();
 
-        var result = (await controller.ReadAll()).Result as ObjectResult;
+        var result = (await controller.List(filter)).Result as ObjectResult;
 
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be((int)HttpStatusCode.MethodNotAllowed);
@@ -205,7 +208,7 @@ public class AsyncCrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IRepository<string, AnyModel>>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IRepository<string, AnyModel, AnyFilter>>());
 
         var result = await controller.Update(id, model) as ObjectResult;
 
@@ -265,7 +268,7 @@ public class AsyncCrudControllerTests
     public async Task Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyAsyncReadOnlyController(A.Fake<IRepository<string, AnyModel>>());
+        var controller = new AnyAsyncReadOnlyController(A.Fake<IRepository<string, AnyModel, AnyFilter>>());
 
         var result = await controller.Delete(id) as ObjectResult;
 

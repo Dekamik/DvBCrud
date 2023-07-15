@@ -1,4 +1,7 @@
-﻿using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DvBCrud.API.Tests.Web.WeatherForecasts.Data;
 
 namespace DvBCrud.API.Tests.Web.WeatherForecasts.Model;
 
@@ -30,5 +33,37 @@ public class WeatherForecastMapper : IWeatherForecastMapper
         target.Date = other.Date;
         target.TemperatureC = other.TemperatureC;
         target.Summary = other.Summary;
+    }
+
+    public IEnumerable<WeatherForecast> FilterOrderAndPaginate(IEnumerable<WeatherForecast> entities, WeatherForecastFilter filter)
+    {
+        if (filter.Date.HasValue)
+            entities = entities.Where(e => e.Date.Date == filter.Date.Value.Date);
+
+        if (!string.IsNullOrWhiteSpace(filter.Summary))
+            entities = entities.Where(e => e.Summary.Contains(filter.Summary));
+
+        switch (filter.Order)
+        {
+            case WeatherForecastFilter.OrderBy.Date:
+                entities = entities.OrderBy(e => e.Date);
+                break;
+            case WeatherForecastFilter.OrderBy.Temperature:
+                entities = entities.OrderBy(e => e.TemperatureC);
+                break;
+            case WeatherForecastFilter.OrderBy.Summary:
+                entities = entities.OrderBy(e => e.Summary);
+                break;
+            case null:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException($"{filter}.{filter.Order}");
+        }
+
+        if (filter.Descending.HasValue && filter.Descending.Value)
+            entities = entities.Reverse();
+
+        return entities.Skip(filter.Skip)
+            .Take(filter.Take);
     }
 }

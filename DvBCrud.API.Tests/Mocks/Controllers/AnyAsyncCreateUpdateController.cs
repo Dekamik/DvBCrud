@@ -9,9 +9,9 @@ namespace DvBCrud.API.Tests.Mocks.Controllers;
 [ApiController]
 [Route("api/v1/[controller]")]
 [AllowedActions(CrudActions.Create | CrudActions.Update)]
-public class AnyAsyncCreateUpdateController : AsyncCrudController<string, AnyModel, IRepository<string, AnyModel>>
+public class AnyAsyncCreateUpdateController : AsyncCrudController<string, AnyModel, IRepository<string, AnyModel, AnyFilter>, AnyFilter>
 {
-    public AnyAsyncCreateUpdateController(IRepository<string, AnyModel> repository) : base(repository)
+    public AnyAsyncCreateUpdateController(IRepository<string, AnyModel, AnyFilter> repository) : base(repository)
     {
     }
 }

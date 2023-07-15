@@ -43,7 +43,7 @@ public class RepositoryTests : SqliteTestBase
         DbContext.SaveChanges();
 
         // Act
-        var actual = _repository.List();
+        var actual = _repository.List(new AnyFilter());
 
         // Assert
         actual.First().AnyString.Should().BeEquivalentTo(expected.First().AnyString);

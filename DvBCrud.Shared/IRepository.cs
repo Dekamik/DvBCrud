@@ -6,15 +6,16 @@ namespace DvBCrud.Shared;
 /// A repository for Creating, Reading, Updating and Deleting <typeparamref name="TModel"/> instances
 /// </summary>
 /// <typeparam name="TId"><typeparamref name="TModel"/> key type</typeparam>
-/// <typeparam name="TModel">Entity type</typeparam>
-public interface IRepository<TId, TModel>
+/// <typeparam name="TModel">Model type</typeparam>
+/// <typeparam name="TFilter">Filter type for <typeparamref name="TModel"/></typeparam>
+public interface IRepository<TId, TModel, TFilter>
 {
     /// <summary>
     /// Lists all entities
     /// </summary>
+    /// <param name="filter">Filter to apply to entities</param>
     /// <returns>An <see cref="IQueryable"/> containing all <typeparamref name="TModel"/> instances</returns>
-    [Obsolete("Method signature will be changed to support pagination")]
-    IEnumerable<TModel> List();
+    IEnumerable<TModel> List(TFilter filter);
 
     /// <summary>
     /// Finds a single <typeparamref name="TModel"/> whose Id matches <paramref name="id"/>

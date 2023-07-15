@@ -15,9 +15,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DvBCrud.API;
 
-public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudControllerBase<TModel>
+public abstract class AsyncCrudController<TId, TModel, TRepository, TFilter> : CrudControllerBase<TModel>
     where TModel : class
-    where TRepository : IRepository<TId, TModel>
+    where TRepository : IRepository<TId, TModel, TFilter>
 {
     protected readonly TRepository Repository;
     protected readonly CrudActions CrudActions;
@@ -77,14 +77,14 @@ public abstract class AsyncCrudController<TId, TModel, TRepository> : CrudContro
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     [SwaggerDocsFilter(CrudActions.Read)]
-    public virtual async Task<ActionResult<Response<IEnumerable<TModel>>>> ReadAll()
+    public virtual async Task<ActionResult<Response<IEnumerable<TModel>>>> List([FromQuery] TFilter filter)
     {
         if (!CrudActions.IsActionAllowed(CrudActions.Read))
         {
             return NotAllowed(HttpMethod.Get.Method);
         }
 
-        var models = Repository.List();
+        var models = Repository.List(filter);
         return Ok(await Task.Run(() => new Response<IEnumerable<TModel>>(models)));
     }
 

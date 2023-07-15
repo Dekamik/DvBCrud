@@ -5,7 +5,7 @@
 /// </summary>
 /// <typeparam name="TEntity">Entity/data model type</typeparam>
 /// <typeparam name="TModel">API model type</typeparam>
-public interface IMapper<TEntity, TModel>
+public interface IMapper<TEntity, TModel, TPagination>
 {
     /// <summary>
     /// Convert from <typeparamref name="TEntity"/> to <typeparamref name="TModel"/> 
@@ -27,4 +27,12 @@ public interface IMapper<TEntity, TModel>
     /// <param name="other">Entity to copy from</param>
     /// <param name="target">Entity to copy to</param>
     void UpdateEntity(TEntity target, TEntity other);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="entities">IEnumerable of entities to filter</param>
+    /// <param name="filter">Filter to apply to <paramref name="entities"/></param>
+    /// <returns></returns>
+    IEnumerable<TEntity> FilterOrderAndPaginate(IEnumerable<TEntity> entities, TPagination filter);
 }

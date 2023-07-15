@@ -2,6 +2,6 @@
 
 namespace DvBCrud.EFCore.Tests.Mocks.Mappers;
 
-public interface IAnyMapper : IMapper<AnyEntity, AnyModel>
+public interface IAnyMapper : IMapper<AnyEntity, AnyModel, AnyFilter>
 {
 }

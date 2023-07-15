@@ -3,6 +3,6 @@ using DvBCrud.Shared;
 
 namespace DvBCrud.API.Tests.Web.WeatherForecasts.Model;
 
-public interface IWeatherForecastMapper : IMapper<WeatherForecast, WeatherForecastModel>
+public interface IWeatherForecastMapper : IMapper<WeatherForecast, WeatherForecastModel, WeatherForecastFilter>
 {
 }

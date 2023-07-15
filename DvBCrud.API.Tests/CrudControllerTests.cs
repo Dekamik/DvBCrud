@@ -16,12 +16,12 @@ namespace DvBCrud.API.Tests;
 
 public class CrudControllerTests
 {
-    private readonly IRepository<string, AnyModel> _repository;
+    private readonly IRepository<string, AnyModel, AnyFilter> _repository;
     private readonly AnyCrudController _controller;
     
     public CrudControllerTests()
     {
-        _repository = A.Fake<IRepository<string, AnyModel>>();
+        _repository = A.Fake<IRepository<string, AnyModel, AnyFilter>>();
         _controller = new AnyCrudController(_repository);
     }
 
@@ -51,7 +51,7 @@ public class CrudControllerTests
     public void Create_CreateNotAllowed_ReturnsForbidden()
     {
         var model = new AnyModel();
-        var controller = new AnyReadOnlyController(A.Fake<IRepository<string, AnyModel>>());
+        var controller = new AnyReadOnlyController(A.Fake<IRepository<string, AnyModel, AnyFilter>>());
 
         var result = controller.Create(model).Result as ObjectResult;
 
@@ -136,11 +136,12 @@ public class CrudControllerTests
             new AnyModel()
         };
         var expected = new Response<IEnumerable<AnyModel>>(models);
+        var filter = new AnyFilter();
         
-        A.CallTo(() => _repository.List())
+        A.CallTo(() => _repository.List(filter))
             .Returns(models);
 
-        var actual = _controller.ReadAll().Result as OkObjectResult;
+        var actual = _controller.List(filter).Result as OkObjectResult;
 
         actual.Should().NotBeNull();
         actual!.Value.Should().BeEquivalentTo(expected);
@@ -154,11 +155,12 @@ public class CrudControllerTests
             new AnyModel(),
             new AnyModel()
         };
+        var filter = new AnyFilter();
         
-        A.CallTo(() => _repository.List())
+        A.CallTo(() => _repository.List(filter))
             .Returns(models);
 
-        var result = _controller.ReadAll().Result as OkObjectResult;
+        var result = _controller.List(filter).Result as OkObjectResult;
 
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be((int)HttpStatusCode.OK);
@@ -168,8 +170,9 @@ public class CrudControllerTests
     public void ReadAll_ReadNotAllowed_ReturnsForbidden()
     {
         var controller = new AnyCreateUpdateController(_repository);
+        var filter = new AnyFilter();
 
-        var result = controller.ReadAll().Result as ObjectResult;
+        var result = controller.List(filter).Result as ObjectResult;
 
         result.Should().NotBeNull();
         result!.StatusCode.Should().Be((int)HttpStatusCode.MethodNotAllowed);
@@ -204,7 +207,7 @@ public class CrudControllerTests
     {
         const string id = "1";
         var model = new AnyModel();
-        var controller = new AnyReadOnlyController(A.Fake<IRepository<string, AnyModel>>());
+        var controller = new AnyReadOnlyController(A.Fake<IRepository<string, AnyModel, AnyFilter>>());
 
         var result = controller.Update(id, model) as ObjectResult;
 
@@ -264,7 +267,7 @@ public class CrudControllerTests
     public void Delete_DeleteForbidden_ReturnsForbidden()
     {
         const string id = "1";
-        var controller = new AnyReadOnlyController(A.Fake<IRepository<string, AnyModel>>());
+        var controller = new AnyReadOnlyController(A.Fake<IRepository<string, AnyModel, AnyFilter>>());
 
         var result = controller.Delete(id) as ObjectResult;
 
