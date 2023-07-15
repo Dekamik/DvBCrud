@@ -13,8 +13,8 @@ public class WeatherForecastFilter
 
     public OrderBy? Order { get; set; }
     public bool? Descending { get; set; }
-    public int Skip { get; set; }
-    public int Take { get; set; }
+    public int Skip { get; set; } = 0;
+    public int Take { get; set; } = 10;
 
     public DateTime? Date { get; set; }
     public string? Summary { get; set; }
