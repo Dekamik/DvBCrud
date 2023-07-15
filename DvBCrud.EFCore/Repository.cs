@@ -184,10 +184,4 @@ public abstract class Repository<TEntity, TId, TDbContext, TMapper, TModel, TFil
         Set.Remove(entity);
         await Context.SaveChangesAsync();
     }
-
-    /// <inheritdoc/>
-    public virtual bool Exists(TId id)
-    {
-        return Set.Any(entity => entity.Id!.Equals(id));
-    }
 }

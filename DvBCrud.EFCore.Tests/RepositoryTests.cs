@@ -483,25 +483,4 @@ public class RepositoryTests : SqliteTestBase
             .Should()
             .ThrowAsync<NotFoundException>();
     }
-
-
-    [Fact]
-    public void Exists_EntityExists_ReturnsTrue()
-    {
-        var entity = new AnyEntity
-        {
-            Id = "1",
-            AnyString = "AnyString"
-        };
-        DbContext.Add(entity);
-        DbContext.SaveChanges();
-
-        _repository.Exists("1").Should().BeTrue();
-    }
-
-    [Fact]
-    public void Exists_EntityDoesntExist_ReturnsFalse()
-    {
-        _repository.Exists("1").Should().BeFalse();
-    }
 }

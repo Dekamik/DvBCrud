@@ -85,11 +85,4 @@ public interface IRepository<TId, TModel, TFilter>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/> is null</exception>
     /// <exception cref="NotFoundException">Thrown if <typeparamref name="TModel"/> with <paramref name="id"/> not found</exception>"
     Task DeleteAsync(TId id);
-
-    /// <summary>
-    /// Checks whether or not a specific <typeparamref name="TModel"/> exists
-    /// </summary>
-    /// <param name="id">Id of <typeparamref name="TModel"/> to check</param>
-    /// <returns>true if exists, otherwise false</returns>
-    bool Exists(TId id);
 }
