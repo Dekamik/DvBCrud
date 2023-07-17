@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Admin", "DvBCrud.Ad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Mongo", "DvBCrud.Mongo\DvBCrud.Mongo.csproj", "{96C23E39-ACB8-41BF-9B2F-CEA046A8D07D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.API.Tests.Mongo", "DvBCrud.API.Tests.Mongo\DvBCrud.API.Tests.Mongo.csproj", "{EB37FF3B-0CA6-419A-AE8B-6AAB5DA5BFC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{96C23E39-ACB8-41BF-9B2F-CEA046A8D07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96C23E39-ACB8-41BF-9B2F-CEA046A8D07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96C23E39-ACB8-41BF-9B2F-CEA046A8D07D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB37FF3B-0CA6-419A-AE8B-6AAB5DA5BFC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB37FF3B-0CA6-419A-AE8B-6AAB5DA5BFC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB37FF3B-0CA6-419A-AE8B-6AAB5DA5BFC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB37FF3B-0CA6-419A-AE8B-6AAB5DA5BFC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
