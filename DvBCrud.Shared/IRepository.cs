@@ -8,7 +8,7 @@ namespace DvBCrud.Shared;
 /// <typeparam name="TId"><typeparamref name="TModel"/> key type</typeparam>
 /// <typeparam name="TModel">Model type</typeparam>
 /// <typeparam name="TFilter">Filter type for <typeparamref name="TModel"/></typeparam>
-public interface IRepository<TId, TModel, TFilter>
+public interface IRepository<TId, TModel, in TFilter>
 {
     /// <summary>
     /// Lists all entities

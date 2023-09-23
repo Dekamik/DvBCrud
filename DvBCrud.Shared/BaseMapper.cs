@@ -7,6 +7,7 @@ namespace DvBCrud.Shared;
 /// </summary>
 /// <typeparam name="TEntity">Entity/data model type</typeparam>
 /// <typeparam name="TModel">API model type</typeparam>
+/// <typeparam name="TFilter"></typeparam>
 public abstract class BaseMapper<TEntity, TModel, TFilter>
 {
     /// <summary>
