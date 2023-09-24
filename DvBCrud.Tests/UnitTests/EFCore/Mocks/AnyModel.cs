@@ -1,8 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿namespace DvBCrud.Tests.UnitTests.EFCore.Mocks;
 
-namespace DvBCrud.Tests.UnitTests.EFCore.Mocks;
-
-[ExcludeFromCodeCoverage]
 public class AnyModel
 {
     // Using string type for Id to test nullable cases

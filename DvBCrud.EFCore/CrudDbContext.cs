@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +9,6 @@ namespace DvBCrud.EFCore;
 
 public abstract class CrudDbContext : DbContext
 {
-    [ExcludeFromCodeCoverage]
     protected CrudDbContext() { }
 
     protected CrudDbContext(DbContextOptions options) : base(options) { }

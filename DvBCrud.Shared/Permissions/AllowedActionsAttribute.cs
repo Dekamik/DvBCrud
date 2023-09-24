@@ -1,11 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace DvBCrud.Shared.Permissions;
+﻿namespace DvBCrud.Shared.Permissions;
 
 /// <summary>
 /// Defines which actions are allowed on a CrudController
 /// </summary>
-[ExcludeFromCodeCoverage]
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class AllowedActionsAttribute : Attribute
 {

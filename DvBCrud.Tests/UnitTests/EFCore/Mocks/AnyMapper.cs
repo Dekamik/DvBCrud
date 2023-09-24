@@ -1,9 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DvBCrud.Shared;
+﻿using DvBCrud.Shared;
 
 namespace DvBCrud.Tests.UnitTests.EFCore.Mocks;
 
-[ExcludeFromCodeCoverage]
 public class AnyMapper : BaseMapper<AnyEntity, AnyModel, AnyFilter>
 {
     public override AnyModel ToModel(AnyEntity other)

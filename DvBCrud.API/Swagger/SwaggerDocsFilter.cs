@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+﻿using System.Reflection;
 using DvBCrud.Shared.Permissions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
@@ -10,8 +9,6 @@ namespace DvBCrud.API.Swagger;
 /// <summary>
 /// Filter for removing disabled endpoints in Swagger UI
 /// </summary>
-[ExcludeFromCodeCoverage]
-// ReSharper disable once ClassNeverInstantiated.Global
 public sealed class SwaggerDocsFilter : IDocumentFilter
 {
     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)

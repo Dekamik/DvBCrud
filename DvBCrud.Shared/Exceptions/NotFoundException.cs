@@ -1,8 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿namespace DvBCrud.Shared.Exceptions;
 
-namespace DvBCrud.Shared.Exceptions;
-
-[ExcludeFromCodeCoverage]
 public class NotFoundException : Exception
 {
     public NotFoundException()
@@ -13,7 +10,6 @@ public class NotFoundException : Exception
     {
     }
 
-    // ReSharper disable once UnusedMember.Global
     public NotFoundException(string message, Exception innerException) : base(message, innerException)
     {
     }

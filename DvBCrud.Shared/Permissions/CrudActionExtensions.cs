@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace DvBCrud.Shared.Permissions;
 
@@ -16,7 +15,6 @@ public static class CrudActionExtensions
         return allowedActions == CrudActions.All || (allowedActions & action) == action;
     }
     
-    [ExcludeFromCodeCoverage]
     public static CrudActions GetCrudActions(this Type type)
     {
         return type.GetCustomAttribute<AllowedActionsAttribute>()?.AllowedActions ?? CrudActions.All;
