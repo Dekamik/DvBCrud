@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Tests.Mocks.API", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Shared", "DvBCrud.Shared\DvBCrud.Shared.csproj", "{15E7A7B1-0773-4539-B100-67BAC0E02DEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Admin.Tests.Web", "DvBCrud.Admin.Tests.Web\DvBCrud.Admin.Tests.Web.csproj", "{307BA6C2-D629-47DB-A798-6E15427D2FA7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Tests.Mocks.Admin", "DvBCrud.Tests.Mocks.Admin\DvBCrud.Tests.Mocks.Admin.csproj", "{307BA6C2-D629-47DB-A798-6E15427D2FA7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DvBCrud.Admin", "DvBCrud.Admin\DvBCrud.Admin.csproj", "{60204746-44CB-4206-9681-7698EB6C22BF}"
 EndProject
