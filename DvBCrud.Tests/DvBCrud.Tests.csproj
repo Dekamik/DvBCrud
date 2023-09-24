@@ -12,6 +12,7 @@
     <ItemGroup>
         <PackageReference Include="FakeItEasy" Version="7.4.0" />
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.22" />
         <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.11" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1"/>
@@ -27,7 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ContractTests\API\" />
       <Folder Include="UnitTests\Shared\" />
     </ItemGroup>
 
@@ -35,6 +35,16 @@
       <ProjectReference Include="..\DvBCrud.API\DvBCrud.API.csproj" />
       <ProjectReference Include="..\DvBCrud.EFCore\DvBCrud.EFCore.csproj" />
       <ProjectReference Include="..\DvBCrud.Shared\DvBCrud.Shared.csproj" />
+      <ProjectReference Include="..\DvBCrud.Tests.Mocks.API\DvBCrud.Tests.Mocks.API.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="IntegrationTests\API\Contracts\onget_withexistingid_response.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="IntegrationTests\API\Contracts\onget_withoutid_response.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

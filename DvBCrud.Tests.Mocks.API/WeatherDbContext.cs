@@ -10,6 +10,12 @@ public class WeatherDbContext : CrudDbContext
     {
 
     }
+    
+    public WeatherDbContext(DbContextOptions options, IDateTimeOffsetFactory dateTimeOffsetFactory) 
+        : base(options, dateTimeOffsetFactory)
+    {
+
+    }
 
     public DbSet<WeatherForecast> WeatherForecasts { get; set; } = null!;
 }

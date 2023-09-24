@@ -6,7 +6,6 @@ namespace DvBCrud.API.Swagger;
 
 public static class SwaggerDocsExtensions
 {
-    // ReSharper disable once UnusedMethodReturnValue.Global
     public static IServiceCollection AddCrudSwaggerGen(this IServiceCollection services, Action<SwaggerGenOptions>? setupAction = null)
     {
         services.AddSwaggerGen(c =>

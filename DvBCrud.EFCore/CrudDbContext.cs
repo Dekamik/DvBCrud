@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,9 +8,27 @@ namespace DvBCrud.EFCore;
 
 public abstract class CrudDbContext : DbContext
 {
-    protected CrudDbContext() { }
+    private readonly IDateTimeOffsetFactory _dateTimeOffsetFactory;
 
-    protected CrudDbContext(DbContextOptions options) : base(options) { }
+    protected CrudDbContext()
+    {
+        _dateTimeOffsetFactory = new DefaultDateTimeOffsetFactory();
+    }
+
+    protected CrudDbContext(IDateTimeOffsetFactory dateTimeOffsetFactory)
+    {
+        _dateTimeOffsetFactory = dateTimeOffsetFactory;
+    }
+
+    protected CrudDbContext(DbContextOptions options) : base(options)
+    {
+        _dateTimeOffsetFactory = new DefaultDateTimeOffsetFactory();
+    }
+    
+    protected CrudDbContext(DbContextOptions options, IDateTimeOffsetFactory dateTimeOffsetFactory) : base(options)
+    {
+        _dateTimeOffsetFactory = dateTimeOffsetFactory;
+    }
     
     public override int SaveChanges()
     {
@@ -33,7 +50,7 @@ public abstract class CrudDbContext : DbContext
 
     private void ModifyTimestamps()
     {
-        var utcNow = DateTimeOffset.UtcNow;
+        var utcNow = _dateTimeOffsetFactory.UtcNow();
         var addedEntries = ChangeTracker
             .Entries()
             .Where(x => x.State == EntityState.Added)

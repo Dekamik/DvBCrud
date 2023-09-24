@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id": 1,
+    "date": "2023-09-24T12:00:00",
+    "temperatureC": 17,
+    "temperatureF": 63,
+    "summary": "Clear"
+  }
+}

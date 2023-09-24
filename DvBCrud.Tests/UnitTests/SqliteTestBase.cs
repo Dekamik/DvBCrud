@@ -2,7 +2,7 @@ using DvBCrud.Tests.UnitTests.EFCore.Mocks;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace DvBCrud.Tests.UnitTests.EFCore;
+namespace DvBCrud.Tests.UnitTests;
 
 public abstract class SqliteTestBase : IDisposable
 {
